@@ -1,0 +1,25 @@
+<div ng-controller="ListadoProductosController as listadoProductosCtrl">
+    <div class="title"><h1>Listado Productos</h1></div>
+    <div class="v-spacer"></div>
+
+    <div class="full-width">
+
+        <input type="text" ng-model="listadoProductosCtrl.filtro" class="full-width" required/>
+        <label>Buscar...</label>
+    </div>
+    <div class="lista-flex" ng-repeat="producto in listadoProductosCtrl.productos | filter:listadoProductosCtrl.filtro">
+        <span>{{producto.nombre}}</span><span>{{producto.categoria}}</span> <span class="descr">{{producto.descripcion}}</span>
+        <div class="btn">
+        <button ng-click="listadoProductosCtrl.detalle(producto.producto_id)" class="btn-medium btn-visibility"></button>
+            <label>Mostrar Detalle</label>
+        </div>
+    </div>
+
+    <div class="btn">
+
+        <input type="button" class="relieve-2 btn-add  btn-big" value=""
+               onclick="window.location='#/productos/0';"/>
+
+        <label>Nuevo Producto</label>
+    </div>
+</div>

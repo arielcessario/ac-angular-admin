@@ -1,0 +1,44 @@
+<div class="title">
+    <div class="btn ">
+        <input type="submit" class="btn-back btn-medium no-margin"
+               onclick="window.location='#/listado_clientes';"
+               value="">
+        <label>Volver</label>
+    </div>
+    <h1>Administrar Clientes</h1></div>
+<div class="v-spacer"></div>
+<form ng-controller="ClientesController  as clientesCtrl"
+      name="clientesForm" novalidate>
+    <div class="form-flex">
+        <div>
+            <input type="text" id="nombre" name="nombre" ng-model="clientesCtrl.cliente.nombre" ng-maxlength="100"
+                   required><br>
+            <label for="nombre">Nombre</label>
+        <span style="color:red" ng-show="clientesForm.nombre.$dirty && clientesForm.nombre.$invalid">
+            <span ng-show="clientesForm.nombre.$error.required">Debe ingresar un Nombre</span>
+            <span ng-show="clientesForm.nombre.$error.maxlength">El Nombre es demasiado largo (Máximo 100)</span>
+        </span>
+        </div>
+
+        
+    </div>
+    <br/>
+
+    <div>
+        <!--<input type="submit"-->
+        <!--ng-disabled="clientesForm.user.$dirty && clientesForm.user.$invalid ||-->
+        <!--clientesForm.email.$dirty && clientesForm.email.$invalid">-->
+        <div class="btn"><input type="submit" ng-click="clientesCtrl.save();"
+                                ng-disabled="clientesForm.$invalid" class="relieve-2 btn-ok btn-big" value="">
+            <label>Guardar Producto</label>
+        </div>
+
+        <div ng-if="clientesCtrl.id != 0" class="btn">
+            <input type="submit" ng-click="clientesCtrl.delete();"
+                   class="relieve-2 btn-delete btn-big" value="">
+            <label>Eliminar Cliente</label>
+        </div>
+    </div>
+
+</form>
+

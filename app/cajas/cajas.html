@@ -1,0 +1,201 @@
+<div ng-controller="CajasController as cajasCtrl">
+
+    <div class="title">
+        <h1>
+            Caja
+        </h1>
+    </div>
+
+    <div class="v-spacer"></div>
+
+    <form name="detalleProductoForm">
+        <div style="display: flex;">
+            <div>
+                <select name="" id="tipo_precio" ng-model="cajasCtrl.tipo_precio">
+                    <option value="0">Minorista</option>
+                    <option value="1">Mayorista</option>
+                    <option value="2">Web</option>
+                </select>
+                <br><label for="tipo_precio">Tipo de Precio</label>
+            </div>
+
+            <ac-search-panel
+                    obj="cajasCtrl.cliente"
+                    obj-name="cajasCtrl.cliente.nombre"
+                    nombref="cajasForm"
+                    nombre="01"
+                    nombre-visible="Cliente"
+                    font-size="32"
+                    width="200"
+                    func="cajasCtrl.fn_clientes"
+                    extra-filter="">
+            </ac-search-panel>
+            <div>
+
+                <!--Formas de pago-->
+                <!--01 - Efectivo-->
+                <!--02 - TD-->
+                <!--03 - TC-->
+                <!--04 - Transferencia CA-->
+                <!--05 - Transferencia CC-->
+                <!--05 - Caja General-->
+                <select name="" id="forma_pago" ng-model="cajasCtrl.forma_pago">
+                    <option value="01">Efectivo</option>
+                    <option value="02">Débito</option>
+                    <option value="03">Crédito</option>
+                    <option value="04">Transferencia CA</option>
+                    <option value="05">Transferencia CC</option>
+                </select>
+                <br><label for="tipo_precio">Forma de Pago</label>
+            </div>
+        </div>
+        <div class="v-spacer"></div>
+        <div class="" style="display: flex;">
+            <ac-search-panel
+                    obj="cajasCtrl.producto"
+                    obj-name="cajasCtrl.producto.nombre"
+                    nombref="cajasForm"
+                    nombre="02"
+                    nombre-visible="Producto"
+                    font-size="32"
+                    width="200"
+                    func="cajasCtrl.fn_productos_sku"
+                    extra-filter="s">
+            </ac-search-panel>
+
+            <!--<ac-search-panel-->
+                    <!--obj="cajasCtrl.producto"-->
+                    <!--obj-name="cajasCtrl.producto.sku"-->
+                    <!--nombref="cajasForm"-->
+                    <!--nombre="03"-->
+                    <!--nombre-visible="Código"-->
+                    <!--font-size="32"-->
+                    <!--width="200"-->
+                    <!--func="cajasCtrl.fn_productos_sku"-->
+                    <!--extra-filter="">-->
+            <!--</ac-search-panel>-->
+
+            <div>
+                <input type="number" id="cantidad" name="cantidad" ng-model="cajasCtrl.cantidad" ng-maxlength="45"
+                       required><br>
+                <label for="cantidad">Cantidad</label>
+
+        <span style="color:red" ng-show="cajasForm.cantidad.$dirty && cajasForm.cantidad.$invalid">
+            <span ng-show="cajasForm.cantidad.$error.required">Debe ingresar un Nombre</span>
+            <span ng-show="cajasForm.cantidad.$error.maxlength">El Nombre es demasiado largo (Máximo 45)</span>
+        </span>
+            </div>
+
+
+            <div>
+                $<span>{{cajasCtrl.producto.precios[cajasCtrl.tipo_precio].precio}}</span>
+                <!--<input type="text" id="precio_unidad_prod" name="precio_unidad_prod"-->
+                       <!--ng-model="cajasCtrl.producto.precios[cajasCtrl.tipo_precio].precio" ng-maxlength="45"-->
+                       <!--required><br>-->
+                <!--<label for="precio_unidad_prod">Precio</label>-->
+                <!--<span style="color:red"-->
+                      <!--ng-show="cajasForm.precio_unidad_prod.$dirty && cajasForm.precio_unidad_prod.$invalid">-->
+                    <!--<span ng-show="cajasForm.precio_unidad_prod.$error.required">Debe ingresar un Nombre</span>-->
+                    <!--<span ng-show="cajasForm.precio_unidad_prod.$error.maxlength">El Nombre es demasiado largo (Máximo 45)</span>-->
+                <!--</span>-->
+            </div>
+
+            <div class="btn">
+                <input type="button" class="relieve-2 btn-add  btn-medium" value=""
+                       ng-click="cajasCtrl.agregarDetalle()"/>
+                <label>Agregar producto</label>
+            </div>
+        </div>
+
+    </form>
+    <div class="v-spacer"></div>
+    <div class="ac-grid">
+        <div class="cabecera">
+            <h3>Codigo</h3>
+
+            <h3 class="descr-grid">Producto</h3>
+
+            <h3>Precio Unitario</h3>
+
+            <h3>Cantidad</h3>
+
+            <h3>Total</h3>
+
+            <h3>MP</h3>
+        </div>
+        <div ng-repeat="detalle in cajasCtrl.detalles">
+            <span>{{detalle.sku}} </span>
+            <span class="descr-grid">{{detalle.producto_nombre}} </span>
+            <span>{{detalle.precio_unidad | currency}}</span>
+            <span>{{detalle.cantidad}}</span>
+            <span>{{detalle.precio_total | currency}}</span>
+            <input type="checkbox" ng-click="cajasCtrl.agregarMP(detalle);"/>
+
+
+            <div class="btn">
+                <button ng-click="cajasCtrl.removeDetalle($index)"
+                        ng-disabled="!(cajasCtrl.caja.fecha_entrega == null || cajasCtrl.caja.fecha_entrega == '')"
+                        class="btn-delete-black btn-medium"></button>
+                <label>Sacar del caja</label>
+            </div>
+        </div>
+
+        <div class="line-separator"></div>
+        <div>
+            <span></span>
+            <span class="descr-grid"></span>
+            <span></span>
+            <span>Total</span>
+            <span>{{cajasCtrl.total | currency}}</span>
+        </div>
+
+
+        <div>
+            <span></span>
+            <span class="descr-grid"></span>
+            <span></span>
+            <span>Descuento</span>
+            $<input type="number"
+                    ng-model="cajasCtrl.desc_cant"
+                    ng-change="cajasCtrl.calc_a_cobrar('cant')"
+                />
+            <input type="number"
+                   ng-model="cajasCtrl.desc_porc"
+                   ng-change="cajasCtrl.calc_a_cobrar('porc')"
+                    />%
+        </div>
+        <div>
+            <span></span>
+            <span class="descr-grid"></span>
+            <span></span>
+            <span>Paga con</span>
+            $<input type="number"
+                    ng-model="cajasCtrl.paga_con"
+                    ng-change="cajasCtrl.vuelto = (cajasCtrl.paga_con>0 && cajasCtrl.paga_con !== null)?cajasCtrl.a_cobrar - cajasCtrl.paga_con:0;"
+                />
+        </div>
+        <div>
+            <span></span>
+            <span class="descr-grid"></span>
+            <span></span>
+            <span>A Cobrar</span>
+            <span>{{cajasCtrl.a_cobrar | currency}}</span>
+        </div>
+        <div>
+            <span></span>
+            <span class="descr-grid"></span>
+            <span></span>
+            <span>Vuelto</span>
+            <span>${{cajasCtrl.vuelto}}</span>
+        </div>
+
+    </div>
+
+
+    <div class="btn"><input type="submit" class="relieve-2 btn-ok btn-big" ng-click="cajasCtrl.save();" value=""
+                            ng-disabled="cajasForm.$invalid">
+        <label>Cobrar</label>
+    </div>
+    <div class="custom-in"></div>
+
+</div>

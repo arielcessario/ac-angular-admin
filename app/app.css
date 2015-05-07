@@ -1,0 +1,119 @@
+@import url(http://fonts.googleapis.com/css?family=Poiret+One|Quicksand|Josefin+Sans|Montserrat);
+
+html, body, input, select, option {
+    margin: 0;
+    padding: 0;
+    /*font-weight: 400;*/
+}
+
+.titulo{
+    font-family: "Poiret One", sans-serif;
+    font-size: 30px;
+
+}
+
+.tarjeta-x1{
+    border-radius: 4px;
+    box-shadow: 0px 1px 5px #adadad;
+    margin: 5px;
+    padding: 5px;
+}
+
+#producto_busqueda {
+    background-color: #737373;
+    /*max-height: 100px;*/
+}
+
+
+/*#btn-faltantes {*/
+    /*border-radius: 50px;*/
+    /*height: 70px;*/
+    /*width: 70px;*/
+    /*border: 0px solid;*/
+    /*background-color: #51a351;*/
+    /*color: #ffffff;*/
+/*}*/
+
+
+.mover-faltantes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #ffffff;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+
+    -webkit-clip-path: circle(0% at 50% 50%);
+}
+
+.mover-faltantes-expanded {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    z-index: 2;
+    -webkit-clip-path: circle(100% at 50% 50%)
+
+}
+
+.mover-faltantes-expanded-add {
+
+    -webkit-animation: show-faltantes 1s !important;
+    -moz-animation: show-faltantes 1s !important;
+    -ms-animation: show-faltantes 1s !important;
+    -o-animation: show-faltantes 1s !important;
+    animation: show-faltantes 1s !important;
+}
+
+.mover-faltantes-expanded-remove,
+.mover-faltantes-expanded-remove-active {
+
+    -webkit-animation: ocultar-faltantes 1s !important;
+    -moz-animation: ocultar-faltantes 1s !important;
+    -ms-animation: ocultar-faltantes 1s !important;
+    -o-animation: ocultar-faltantes 1s !important;
+    animation: ocultar-faltantes 1s !important;
+}
+
+@-webkit-keyframes ocultar-faltantes {
+
+    0% {
+
+        -webkit-clip-path: circle(200% at 0% 0%);
+    }
+
+    100% {
+        background-color: #FF9800;
+        -webkit-clip-path: circle(0% at 0% 0%);
+        z-index: 2;
+    }
+
+}
+
+@-webkit-keyframes show-faltantes {
+    0% {
+        z-index: 2;
+        -webkit-clip-path: circle(0% at 0% 0%);
+        background-color: #FF9800;
+    }
+
+    90% {
+        /*shape-inside: polygon(0 0,  500px 0, 350px 300px, 150px 300px);*/
+    }
+
+    100% {
+
+        -webkit-clip-path: circle(200% at 0% 0%);
+        z-index: 2;
+    }
+
+}
+
+
+.ac-live-search{
+    margin-top: -25px !important;
+    margin-left: 10px !important;
+}

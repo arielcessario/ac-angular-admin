@@ -1,0 +1,200 @@
+
+<div class="title">
+    <div class="btn ">
+        <input type="submit" class="btn-back btn-medium no-margin"
+               onclick="window.location='#/listado_productos';"
+               value="">
+        <label>Volver</label>
+    </div>
+    <h1>Administrar Productos</h1>
+</div>
+<div class="v-spacer"></div>
+<form ng-controller="ProductosController  as productosCtrl"
+      name="productForm" novalidate>
+    <div class="form-flex">
+        <div>
+            <input type="text" id="nombre" name="nombre" ng-model="productosCtrl.producto.nombre" ng-maxlength="45"
+                   required><br>
+            <label for="nombre">Nombre</label>
+        <span style="color:red" ng-show="productForm.nombre.$dirty && productForm.nombre.$invalid">
+            <span ng-show="productForm.nombre.$error.required">Debe ingresar un Nombre</span>
+            <span ng-show="productForm.nombre.$error.maxlength">El Nombre es demasiado largo (Máximo 45)</span>
+        </span>
+        </div>
+
+        <div>
+            <input type="text" id="descripcion" name="descripcion" ng-model="productosCtrl.producto.descripcion"
+                   ng-maxlength="2000" required><br>
+            <label for="descripcion">Descripción</label>
+        <span style="color:red" ng-show="productForm.descripcion.$dirty && productForm.descripcion.$invalid">
+            <span ng-show="productForm.descripcion.$error.required">descripcion es obligatorio</span>
+            <span ng-show="productForm.descripcion.$error.maxlength">La descripción es demasiado largo (Máximo 1000)</span>
+        </span>
+        </div>
+
+        <div>
+            <input type="number" id="ptoRepo" name="ptoRepo" ng-model="productosCtrl.producto.ptoRepo" ng-maxlength="45"
+                   required><br><label for="ptoRepo">Punto Reposición</label>
+        <span style="color:red" ng-show="productForm.ptoRepo.$dirty && productForm.ptoRepo.$invalid">
+            <span ng-show="productForm.ptoRepo.$error.required">Punto de Reposición es obligatorio</span>
+            <span ng-show="productForm.ptoRepo.$error.number">Número inválido</span>
+        </span>
+        </div>
+
+        <div>
+
+            <select name="status" id="status" ng-model="productosCtrl.producto.status">
+                <option value="1" selected>Activo</option>
+                <option value="0">Inactivo</option>
+            </select><br><label for="status">Estado</label>
+        <span style="color:red" ng-show="productForm.status.$dirty && productForm.status.$invalid">
+            <span ng-show="productForm.status.$error.required">status es obligatorio</span>
+        </span>
+        </div>
+
+        <div>
+            <select name="categoria" id="categoria" ng-model="productosCtrl.producto.categoria_id"
+            ng-options="categoria.categoria_id as categoria.nombre  for categoria in productosCtrl.categorias">
+            </select><br/>
+            <label for="categoria">Categoria</label><br>
+            <span style="color:red" ng-show="(productForm.categoria.$dirty && productForm.categoria.$invalid)">
+            <span ng-show="productForm.categoria.$error.required">categorianame is required.</span>
+        </span>
+        </div>
+
+        <div>
+            <input type="text" id="sku" name="sku" ng-model="productosCtrl.producto.sku" ng-maxlength="45"
+                   required><br>
+            <label for="sku">SKU</label>
+        <span style="color:red" ng-show="productForm.sku.$dirty && productForm.sku.$invalid">
+            <span ng-show="productForm.sku.$error.required">Debe ingresar un Nombre</span>
+            <span ng-show="productForm.sku.$error.maxlength">El Nombre es demasiado largo (Máximo 45)</span>
+        </span>
+        </div>
+
+        <div>
+            <select name="destacado" id="destacado" ng-model="productosCtrl.producto.destacado">
+                <option value="1">Si</option>
+                <option value="0" selected>No</option>
+            </select><br><label for="destacado">Destacado</label>
+        <span style="color:red" ng-show="(productForm.destacado.$dirty && productForm.destacado.$invalid)">
+            <span ng-show="productForm.destacado.$error.required">destacadoname is required.</span>
+        </span>
+        </div>
+
+        <div>
+            <select name="insumo" id="insumo" ng-model="productosCtrl.producto.insumo">
+                <option value="0" selected>Producto</option>
+                <option value="1" selected>Insumo</option>
+            </select><br><label for="insumo">Producto o Insumo</label>
+        <span style="color:red" ng-show="(productForm.insumo.$dirty && productForm.insumo.$invalid)">
+            <span ng-show="productForm.insumo.$error.required">insumo is required.</span>
+        </span>
+        </div>
+    </div>
+
+    <div class="form-flex">
+        <div><h3>Precios</h3><br>
+
+            <div>
+                <input id="precio_minorista" type="number" ng-model="productosCtrl.precio_minorista" required/>
+                <br>
+                <label for="precio_minorista">Minorista</label>
+            <span style="color:red"
+                  ng-show="productForm.precio_minorista.$dirty && productForm.precio_minorista.$invalid">
+                <span ng-show="productForm.precio_minorista.$error.required">Punto de Reposición es obligatorio</span>
+                <span ng-show="productForm.precio_minorista.$error.number">Número inválido</span>
+            </span>
+            </div>
+
+            <div>
+                <input id="precio_mayorista" type="number" ng-model="productosCtrl.precio_mayorista" required/>
+                <br>
+                <label for="precio_mayorista">Mayorista</label>
+            <span style="color:red"
+                  ng-show="productForm.precio_mayorista.$dirty && productForm.precio_mayorista.$invalid">
+                <span ng-show="productForm.precio_mayorista.$error.required">Punto de Reposición es obligatorio</span>
+                <span ng-show="productForm.precio_mayorista.$error.number">Número inválido</span>
+            </span>
+            </div>
+            <div>
+                <input id="precio_web" type="number" ng-model="productosCtrl.precio_web" required/>
+                <br>
+                <label for="precio_web">Web</label>
+            <span style="color:red" ng-show="productForm.precio_web.$dirty && productForm.precio_web.$invalid">
+                <span ng-show="productForm.precio_web.$error.required">Punto de Reposición es obligatorio</span>
+                <span ng-show="productForm.precio_web.$error.number">Número inválido</span>
+            </span>
+            </div>
+            <!--<input type="number" id="precio" name="precio" ng-model="productosCtrl.producto.precios" ng-maxlength="45" required>-->
+
+
+            <!--<span style="color:red" ng-show="productForm.precio.$dirty && productForm.precio.$invalid">-->
+            <!--<span ng-show="productForm.precio.$error.required">Punto de Reposición es obligatorio</span>-->
+            <!--<span ng-show="productForm.precio.$error.number">Número inválido</span>-->
+            <!--</span>-->
+        </div>
+
+        <div><h3>Proveedores</h3><br/>
+
+            <div ng-repeat="proveedor in productosCtrl.proveedores">
+
+                <label class="label--checkbox">
+                    <input type="checkbox"
+                           id="{{proveedor.proveedor_id}}"
+                           class="checkbox"
+                           ng-model="productosCtrl.listProveedores[proveedor.proveedor_id]"
+                           name="proveedor">
+                    {{proveedor.nombre}}
+                </label>
+
+
+                <!--<input name="proveedor"-->
+                <!--id="{{proveedor.proveedor_id}}"-->
+                <!--type="checkbox"-->
+                <!--ng-model="productosCtrl.listProveedores[proveedor.proveedor_id]"/>-->
+                <!--{{proveedor.nombre}}<br/>-->
+                <!--</div>-->
+
+            </div>
+        </div>
+
+
+        <div>
+            <div><h3>Fotos</h3><br/>
+                <input type="file" name="images" id="images"
+                       data-dbinf-on-files-selected="agregarImagen(selectedFileList)"/>
+            </div>
+            <br/>
+
+            <div ng-repeat="image in productosCtrl.producto.fotos">
+                <span>{{image.nombre}}</span>
+
+                <div class="btn">
+                    <button ng-click="productosCtrl.deleteImage(image.nombre)"
+                            class="btn-delete-black btn-medium"></button>
+                    <label>Eliminar Foto</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+
+    <div>
+        <!--<input type="submit"-->
+        <!--ng-disabled="productForm.user.$dirty && productForm.user.$invalid ||-->
+        <!--productForm.email.$dirty && productForm.email.$invalid">-->
+        <div class="btn"><input type="submit" ng-click="productosCtrl.save();"
+                                ng-disabled="productForm.$invalid" class="relieve-2 btn-ok btn-big" value="">
+            <label>Guardar Producto</label>
+        </div>
+
+        <div ng-if="productosCtrl.id != 0" class="btn">
+            <input type="submit" ng-click="productosCtrl.delete();"
+                   class="relieve-2 btn-delete btn-big" value="">
+            <label>Eliminar Producto</label>
+        </div>
+    </div>
+
+</form>
+

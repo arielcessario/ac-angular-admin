@@ -1,0 +1,52 @@
+<div ng-controller="ListadoPedidosController as listadoPedidosCtrl">
+
+    <div class="title">
+
+        <h1 >Listado de Pedidos</h1>
+    </div>
+
+    <div class="v-spacer"></div>
+
+    <div class="full-width">
+
+        <input type="text" ng-model="listadoPedidosCtrl.filtro" class="full-width" required/>
+        <label>Buscar...</label>
+    </div>
+
+    <div class="full-width">
+        <label class="label--checkbox">
+            <input type="checkbox" class="checkbox" ng-model="listadoPedidosCtrl.soloActivos" ng-click="listadoPedidosCtrl.loadPedidos();">
+            Solo pedidos sin confirmar
+        </label>
+
+    </div>
+
+    <div class="ac-grid " >
+        <div class="cabecera lista-flex">
+            <h3>Proveedor</h3>
+            <h3 class="descr">Fecha de Pedido</h3>
+            <h3>Total</h3>
+            <h3></h3>
+        </div>
+        <div class="lista-flex" ng-repeat="pedido in listadoPedidosCtrl.pedidos | filter:listadoPedidosCtrl.filtro">
+            <span>{{pedido.proveedor_nombre}}</span>
+            <span class="descr">{{pedido.fecha_pedido}}</span>
+            <span>{{pedido.total | currency}}</span>
+            <!--<span class="descr">{{pedido.total}}</span>-->
+
+            <div class="btn">
+                <button ng-click="listadoPedidosCtrl.detalle(pedido.pedido_id)"
+                        class="btn-medium btn-visibility"></button>
+                <label>Mostrar Detalle</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="btn">
+
+        <input type="button" class="relieve-2 btn-add  btn-big" value=""
+               onclick="window.location='#/pedidos/0';"/>
+
+        <label>Nuevo Pedido</label>
+    </div>
+</div>

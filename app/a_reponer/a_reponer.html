@@ -1,0 +1,56 @@
+<div ng-controller="AReponerController as aReponerCtrl" xmlns="http://www.w3.org/1999/html">
+   <div class="title"> <h1 >Consulta de Stock</h1></div>
+
+    <div class="v-spacer"></div>
+
+    <div class="full-width lista-flex">
+
+        <div>
+            <input type="text" ng-model="aReponerCtrl.filtro" class="full-width" required/>
+            <label>Filtrar Productos...</label>
+        </div>
+        <select
+                ng-model="aReponerCtrl.proveedor"
+                ng-options="proveedor.nombre  for proveedor in aReponerCtrl.proveedores" name=""
+                ng-click="aReponerCtrl.load()">
+
+        </select>
+
+        <!--<div>-->
+            <!--<label class="label--checkbox">-->
+                <!--<input type="checkbox" class="checkbox" ng-model="aReponerCtrl.conStock"-->
+                       <!--ng-click="aReponerCtrl.loadConStock();">-->
+                <!--Con Stock-->
+            <!--</label>-->
+        <!--</div>-->
+    </div>
+
+    <div class="ac-grid ">
+        <div class="cabecera lista-flex">
+            <h3>Producto</h3>
+
+            <h3>Reposición</h3>
+
+            <h3>Actual</h3>
+
+            <h3>Reponer</h3>
+        </div>
+
+        <div class="lista-flex" ng-repeat="producto in aReponerCtrl.productos | filter:aReponerCtrl.filtro">
+            <span>{{producto.nombre}}</span>
+            <span>{{producto.pto_repo}}</span>
+            <span>{{producto.actual}}</span>
+            <input type="checkbox" ng-click="aReponerCtrl.agregarFaltante(producto);"/>
+
+
+        </div>
+
+    </div>
+    <div class="btn">
+
+        <input type="button" class="relieve-2 btn-add  btn-big" value=""
+               ng-click="aReponerCtrl.nuevoPedido();"/>
+
+        <label>Nuevo Pedido</label>
+    </div>
+</div>
