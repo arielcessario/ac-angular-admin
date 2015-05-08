@@ -136,6 +136,7 @@ body {
 
 input[type="text"],
 input[type="password"],
+input[type="email"],
 input[type="number"] {
   border: solid 0px;
   border-bottom-width: 1px;
@@ -164,6 +165,7 @@ input[type="number"] {
 
 input[type="text"] ~ label,
 input[type="password"] ~ label,
+input[type="email"] ~ label,
 input[type="number"] ~ label,
 select ~ label {
   color: #666666;
@@ -182,6 +184,8 @@ input[type="text"]:focus ~ label,
 input[type="text"]:valid ~ label,
 input[type="password"]:focus ~ label,
 input[type="password"]:valid ~ label,
+input[type="email"]:focus ~ label,
+input[type="email"]:valid ~ label,
 input[type="number"]:focus ~ label,
 input[type="number"]:valid ~ label,
 select ~ label {
