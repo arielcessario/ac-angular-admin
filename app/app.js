@@ -17,6 +17,8 @@ angular.module('myApp', [
     'nombreapp.stock.listadoCategorias',
     'nombreapp.stock.cajas',
     'nombreapp.stock.clientes',
+    'nombreapp.stock.gastos',
+    'nombreapp.stock.depositos',
     'nombreapp.nav',
     'ac-search-panel'
 ]).
@@ -33,6 +35,8 @@ function MainCtrl(){
         {ref:'#/productos/0',name:'Nuevo Producto'},
         {ref:'#/pedidos/0',name:'Nuevo Pedido'},
         {ref:'#/categorias/0',name:'Nueva Categoria'},
+        {ref:'#/gastos/0',name:'Gastos'},
+        {ref:'#/depositos/0',name:'Depositos'},
         {ref:'#/a_reponer',name:'A Reponer'},
         {ref:'#/consulta_stock',name:'Consulta de Stock'}
     ];
