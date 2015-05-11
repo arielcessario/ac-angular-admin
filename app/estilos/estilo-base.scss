@@ -106,13 +106,23 @@ body {
 
 
 
-.form-flex, .lista-flex {
+.form-flex, .lista-flex, {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
 
 }
+
+
+.total{
+  font-weight: 700;
+  border: 0px solid;
+  border-top-color: rgba($blueDark, 0.1);
+  border-top-width: 1px;
+}
+
+
 
 .form-flex{
 
@@ -265,6 +275,18 @@ select ~ label {
   background-size: 60% 60%;
 }
 
+.btn-archive {
+  background: #FF9800 url("icons/core/archive.svg") no-repeat 50% 50%;
+//  -webkit-filter: invert(100%);
+  background-size: 60% 60%;
+}
+
+.btn-lock {
+  background: url("icons/core/lock-outline.svg") no-repeat 50% 50%;
+  -webkit-filter: invert(100%);
+  background-size: 60% 60%;
+}
+
 .btn-add {
   background: #51a351 url("icons/core/add.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
@@ -292,6 +314,11 @@ select ~ label {
 
 .btn-like {
   background: #03A9F4 url("icons/core/thumb-up.svg") no-repeat 50% 50%;
+  background-size: 60% 60%;
+}
+
+.btn-refresh {
+  background: #03A9F4 url("icons/core/refresh.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
@@ -461,6 +488,13 @@ h3 {
 
 .v-spacer {
   height: 60px;
+  width: 0px;
+
+}
+
+
+.half-v-spacer {
+  height: 20px;
   width: 0px;
 
 }

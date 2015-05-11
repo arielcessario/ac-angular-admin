@@ -264,10 +264,11 @@
         }
     }
 
-    ProductosService.$inject = ['$http'];
-    function ProductosService($http) {
+    ProductosService.$inject = ['$http', '$cacheFactory'];
+    function ProductosService($http, $cacheFactory) {
         var service = {};
         var sucursal_id = 1;
+        var clearCache = false;
 
         service.getProductos = getProductos;
         service.getProductoByID = getProductoByID;
@@ -282,14 +283,51 @@
         return service;
 
         function getProductos(callback) {
-            return $http.post('./stock-api/stock.php',
-                {function: 'getProductos'},
-                {cache: true})
+            var $httpDefaultCache = $cacheFactory.get('$http');
+            var cachedData = [];
+            if (clearCache) {
+                $httpDefaultCache.remove('./stock-api/stock.php?function=getProductos');
+
+
+            }
+            //else {
+            //
+            //    cachedData = $httpDefaultCache.get('./stock-api/stock.php?function=getProductos');
+            //    return cachedData;
+            //}
+
+
+            return $http.get('./stock-api/stock.php?function=getProductos', {cache: true})
                 .success(function (data) {
                     callback(data);
+                    clearCache = false;
                 })
                 .error();
+
+            //return cachedData;
+
+            //$http({
+            //    method: 'GET',
+            //    url: './stock-api/stock.php',
+            //    params: 'function=getProductos'
+            //}).success(function(data){
+            //    console.log(data);
+            //    // With the data succesfully returned, call our callback
+            //    callback(data);
+            //}).error(function(){
+            //    alert("error");
+            //});
         }
+
+        //function getProductos(callback) {
+        //    return $http.post('./stock-api/stock.php',
+        //        {function: 'getProductos'},
+        //        {cache: true})
+        //        .success(function (data) {
+        //            callback(data);
+        //        })
+        //        .error();
+        //}
 
         function getProductoByID(id, callback) {
             getProductos(function (data) {
@@ -315,8 +353,8 @@
 
                     var stockEnSucursal = false;
 
-                    for(var i = 0; i < elem.stocks.length; i++){
-                        if(elem.stocks[i].sucursal_id == sucursal_id){
+                    for (var i = 0; i < elem.stocks.length; i++) {
+                        if (elem.stocks[i].sucursal_id == sucursal_id) {
                             stockEnSucursal = true;
                         }
 
@@ -366,14 +404,14 @@
 
                     if (n !== undefined && n > -1) {
                         var conStock = false;
-                        for(var i = 0; i< elem.stocks.length; i++){
-                            if(elem.stocks[i].sucursal_id = sucursal_id){
+                        for (var i = 0; i < elem.stocks.length; i++) {
+                            if (elem.stocks[i].sucursal_id = sucursal_id) {
                                 conStock = true;
                             }
 
                         }
 
-                        if(conStock){
+                        if (conStock) {
                             return elem;
                         }
                     }
@@ -428,6 +466,7 @@
                 {function: _function, producto: JSON.stringify(producto)})
                 .success(function (data) {
                     callback(data);
+                    clearCache = true;
                 })
                 .error();
         }

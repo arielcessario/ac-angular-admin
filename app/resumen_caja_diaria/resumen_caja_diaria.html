@@ -1,0 +1,55 @@
+<div ng-controller="ResumenCajaDiariaController as resumenCajaDiariaCtrl">
+    <div class="title"><h1>Resumen de Caja</h1></div>
+    <div class="v-spacer"></div>
+
+    <div class="full-width">
+
+        <input type="text" ng-model="resumenCajaDiariaCtrl.filtro" class="full-width" required/>
+        <label>Buscar...</label>
+    </div>
+    <div ng-repeat="asiento in resumenCajaDiariaCtrl.asientos | filter:resumenCajaDiariaCtrl.filtro">
+        <!--{{asiento}}-->
+
+        <div>{{asiento[$index].fecha}}
+            <div class="btn">
+                <input type="submit" ng-click="resumenCajaDiariaCtrl.deleteAsiento(asiento[$index].asiento_id);"
+                       class="btn-delete btn-small" value="">
+                <label>Eliminar movimiento</label>
+            </div>
+        </div>
+
+        <div ng-repeat="movimiento in asiento" class="full-width" >
+            <div ng-if="movimiento.cuenta_id.indexOf('4.1.1.') > -1 " class="form-flex">
+                <div>{{movimiento.detalles[2].detalle}}</div>
+                <div>{{movimiento.detalles[1].detalle}} x {{movimiento.detalles[0].detalle | filter:currency}}</div>
+            </div>
+
+            <div ng-if="movimiento.cuenta_id == '1.1.1.01'" class="form-flex total">
+                <div></div>
+                <div>{{movimiento.importe | filter:currency}}</div>
+            </div>
+
+
+            <div ng-if="movimiento.cuenta_id == '1.1.2.01'" class="form-flex total">
+                <div>Deudas: {{movimiento.detalles[0].detalle}}</div>
+                <div>{{movimiento.importe | filter:currency}}</div>
+            </div>
+            <!--{{movimiento}}-->
+            <!--<div style="color: red;">{{movimiento}}</div>-->
+        </div>
+        <!--<span>{{asiento.fecha}}</span><span>{{producto.categoria}}</span> <span class="descr">{{producto.descripcion}}</span>-->
+        <!--<div class="btn">-->
+        <!--<button ng-click="resumenCajaDiariaCtrl.detalle(producto.producto_id)" class="btn-medium btn-visibility"></button>-->
+        <!--<label>Mostrar Detalle</label>-->
+        <!--</div>-->
+        <div class="half-v-spacer"></div>
+    </div>
+
+    <!--<div class="btn">-->
+
+    <!--<input type="button" class="relieve-2 btn-add  btn-big" value=""-->
+    <!--onclick="window.location='#/productos/0';"/>-->
+
+    <!--<label>Nuevo Producto</label>-->
+    <!--</div>-->
+</div>

@@ -45,13 +45,46 @@
         vm.agregarMP = agregarMP;
         vm.calc_a_cobrar = calc_a_cobrar;
         vm.save = save;
+        vm.aCuenta = aCuenta;
+
+        function aCuenta(){
+            //console.log(vm.cliente.cliente_id);
+            if(vm.cliente === undefined || vm.cliente.cliente_id === undefined || vm.cliente === {}){
+                toastr.error('Debe seleccionar un cliente');
+                return;
+            }
+
+            if(vm.detalles.length < 1){
+                toastr.error('No hay productos seleccionados');
+                return;
+            }
+
+            //(tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback)
+            MovimientosService.armarMovimiento('001', '00', 1, '07', '00', vm.total, vm.desc_cant, 'Venta Productos - Ingreso a Deudores', vm.detalles, vm.cliente.cliente_id, 1, '',
+                function(data){
+                    //console.log(MovimientoStockFinal.stocks_finales);
+                    ConsultaStockService.updateStock(MovimientoStockFinal.stocks_finales, function(data){
+                        toastr.success('Venta realizada con éxito.');
+
+                        //console.log(data);
+                    });
+                    //console.log(data);
+                });
+        }
 
         function save(){
+
+            if(vm.detalles.length < 1){
+                toastr.error('No hay productos seleccionados');
+                return;
+            }
             //(tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback)
             MovimientosService.armarMovimiento('001', '00', 1, vm.forma_pago, '00', vm.total, vm.desc_cant, 'Venta de Caja', vm.detalles, vm.cliente.cliente_id, 1, '',
             function(data){
                 //console.log(MovimientoStockFinal.stocks_finales);
                 ConsultaStockService.updateStock(MovimientoStockFinal.stocks_finales, function(data){
+                    toastr.success('Venta realizada con éxito.');
+
                     console.log(data);
                 });
                 //console.log(data);
@@ -229,7 +262,29 @@
     CajasService.$inject = ['$http'];
     function CajasService($http) {
         var service = {};
+        var url = './stock-api/cajas.php';
+        // Cajas diarias siempre por sucursal
+        service.getCajaDiaria = getCajaDiaria;
+        service.getHistoricoCajaDiaria = getHistoricoCajaDiaria;
+        // Resumen de todos los movimientos exceptuando caja chica.
+        service.movimientos = movimientos;
+        return service;
 
+
+        function getCajaDiaria(sucursal_id, callback){
+            return $http.get(url+'?function=getCajaDiaria&sucursal_id='+sucursal_id)
+                .success(function(data){callback(data)})
+                .error(function(data){callback(data)});
+
+        }
+        function getHistoricoCajaDiaria(sucursal_id, callback){
+            //return $http.post();
+
+        }
+        function movimientos(sucursal_id, callback){
+            //return $http.post();
+
+        }
 
     }
 })();

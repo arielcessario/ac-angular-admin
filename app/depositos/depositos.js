@@ -24,15 +24,27 @@
         vm.forma_pago = '01';
         vm.save = save;
         vm.id = $routeParams.id;
-        vm.destino = '01';
-        vm.origen = '04';
+        vm.destino = '04';
+        vm.origen = '01';
 
 
         function save() {
-            console.log(vm.importe);
+            if (vm.importe < 1 || vm.importe == '' || vm.importe == undefined){
+                toastr.error('Debe ingresar un importe');
+                return;
+            }
             //tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback
             MovimientosService.armarMovimiento(vm.movimiento, vm.subtipo, 1, vm.destino, vm.origen, vm.importe, '', vm.comentario, [], 0, 1, vm.comentario, function(data){
-                console.log(data);
+                if(data.indexOf("guardado")>1){
+                    toastr.success("Depósito realizado con éxito");
+                    vm.movimiento = '000';
+                    vm.subtipo = '00';
+                    vm.forma_pago = '01';
+                    vm.destino = '04';
+                    vm.origen = '01';
+                    vm.importe = '';
+
+                }
             } );
         }
 

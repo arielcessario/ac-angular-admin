@@ -13,38 +13,47 @@ $data = file_get_contents("php://input");
 
 $decoded = json_decode($data);
 
-if ($decoded->function == 'save') {
-    saveProducto($decoded->producto);
-} elseif ($decoded->function == 'update') {
-    updateProducto($decoded->producto);
-} elseif ($decoded->function == 'deleteProducto') {
-    deleteProducto($decoded->id);
-} elseif ($decoded->function == 'getProductos') {
-    getProductos();
-} elseif ($decoded->function == 'getProductoByID') {
-    getProductoByID($id);
-} elseif ($decoded->function == 'savePedido') {
-    savePedido($decoded->data);
-} elseif ($decoded->function == 'updatePedido') {
-    updatePedido($decoded->data);
-} elseif ($decoded->function == 'getPedidos') {
-    getPedidos();
-} elseif ($decoded->function == 'confirmarPedido') {
-    confirmarPedido($decoded->data);
-} elseif ($decoded->function == 'deletePedido') {
-    deletePedido($decoded->data);
-} elseif ($decoded->function == 'deletePedidoDetalles') {
-    deletePedidoDetalles($decoded->data);
-} elseif ($decoded->function == 'savePedidoDetalles') {
-    savePedidoDetalles($decoded->pedido_id, json_decode($decoded->data));
-} elseif ($decoded->function == 'saveStock') {
-    saveStock($decoded->pedido, $decoded->stock);
-} elseif ($decoded->function == 'getStock') {
-    getStock();
-} elseif ($decoded->function == 'updateStock') {
-    updateStock($decoded->stock);
-}elseif ($decoded->function == 'aReponer') {
-    aReponer();
+if($decoded != null){
+    if ($decoded->function == 'save') {
+        saveProducto($decoded->producto);
+    } elseif ($decoded->function == 'update') {
+        updateProducto($decoded->producto);
+    } elseif ($decoded->function == 'deleteProducto') {
+        deleteProducto($decoded->id);
+    } elseif ($decoded->function == 'getProductos') {
+        getProductos();
+    } elseif ($decoded->function == 'getProductoByID') {
+        getProductoByID($id);
+    } elseif ($decoded->function == 'savePedido') {
+        savePedido($decoded->data);
+    } elseif ($decoded->function == 'updatePedido') {
+        updatePedido($decoded->data);
+    } elseif ($decoded->function == 'getPedidos') {
+        getPedidos();
+    } elseif ($decoded->function == 'confirmarPedido') {
+        confirmarPedido($decoded->data);
+    } elseif ($decoded->function == 'deletePedido') {
+        deletePedido($decoded->data);
+    } elseif ($decoded->function == 'deletePedidoDetalles') {
+        deletePedidoDetalles($decoded->data);
+    } elseif ($decoded->function == 'savePedidoDetalles') {
+        savePedidoDetalles($decoded->pedido_id, json_decode($decoded->data));
+    } elseif ($decoded->function == 'saveStock') {
+        saveStock($decoded->pedido, $decoded->stock);
+    } elseif ($decoded->function == 'getStock') {
+        getStock();
+    } elseif ($decoded->function == 'updateStock') {
+        updateStock($decoded->stock);
+    }elseif ($decoded->function == 'aReponer') {
+        aReponer();
+    }
+}else{
+
+    $function = $_GET["function"];
+    if ($function == 'getProductos') {
+        getProductos();
+    }
+
 }
 
 
