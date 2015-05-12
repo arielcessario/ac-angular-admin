@@ -20,6 +20,7 @@ angular.module('myApp', [
     'nombreapp.stock.gastos',
     'nombreapp.stock.depositos',
     'nombreapp.stock.resumenCajaDiaria',
+    'nombreapp.stock.historicoCajaDiaria',
     'nombreapp.nav',
     'ac-search-panel'
 ]).
@@ -31,7 +32,7 @@ function MainCtrl(){
     var vm = this;
     vm.data = [{ref:'#/cajas',name:'Caja'},
         {ref:'#/resumen_caja_diaria',name:'Resumen de Caja Diaria'},
-        {ref:'#/historico_cajas_diaria',name:'Histórico de Cajas Diarias'},
+        {ref:'#/historico_caja_diaria',name:'Histórico de Cajas Diarias'},
         {ref:'#/movimientos',name:'Movimientos'},
         {ref:'#/listado_productos',name:'Lista de Productos'},
         {ref:'#/listado_pedidos',name:'Lista de Pedidos'},

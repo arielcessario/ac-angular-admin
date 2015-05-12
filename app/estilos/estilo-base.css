@@ -365,54 +365,60 @@ select ~ label {
 }
 
 /* line 295, estilo-base.scss */
+.btn-lock-open {
+  background: #FF9800 url("icons/core/lock-open.svg") no-repeat 50% 50%;
+  background-size: 60% 60%;
+}
+
+/* line 300, estilo-base.scss */
 .btn-ok {
   background: #51a351 url("icons/core/done.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 300, estilo-base.scss */
+/* line 305, estilo-base.scss */
 .btn-cut {
   background: #FF9800 url("icons/core/content-cut.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 305, estilo-base.scss */
+/* line 310, estilo-base.scss */
 .btn-delete {
   background: #F44336 url("icons/core/delete.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 310, estilo-base.scss */
+/* line 315, estilo-base.scss */
 .btn-delete-black {
   background: url("icons/core/delete-black.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 315, estilo-base.scss */
+/* line 320, estilo-base.scss */
 .btn-like {
   background: #03A9F4 url("icons/core/thumb-up.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 320, estilo-base.scss */
+/* line 325, estilo-base.scss */
 .btn-refresh {
   background: #03A9F4 url("icons/core/refresh.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 325, estilo-base.scss */
+/* line 330, estilo-base.scss */
 .btn-close {
   background: #F44336 url("icons/core/close.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 330, estilo-base.scss */
+/* line 335, estilo-base.scss */
 .btn-visibility {
   background: #03A9F4 url("icons/core/visibility.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 335, estilo-base.scss */
+/* line 340, estilo-base.scss */
 input[type=submit]:hover ~ label,
 input[type=button]:hover ~ label,
 button:hover ~ label {
@@ -420,7 +426,7 @@ button:hover ~ label {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
-/* line 342, estilo-base.scss */
+/* line 347, estilo-base.scss */
 .relieve-2 {
   box-shadow: 0px 5px 10px #adadad;
   -webkit-transition: all .3s;
@@ -430,12 +436,12 @@ button:hover ~ label {
   transition: all 0.3s;
 }
 
-/* line 352, estilo-base.scss */
+/* line 357, estilo-base.scss */
 .relieve-2:hover {
   box-shadow: 0px 10px 15px #ababab;
 }
 
-/* line 357, estilo-base.scss */
+/* line 362, estilo-base.scss */
 span {
   display: inline-block;
   width: 150px;
@@ -443,13 +449,13 @@ span {
   padding: 5px;
 }
 @media (max-width: 1025px) {
-  /* line 357, estilo-base.scss */
+  /* line 362, estilo-base.scss */
   span {
     width: 100px !important;
   }
 }
 
-/* line 369, estilo-base.scss */
+/* line 374, estilo-base.scss */
 .descr {
   min-width: 400px !important;
   max-width: 400px !important;
@@ -457,13 +463,13 @@ span {
   overflow: auto;
 }
 @media (max-width: 1025px) {
-  /* line 369, estilo-base.scss */
+  /* line 374, estilo-base.scss */
   .descr {
     width: 300px;
   }
 }
 
-/* line 382, estilo-base.scss */
+/* line 387, estilo-base.scss */
 .descr-corta {
   min-width: 200px !important;
   max-width: 200px !important;
@@ -471,13 +477,13 @@ span {
   overflow: auto;
 }
 @media (max-width: 1025px) {
-  /* line 382, estilo-base.scss */
+  /* line 387, estilo-base.scss */
   .descr-corta {
     width: 150px;
   }
 }
 
-/* line 394, estilo-base.scss */
+/* line 399, estilo-base.scss */
 .title {
   position: absolute;
   color: #ffffff;
@@ -490,7 +496,7 @@ span {
   display: flex;
 }
 
-/* line 409, estilo-base.scss */
+/* line 414, estilo-base.scss */
 h1 {
   font-family: Roboto, serif;
   font-weight: 400;
@@ -499,7 +505,7 @@ h1 {
   margin-left: 5px;
 }
 
-/* line 417, estilo-base.scss */
+/* line 422, estilo-base.scss */
 h2 {
   font-family: Roboto, serif;
   font-weight: 400;
@@ -510,7 +516,7 @@ h2 {
   min-width: 200px;
 }
 
-/* line 427, estilo-base.scss */
+/* line 432, estilo-base.scss */
 h3 {
   font-family: Roboto, serif;
   font-weight: 400;
@@ -518,52 +524,52 @@ h3 {
   margin-bottom: 15px;
 }
 @media (max-width: 1025px) {
-  /* line 427, estilo-base.scss */
+  /* line 432, estilo-base.scss */
   h3 {
     width: 100px !important;
   }
 }
 
-/* line 439, estilo-base.scss */
+/* line 444, estilo-base.scss */
 .no-margin {
   margin: 0px !important;
 }
 
-/* line 445, estilo-base.scss */
+/* line 450, estilo-base.scss */
 .ac-grid .cabecera h3 {
   width: 130px;
   display: inline-block;
   margin: 5px;
   padding: 5px;
 }
-/* line 456, estilo-base.scss */
+/* line 461, estilo-base.scss */
 .ac-grid .descr-grid {
   width: 200px;
   min-width: 200px;
 }
-/* line 462, estilo-base.scss */
+/* line 467, estilo-base.scss */
 .ac-grid div span, .ac-grid div input {
   width: 130px !important;
 }
 @media (max-width: 1025px) {
-  /* line 462, estilo-base.scss */
+  /* line 467, estilo-base.scss */
   .ac-grid div span, .ac-grid div input {
     width: 100px !important;
   }
 }
 
-/* line 472, estilo-base.scss */
+/* line 477, estilo-base.scss */
 .full-width {
   width: 100% !important;
 }
 
-/* line 476, estilo-base.scss */
+/* line 481, estilo-base.scss */
 .line {
   display: flex;
   flex-direction: row;
 }
 
-/* line 481, estilo-base.scss */
+/* line 486, estilo-base.scss */
 .line-separator {
   width: 100%;
   border: 0 solid;
@@ -571,25 +577,25 @@ h3 {
   border-bottom-color: #ababab;
 }
 
-/* line 489, estilo-base.scss */
+/* line 494, estilo-base.scss */
 .v-spacer {
   height: 60px;
   width: 0px;
 }
 
-/* line 496, estilo-base.scss */
+/* line 501, estilo-base.scss */
 .half-v-spacer {
   height: 20px;
   width: 0px;
 }
 
-/* line 502, estilo-base.scss */
+/* line 507, estilo-base.scss */
 .selected {
   background-color: #009688;
   color: #ffffff;
 }
 
-/* line 507, estilo-base.scss */
+/* line 512, estilo-base.scss */
 .label--checkbox {
   position: relative;
   margin: .5rem;
@@ -598,14 +604,14 @@ h3 {
   cursor: pointer;
 }
 
-/* line 518, estilo-base.scss */
+/* line 523, estilo-base.scss */
 .checkbox {
   position: relative;
   top: -0.375rem;
   margin: 0 1rem 0 0;
   cursor: pointer;
 }
-/* line 526, estilo-base.scss */
+/* line 531, estilo-base.scss */
 .checkbox:before {
   -moz-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
@@ -619,7 +625,7 @@ h3 {
   height: 1rem;
   border: 2px solid #f2f2f2;
 }
-/* line 542, estilo-base.scss */
+/* line 547, estilo-base.scss */
 .checkbox:checked:before {
   -moz-transform: rotate(-45deg);
   -ms-transform: rotate(-45deg);
@@ -630,7 +636,7 @@ h3 {
   border-top-style: none;
   border-right-style: none;
 }
-/* line 553, estilo-base.scss */
+/* line 558, estilo-base.scss */
 .checkbox:after {
   content: "";
   position: absolute;
@@ -642,7 +648,7 @@ h3 {
   cursor: pointer;
 }
 
-/* line 569, estilo-base.scss */
+/* line 574, estilo-base.scss */
 .button--round {
   -moz-transition: background 0.3s ease-in-out;
   -o-transition: background 0.3s ease-in-out;
@@ -657,18 +663,18 @@ h3 {
   text-decoration: none;
   text-align: center;
 }
-/* line 584, estilo-base.scss */
+/* line 589, estilo-base.scss */
 .button--round i {
   font-size: 1rem;
   line-height: 220%;
   vertical-align: middle;
 }
-/* line 590, estilo-base.scss */
+/* line 595, estilo-base.scss */
 .button--round:hover {
   background: #3b50ce;
 }
 
-/* line 595, estilo-base.scss */
+/* line 600, estilo-base.scss */
 .button--sticky {
   position: fixed;
   right: 2rem;
