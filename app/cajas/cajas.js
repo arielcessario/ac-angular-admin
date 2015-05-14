@@ -78,8 +78,12 @@
                 toastr.error('No hay productos seleccionados');
                 return;
             }
+            var cliente_id = -1;
+            if(vm.cliente.cliente_id !== undefined){
+                cliente_id = vm.cliente.cliente_id;
+            }
             //(tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback)
-            MovimientosService.armarMovimiento('001', '00', 1, vm.forma_pago, '00', vm.total, vm.desc_cant, 'Venta de Caja', vm.detalles, vm.cliente.cliente_id, 1, '',
+            MovimientosService.armarMovimiento('001', '00', 1, vm.forma_pago, '00', vm.total, vm.desc_cant, 'Venta de Caja', vm.detalles, cliente_id, 1, '',
                 function (data) {
                     //console.log(MovimientoStockFinal.stocks_finales);
                     ConsultaStockService.updateStock(MovimientoStockFinal.stocks_finales, function (data) {
@@ -269,9 +273,21 @@
         service.getCajas = getCajas;
         service.getCajaDiariaFromTo = getCajaDiariaFromTo;
         service.getCajasBySucursal = getCajasBySucursal;
+        service.getMovimientos = getMovimientos;
         return service;
 
 
+
+
+        function getMovimientos(fecha_desde, fecha_hasta, callback){
+            return $http.get(url + '?function=getMovimientos&fecha_desde=' + fecha_desde +'&fecha_hasta='+fecha_hasta)
+                .success(function (data) {
+                    callback(data)
+                })
+                .error(function (data) {
+                    callback(data)
+                });
+        }
 
 
         function getCajaDiariaFromTo(sucursal_id, asiento_id_inicio, asiento_id_fin, callback){

@@ -1,20 +1,20 @@
 (function () {
     'use strict';
 
-    angular.module('nombreapp.stock.historicoCajaDiaria', ['ngRoute', 'nombreapp.stock.cajas', 'acMovimientos', 'nombreapp.stock.sucursales'])
+    angular.module('nombreapp.stock.totalConcepto', ['ngRoute', 'nombreapp.stock.cajas', 'acMovimientos', 'nombreapp.stock.sucursales'])
 
         .config(['$routeProvider', function ($routeProvider) {
-            $routeProvider.when('/historico_caja_diaria', {
-                templateUrl: './historico_caja_diaria/historico_caja_diaria.html',
-                controller: 'HistoricoCajaDiariaController'
+            $routeProvider.when('/total_concepto', {
+                templateUrl: './total_concepto/total_concepto.html',
+                controller: 'TotalConceptoController'
             });
         }])
 
-        .controller('HistoricoCajaDiariaController', HistoricoCajaDiariaController);
+        .controller('TotalConceptoController', TotalConceptoController);
 
 
-    HistoricoCajaDiariaController.$inject = ['CajasService', '$location', 'MovimientosService', 'SucursalesService'];
-    function HistoricoCajaDiariaController(CajasService, $location, MovimientosService, SucursalesService) {
+    TotalConceptoController.$inject = ['CajasService', '$location', 'MovimientosService', 'SucursalesService'];
+    function TotalConceptoController(CajasService, $location, MovimientosService, SucursalesService) {
 
         var vm = this;
         vm.asientos = [];

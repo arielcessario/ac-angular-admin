@@ -1,0 +1,124 @@
+<div ng-controller="MovimientosController as movimientosCtrl">
+    <div class="title"><h1>Historico de Caja</h1></div>
+    <div class="v-spacer"></div>
+
+    <div>
+        <select
+                ng-model="movimientosCtrl.mes"
+                ng-click="movimientosCtrl.filtroMes();">
+
+            <option value="01">Enero</option>
+            <option value="02">Febrero</option>
+            <option value="03">Marzo</option>
+            <option value="04">Abril</option>
+            <option value="05">Mayo</option>
+            <option value="06">Junio</option>
+            <option value="07">Julio</option>
+            <option value="08">Agosto</option>
+            <option value="09">Septiempbre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+        </select>
+        <br><label for="status">Mes</label>
+
+    </div>
+    <!--Agregar filtro por año-->
+    <!--<div>-->
+        <!--<select-->
+                <!--ng-model="movimientosCtrl.anio"-->
+                <!--ng-click="movimientosCtrl.filtroMes();">-->
+
+            <!--<option value="2015">Enero</option>-->
+            <!--<option value="2016">Febrero</option>-->
+            <!--<option value="2017">Marzo</option>-->
+        <!--</select>-->
+
+    <!--</div>-->
+    <div class="half-v-spacer"></div>
+    <div class="form-flex ">
+        <div style="min-width: 400px;"></div>
+        <div style="text-align: center;">Cta. Ctrl.</div>
+        <div style="text-align: center;">C. Ahorro</div>
+        <div style="text-align: center;">Cta. Cte.</div>
+        <div style="text-align: center;">CA u$s</div>
+        <div style="text-align: center;">General</div>
+        <div style="min-width: 100px;text-align: center;"></div>
+
+    </div>
+    <div class="half-v-spacer"></div>
+
+    <div class="form-flex total">
+        <div style="min-width: 400px;">Inicio del Periodo</div>
+        <div style="text-align: center;">{{movimientosCtrl.resultado_inicial.control}}</div>
+        <div style="text-align: center;">{{movimientosCtrl.resultado_inicial.ca}}</div>
+        <div style="text-align: center;">{{movimientosCtrl.resultado_inicial.cc}}</div>
+        <div style="text-align: center;">{{movimientosCtrl.resultado_inicial.me}}</div>
+        <div style="text-align: center;">{{movimientosCtrl.resultado_inicial.general}}</div>
+        <div style="min-width: 100px;text-align: center;"></div>
+
+    </div>
+
+    <div class="half-v-spacer"></div>
+
+    <div ng-repeat="asiento in movimientosCtrl.asientos | filter:movimientosCtrl.filtro">
+        <!--{{asiento}}-->
+
+        <!--<div>{{asiento[$index].fecha}}-->
+
+        <!--</div>-->
+
+        <div ng-repeat="movimiento in asiento" class="full-width">
+
+
+            <div ng-if="movimiento.cuenta_id.indexOf('1.1.2.0')" class="form-flex">
+                <div style="min-width: 400px;">{{movimiento.detalles[0].detalle}}</div>
+                <div style="text-align: center;">
+                    <div ng-if="movimiento.control !== 0">{{movimiento.control}}</div>
+                </div>
+                <div style="text-align: center;">
+                    <div ng-if="movimiento.ca !== 0">{{movimiento.ca}}</div>
+                </div>
+                <div style="text-align: center;">
+                    <div ng-if="movimiento.cc !== 0">{{movimiento.cc}}</div>
+                </div>
+                <div style="text-align: center;">
+                    <div ng-if="movimiento.me !== 0">{{movimiento.me}}</div>
+                </div>
+                <div style="text-align: center;">
+                    <div ng-if="movimiento.general !== 0">{{movimiento.general}}</div>
+                </div>
+                <div style="min-width: 100px;text-align: center;">{{movimiento.importe | currency}}</div>
+
+            </div>
+            <!--{{movimiento}}-->
+            <!--<div style="color: red;">{{movimiento}}</div>-->
+        </div>
+        <!--<span>{{asiento.fecha}}</span><span>{{producto.categoria}}</span> <span class="descr">{{producto.descripcion}}</span>-->
+        <!--<div class="btn">-->
+        <!--<button ng-click="movimientosCtrl.detalle(producto.producto_id)" class="btn-medium btn-visibility"></button>-->
+        <!--<label>Mostrar Detalle</label>-->
+        <!--</div>-->
+        <div class="half-v-spacer"></div>
+    </div>
+    <div class="half-v-spacer"></div>
+
+    <div class="form-flex total">
+        <div style="min-width: 400px;">Final del Periodo</div>
+        <div style="text-align: center;">{{movimientosCtrl.resultado_posterior.control}}</div>
+        <div style="text-align: center;">{{movimientosCtrl.resultado_posterior.ca}}</div>
+        <div style="text-align: center;">{{movimientosCtrl.resultado_posterior.cc}}</div>
+        <div style="text-align: center;">{{movimientosCtrl.resultado_posterior.me}}</div>
+        <div style="text-align: center;">{{movimientosCtrl.resultado_posterior.general}}</div>
+        <div style="min-width: 100px;text-align: center;"></div>
+
+    </div>
+
+    <!--<div class="btn">-->
+
+    <!--<input type="button" class="relieve-2 btn-add  btn-big" value=""-->
+    <!--onclick="window.location='#/productos/0';"/>-->
+
+    <!--<label>Nuevo Producto</label>-->
+    <!--</div>-->
+</div>

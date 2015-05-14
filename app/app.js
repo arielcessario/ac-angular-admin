@@ -21,6 +21,9 @@ angular.module('myApp', [
     'nombreapp.stock.depositos',
     'nombreapp.stock.resumenCajaDiaria',
     'nombreapp.stock.historicoCajaDiaria',
+    'nombreapp.stock.movimientos',
+    'nombreapp.stock.resultados',
+    'nombreapp.stock.totalConcepto',
     'nombreapp.nav',
     'ac-search-panel'
 ]).
@@ -34,6 +37,8 @@ function MainCtrl(){
         {ref:'#/resumen_caja_diaria',name:'Resumen de Caja Diaria'},
         {ref:'#/historico_caja_diaria',name:'Histórico de Cajas Diarias'},
         {ref:'#/movimientos',name:'Movimientos'},
+        {ref:'#/total_concepto',name:'Total por Concepto'},
+        {ref:'#/margenes',name:'Margenes'},
         {ref:'#/listado_productos',name:'Lista de Productos'},
         {ref:'#/listado_pedidos',name:'Lista de Pedidos'},
         {ref:'#/listado_categorias',name:'Lista de Categorias'},

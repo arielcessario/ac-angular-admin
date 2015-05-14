@@ -8,30 +8,71 @@ $decoded = json_decode($data);
 if ($decoded != null) {
     if ($decoded->function == 'getCajaDiaria') {
         getCajaDiaria($decoded->sucursal_id);
-    } elseif ($decoded->function == 'save') {
-        saveCategoria($decoded->categoria);
-    } elseif ($decoded->function == 'deleteCategoria') {
-        deleteCategoria($decoded->id);
-    } elseif ($decoded->function == 'update') {
-        updateCategoria($decoded->categoria);
     }
 } else {
 
     $function = $_GET["function"];
     if ($function == 'getCajaDiaria') {
         getCajaDiaria($_GET["sucursal_id"]);
-    }else if($function == 'getSaldoInicial'){
+    } else if ($function == 'getSaldoInicial') {
         getSaldoInicial($_GET["sucursal_id"]);
-    }else if($function == 'getCajas'){
+    } else if ($function == 'getCajas') {
         getCajas();
-    }else if($function == 'getCajaDiariaFromTo') {
+    } else if ($function == 'getCajaDiariaFromTo') {
         getCajaDiariaFromTo($_GET["sucursal_id"], $_GET["asiento_id_inicio"], $_GET["asiento_id_fin"]);
+    } else if ($function == 'getMovimientos') {
+        getMovimientos($_GET["fecha_desde"], $_GET["fecha_hasta"]);
     }
-
 
 
 }
 
+// Movimientos que modifican el estado de cuentas
+function getMovimientos($fecha_desde, $fecha_hasta)
+{
+    $db = new MysqliDb();
+    $resultsDetalles = [];
+
+    $SQL = "select movimiento_id, asiento_id, fecha, c.cuenta_id, c.descripcion, usuario_id, importe, 0 general, 0 control, 0 ca, 0 cc, 0 me,
+0 detalles
+from movimientos m inner join cuentas c on m.cuenta_id = c.cuenta_id where (m.cuenta_id like '1.1.1.2%' or m.cuenta_id = '1.1.1.10')
+and (fecha between '" . $fecha_desde . "' and '" . $fecha_hasta . "');";
+
+
+//or m.cuenta_id = '1.1.7.01'
+//or m.cuenta_id = '1.2.1.01'
+//or m.cuenta_id = '1.3.1.01'
+//or m.cuenta_id = '1.3.2.01'
+//or m.cuenta_id = '1.3.3.01'
+//or m.cuenta_id = '2.1.1.01'
+//or m.cuenta_id = '2.1.2.01'
+//or m.cuenta_id like '4.2.1.%'
+//or m.cuenta_id like '5.2.1.%'
+//or m.cuenta_id = '5.2.2.01'
+//or m.cuenta_id = '5.2.3.01'
+//or m.cuenta_id like '5.2.4.%'
+//or m.cuenta_id like '5.2.5.%'
+//or m.cuenta_id like '5.2.8.%'
+//or m.cuenta_id = '5.3.1.01'
+
+    $results = $db->rawQuery($SQL);
+
+    foreach ($results as $row) {
+        $SQL = "select
+detalle_tipo_id,
+valor detalle
+
+ from detallesmovimientos
+ where detalle_tipo_id in (2) and movimiento_id =  " . $row['movimiento_id'] . ";";
+        $detalles = $db->rawQuery($SQL);
+
+        $row["detalles"] = $detalles;
+        array_push($resultsDetalles, $row);
+
+    }
+
+    echo json_encode($resultsDetalles);
+}
 
 function getCajaDiaria($sucursal_id)
 {
@@ -230,7 +271,7 @@ function checkEstado()
 function getLastCaja($sucursal_id)
 {
     $db = new MysqliDb();
-    $results = $db->rawQuery("select * from cajas where caja_id = (select max(caja_id) from cajas) and sucursal_id=".$sucursal_id.";");
+    $results = $db->rawQuery("select * from cajas where caja_id = (select max(caja_id) from cajas) and sucursal_id=" . $sucursal_id . ";");
 
     return $results[0];
 }
@@ -263,93 +304,6 @@ function abrirCaja($params, $sucursal_id)
     } else {
         echo json_encode($db->getLastError());
     }
-
-}
-
-// Obtiene el detalle de la caja actual
-function getDetalleCaja()
-{
-
-//    $db = new MysqliDb();
-//    $data = Array(
-//        "status" => 0);
-//
-//    $lastCaja = getLastCaja($sucursal_id);
-//
-//
-//    $SQL = "Select
-//                                    m.idAsiento idAsiento,
-//                                    m.idMovimiento,
-//                                    DATE_FORMAT(m.fecha,'%d-%m-%Y %h:%m')
-//                                    m.idCuenta,
-//                                    c.nombre,
-//                                    m.importe,
-//                                    0 detalles,
-//                                    " . $lastCaja["saldoInicial"] . " saldoInicial
-//                                from
-//                                    movimientos m
-//                                        inner join
-//                                    cuentas c ON c.nroCuenta = m.idCuenta
-//                                where
-//                                m.idAsiento >= " . $lastCaja['idAsientoInicio'] . "
-//                                order by m.idAsiento , m.idMovimiento;";
-//    $results = $db->rawQuery($SQL);
-//
-//
-//    $resultsDetalles = Array();
-//
-//    foreach ($results as $row) {
-//
-//        $SQL = "select
-//                                        u.nombre usuario, p.nombre producto, d.valor, t.nombre, d.idTipoDetalle
-//                                    from
-//                                        movimientos m
-//                                            inner join
-//                                        detallesmovimientos d ON m.idMovimiento = d.idMovimiento
-//                                            inner join
-//                                        tiposdetalles t ON d.idTipoDetalle = t.idTipoDetalle
-//                                            left join
-//                                        usuarios u ON d.valor = u.idUsuario
-//                                            and d.idTipoDetalle = 1
-//                                            left join
-//                                        productos p ON d.valor = p.idProducto
-//                                            and d.idTipoDetalle = 8
-//                                    where
-//                                        m.idMovimiento = " . $row['idMovimiento'] . ";";
-//
-//
-//        $detalles = $db->rawQuery($SQL);
-//
-//        $row["detalles"] = $detalles;
-//        array_push($resultsDetalles, $row);
-//
-//
-//    }
-//
-//
-//    if (count($resultsDetalles) === 0) {
-//        $lastCaja["saldoInicial"];
-//
-//        $results = $db->rawQuery(" select 0 idAsiento,
-//                                    0 idMovimiento,
-//                                    0 fecha,
-//                                    0 idCuenta,
-//                                    0 nombre,
-//                                    0 importe,
-//                                    0 detalles,
-//                                    " . $lastCaja["saldoInicial"] . " saldoInicial from dual ");
-//        echo json_encode($results);
-//
-//    } else {
-//        echo json_encode($resultsDetalles);
-//    }
-
-
-//    if ($id) {
-//        echo $id;
-//    } else {
-//        echo json_encode(Array("Error" => $db->getLastError()));
-//    }
 
 }
 
