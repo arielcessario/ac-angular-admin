@@ -22,6 +22,8 @@ if ($decoded != null) {
         getCajaDiariaFromTo($_GET["sucursal_id"], $_GET["asiento_id_inicio"], $_GET["asiento_id_fin"]);
     } else if ($function == 'getMovimientos') {
         getMovimientos($_GET["fecha_desde"], $_GET["fecha_hasta"]);
+    } else if ($function == 'totalConcepto') {
+        totalConcepto($_GET["where"], $_GET["fecha_desde"], $_GET["fecha_hasta"]);
     }
 
 
@@ -73,6 +75,37 @@ valor detalle
 
     echo json_encode($resultsDetalles);
 }
+
+// Movimientos que modifican el estado de cuentas
+function totalConcepto($where, $fecha_desde, $fecha_hasta)
+{
+    $db = new MysqliDb();
+    $resultsDetalles = [];
+
+    $SQL = "select movimiento_id, asiento_id, fecha, c.cuenta_id, c.descripcion, usuario_id, importe, 0 general, 0 control, 0 ca, 0 cc, 0 me,
+0 detalles
+from movimientos m inner join cuentas c on m.cuenta_id = c.cuenta_id
+where " .$where. " and (fecha between '" . $fecha_desde . "' and '" . $fecha_hasta . "');";
+
+    $results = $db->rawQuery($SQL);
+
+    foreach ($results as $row) {
+        $SQL = "select
+detalle_tipo_id,
+valor detalle
+
+ from detallesmovimientos
+ where detalle_tipo_id in (2) and movimiento_id =  " . $row['movimiento_id'] . ";";
+        $detalles = $db->rawQuery($SQL);
+
+        $row["detalles"] = $detalles;
+        array_push($resultsDetalles, $row);
+
+    }
+
+    echo json_encode($resultsDetalles);
+}
+
 
 function getCajaDiaria($sucursal_id)
 {

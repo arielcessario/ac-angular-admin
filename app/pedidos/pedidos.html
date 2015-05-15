@@ -100,7 +100,8 @@
         </span>
         </div>
 
-        <div class="btn" ng-if="pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == ''">
+        <div class="btn" ng-if="pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == ''
+        || pedidosCtrl.pedido.fecha_entrega == '0000-00-00 00:00:00'">
             <input type="button" class="relieve-2 btn-add  btn-medium" value=""
                    ng-click="pedidosCtrl.agregarDetalle()"/>
             <label>Agregar al Pedido</label>
@@ -138,7 +139,8 @@
                     />
             <input type="checkbox" ng-click="pedidosCtrl.agregarFaltante(detalle);"
 
-                   ng-disabled="!(pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == '')"/>
+                   ng-disabled="!(pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == ''
+                   || pedidosCtrl.pedido.fecha_entrega == '0000-00-00 00:00:00')"/>
 
 
             <div class="btn">

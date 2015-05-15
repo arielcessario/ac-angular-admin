@@ -4,17 +4,36 @@
 
     <div style="display: flex;">
         <div><select
-                ng-model="totalConceptoCtrl.sucursal"
-                ng-options="sucursal.nombre  for sucursal in totalConceptoCtrl.sucursales" name=""
-                ng-click="totalConceptoCtrl.filtroSucursal(); totalConceptoCtrl.clearDetalles();">
-
-        </select><br><label for="status">Estado</label></div>
+                ng-model="totalConceptoCtrl.mes" name=""
+                ng-click="totalConceptoCtrl.getDetalles(); totalConceptoCtrl.clearDetalles();">
+            <option value="01">Enero</option>
+            <option value="02">Febrero</option>
+            <option value="03">Marzo</option>
+            <option value="04">Abril</option>
+            <option value="05">Mayo</option>
+            <option value="06">Junio</option>
+            <option value="07">Julio</option>
+            <option value="08">Agosto</option>
+            <option value="09">Septiempbre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+        </select>
+            <br><label for="status">Mes</label>
+        </div>
         <div><select
-                ng-model="consultaStockCtrl.caja"
-                ng-options="caja.fecha  for caja in totalConceptoCtrl.cajas" name=""
+                ng-model="totalConceptoCtrl.concepto" name=""
                 ng-click="totalConceptoCtrl.getDetalles()">
+            <option value="01">Sueldos</option>
+            <option value="02">Compra de Mercaderia</option>
+            <option value="03">Compra de Insumos</option>
+            <option value="04">Venta de Productos</option>
+            <option value="05">Venta de Servicios</option>
+            <option value="06">Alquileres</option>
+            <option value="07">Impuestos</option>
+            <option value="08">Impuestos</option>
 
-        </select><br><label for="status">Estado</label></div>
+        </select><br><label for="">Concepto</label></div>
     </div>
     <div class="v-spacer"></div>
 
@@ -25,7 +44,7 @@
 
         </div>
 
-        <div ng-repeat="movimiento in asiento" class="full-width" >
+        <div ng-repeat="movimiento in asiento" class="full-width">
             <div ng-if="movimiento.cuenta_id.indexOf('4.1.1.') > -1 " class="form-flex">
                 <div>{{movimiento.detalles[2].detalle}}</div>
                 <div>{{movimiento.detalles[1].detalle}} x {{movimiento.detalles[0].detalle | currency}}</div>

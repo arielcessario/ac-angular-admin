@@ -274,9 +274,18 @@
         service.getCajaDiariaFromTo = getCajaDiariaFromTo;
         service.getCajasBySucursal = getCajasBySucursal;
         service.getMovimientos = getMovimientos;
+        service.totalConcepto = totalConcepto;
         return service;
 
-
+        function totalConcepto(where, fecha_desde, fecha_hasta, callback){
+            return $http.get(url + '?function=totalConcepto&where='+where+'&fecha_desde=' + fecha_desde +'&fecha_hasta='+fecha_hasta)
+                .success(function (data) {
+                    callback(data)
+                })
+                .error(function (data) {
+                    callback(data)
+                });
+        }
 
 
         function getMovimientos(fecha_desde, fecha_hasta, callback){
