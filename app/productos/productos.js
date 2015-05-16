@@ -369,6 +369,7 @@
 
         }
 
+
         function getProductoByName(name, callback) {
             getProductos(function (data) {
                 //console.log(data);

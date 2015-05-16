@@ -8,11 +8,23 @@
         <label>Buscar...</label>
     </div>
     <div class="lista-flex" ng-repeat="producto in listadoProductosCtrl.productos | filter:listadoProductosCtrl.filtro">
-        <span>{{producto.nombre}}</span><span>{{producto.categoria}}</span> <span class="descr">{{producto.descripcion}}</span>
+
+        <span>{{producto.nombre}}</span>
+        <div class="btn" ng-if="producto.destacado == 1">
+            <button class="btn-medium btn-star-outlined"></button>
+            <label>Destacado</label>
+        </div>
+        <div ng-if="producto.destacado != 1"> </div>
+        <span>{{producto.categoria}}</span>
+        <span class="descr">{{producto.descripcion}}</span>
+
         <div class="btn">
-        <button ng-click="listadoProductosCtrl.detalle(producto.producto_id)" class="btn-medium btn-visibility"></button>
+            <button ng-click="listadoProductosCtrl.detalle(producto.producto_id)"
+                    class="btn-medium btn-visibility"></button>
             <label>Mostrar Detalle</label>
         </div>
+
+
     </div>
 
     <div class="btn">
