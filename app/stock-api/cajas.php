@@ -8,6 +8,12 @@ $decoded = json_decode($data);
 if ($decoded != null) {
     if ($decoded->function == 'getCajaDiaria') {
         getCajaDiaria($decoded->sucursal_id);
+    } else if ($decoded->function == 'cerrarCaja') {
+        cerrarCaja($decoded->importe, $decoded->sucursal_id);
+    } else if ($decoded->function == 'getSaldoFinal') {
+        getSaldoFinal($decoded->sucursal_id);
+    } else if ($decoded->function == 'abrirCaja') {
+        abrirCaja($decoded->importe, $decoded->sucursal_id);
     }
 } else {
 
@@ -24,6 +30,10 @@ if ($decoded != null) {
         getMovimientos($_GET["fecha_desde"], $_GET["fecha_hasta"]);
     } else if ($function == 'totalConcepto') {
         totalConcepto($_GET["where"], $_GET["fecha_desde"], $_GET["fecha_hasta"]);
+    } else if ($function == 'checkEstado') {
+        checkEstado($_GET["sucursal_id"]);
+    } else if ($function == 'getSaldoFinalAnterior') {
+        getSaldoFinalAnterior($_GET["sucursal_id"]);
     }
 
 
@@ -85,7 +95,7 @@ function totalConcepto($where, $fecha_desde, $fecha_hasta)
     $SQL = "select movimiento_id, asiento_id, fecha, c.cuenta_id, c.descripcion, usuario_id, importe, 0 general, 0 control, 0 ca, 0 cc, 0 me,
 0 detalles
 from movimientos m inner join cuentas c on m.cuenta_id = c.cuenta_id
-where " .$where. " and (fecha between '" . $fecha_desde . "' and '" . $fecha_hasta . "');";
+where " . $where . " and (fecha between '" . $fecha_desde . "' and '" . $fecha_hasta . "');";
 
     $results = $db->rawQuery($SQL);
 
@@ -105,7 +115,6 @@ valor detalle
 
     echo json_encode($resultsDetalles);
 }
-
 
 function getCajaDiaria($sucursal_id)
 {
@@ -173,81 +182,54 @@ function getSaldoFinal($sucursal_id)
 {
     $db = new MysqliDb();
     $lastCaja = getLastCaja($sucursal_id);
-    $moneda = 2;
-    $totales = Array();
 
-
-    for ($i = 2; $i < 5; $i++) {
-        $moneda = $i;
-        $SQL = "Select " . $moneda . " idMoneda,
+    $SQL = "
+        Select
     ifnull(sum(m.importe),0) total
 from
     movimientos m
 where
-    m.idCuenta = '1.1.1.01'
-        and m.idMovimiento in (select distinct
-            (idMovimiento)
-        from
-            detallesmovimientos d
-        where
-            d.idMovimiento in (select
-                    idMovimiento
-                from
-                    movimientos
-                where
-                    idAsiento >= " . $lastCaja['idAsientoInicio'] . ")
-                and d.idMovimiento in (select
-                    dd.idMovimiento
-                from
-                    detallesmovimientos dd
-                where
-					valor = " . $moneda . " and
-                    idTipoDetalle = 5
-                        and dd.idMovimiento in (select
-                            idMovimiento
-                        from
-                            movimientos
-                        where
-                            idAsiento >= " . $lastCaja['idAsientoInicio'] . " )));";
-        $results = $db->rawQuery($SQL);
-        array_push($totales, $results);
-    }
+    m.cuenta_id = '1.1.1.0" . $sucursal_id . "'
+        and m.asiento_id >= " . $lastCaja['asiento_inicio_id'] . ";";
+    $results = $db->rawQuery($SQL);
 
-    echo json_encode($totales);
+    echo json_encode($results);
 
 
 }
 
-function cerrarCaja($params)
+function cerrarCaja($importe, $sucursal_id)
 {
-//    $db = new MysqliDb();
+    $db = new MysqliDb();
 //    $decoded = json_decode($params);
-//    $lastCaja = getLastCaja();
+    $lastCaja = getLastCaja($sucursal_id);
 //
-//    if (intval($lastCaja["idUsuario"]) !== $decoded[0]->idUsuario) {
+//    if (intval($lastCaja["usuario_id"]) !== $decoded[0]->idUsuario) {
 //        echo 'usuario';
 //        return;
 //    }
-//
-//    if ($lastCaja["idAsientoCierre"] !== null) {
-//        echo 'cerrada';
-//        return;
-//    }
-//
-//    $db->rawQuery("update cajas set idAsientoCierre = (Select max(idAsiento) from movimientos) where idCaja =" . $lastCaja["idCaja"] . ";");
-//
-//
+
+    if ($lastCaja["asiento_cierre_id"] !== null && $lastCaja["asiento_cierre_id"] !== 0) {
+        echo 'cerrada';
+        return;
+    }
+
+    $db->rawQuery("update cajas set asiento_cierre_id = (Select max(asiento_id) from movimientos) where
+sucursal_id = " . $sucursal_id . " and
+caja_id =" . $lastCaja["caja_id"] . ";");
+
+
 //    for ($i = 0; $i <= 3; $i++) {
-//        $data = Array(
-//            "idMoneda" => $decoded[$i]->idMoneda,
-//            "valorReal" => $decoded[$i]->valor,
-//            "valorEsperado" => $decoded[$i]->valor,
-//            "idCaja" => $lastCaja["idCaja"]);
-//        $db->insert("detallescajas", $data);
-//
+        $data = Array(
+            "moneda_id" => 1,
+            "valor_real" => $importe,
+            "valor_esperado" => $importe,
+            "caja_id" => $lastCaja["caja_id"]);
+        $db->insert("cajas_detalles", $data);
+
 //    }
-//
-//    echo "ok";
+
+    echo "ok";
 }
 
 //Obtiene el saldo inicial de caja
@@ -259,46 +241,26 @@ function getSaldoInicial($sucursal_id)
     echo json_encode($lastCaja["saldo_inicial"]);
 
 
-//    $SQL = 'Select
-//    sum(m.importe) total
-//from
-//    movimientos m
-//where
-//    m.cuenta_id like "1.1.1.%"
-//        and m.movimiento_id in (select distinct
-//            (movimiento_id)
-//        from
-//            detallesmovimientos d
-//        where
-//            d.movimiento_id in (select
-//                    movimiento_id
-//                from
-//                    movimientos
-//                where
-//                    asiento_id between ' . $lastCaja['asiento_inicio_id'] . ' and ' . $lastCaja['asiento_cierre_id'] . ')
-//                and d.movimiento_id not in (select
-//                    dd.movimiento_id
-//                from
-//                    detallesmovimientos dd
-//                where
-//                    detalle_tipo_id = 5
-//                        and dd.movimiento_id in (select
-//                            movimiento_id
-//                        from
-//                            movimientos
-//                        where
-//                            asiento_id between ' . $lastCaja['asiento_inicio_id'] . ' and ' . $lastCaja['asiento_cierre_id'] . ')));';
-
-//    $results = $db->rawQuery($SQL);
-
-//    echo json_encode($results[0]['total'] + $lastCaja['saldo_inicial']);
-
 
 }
 
-function checkEstado()
+function getSaldoFinalAnterior($sucursal_id)
 {
-//    echo json_encode(getLastCaja());
+    $db = new MysqliDb();
+
+//    $lastCaja = getLastCaja($sucursal_id);
+//    echo json_encode($lastCaja["saldo_inicial"]);
+
+
+    $results = $db->rawQuery("select valor_real from cajas_detalles where caja_id = (select max(caja_id) from cajas where sucursal_id = ".$sucursal_id.");");
+
+    echo json_encode($results);
+
+}
+
+function checkEstado($sucursal_id)
+{
+    echo json_encode(getLastCaja($sucursal_id));
 }
 
 function getLastCaja($sucursal_id)
@@ -310,24 +272,25 @@ function getLastCaja($sucursal_id)
 }
 
 //Realiza la apertura de la caja
-function abrirCaja($params, $sucursal_id)
+function abrirCaja($importe, $sucursal_id)
 {
     $db = new MysqliDb();
 
-    $decoded = json_decode($params);
+//    $decoded = json_decode($params);
     $lastCaja = getLastCaja($sucursal_id);
 
 
-    if ($lastCaja['idAsientoCierre'] === null) {
+    if ($lastCaja['asiento_cierre_id'] === null ||$lastCaja['asiento_cierre_id'] === 0 ) {
         echo 'abierta';
 //        echo 'La caja se encuentra abierta';
         return;
     }
 
     $data = Array(
-        'idUsuario' => $decoded->idUsuario,
-        'idAsientoInicio' => $lastCaja['idAsientoCierre'] + 1,
-        'saldoInicial' => $decoded->saldoInicial
+        'usuario_id' => 1,
+        'asiento_inicio_id' => $lastCaja['asiento_cierre_id'] + 1,
+        'saldo_inicial' => $importe,
+        'sucursal_id' => $sucursal_id
     );
 
     $id = $db->insert('cajas', $data);

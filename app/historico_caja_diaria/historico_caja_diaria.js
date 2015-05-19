@@ -52,7 +52,10 @@
         }
 
         function getDetalles() {
+            clearDetalles();
             vm.saldoInicial = parseFloat(vm.caja.saldo_inicial);
+
+            //console.log(vm.caja);
 
             CajasService.getCajaDiariaFromTo(vm.sucursal.sucursal_id, vm.caja.asiento_inicio_id, vm.caja.asiento_cierre_id, function (data) {
                 //console.log(data);

@@ -275,6 +275,11 @@
         service.getCajasBySucursal = getCajasBySucursal;
         service.getMovimientos = getMovimientos;
         service.totalConcepto = totalConcepto;
+        service.checkEstado = checkEstado;
+        service.getSaldoFinal = getSaldoFinal;
+        service.getSaldoFinalAnterior = getSaldoFinalAnterior;
+        service.cerrarCaja = cerrarCaja;
+        service.abrirCaja = abrirCaja;
         return service;
 
         function totalConcepto(where, fecha_desde, fecha_hasta, callback){
@@ -346,8 +351,61 @@
 
         }
 
+        function getSaldoFinal(sucursal_id, callback) {
+            return $http.post(url, {function:'getSaldoFinal',sucursal_id: sucursal_id})
+                .success(function(data){
+                    callback(data);
+                })
+                .error(function(data){
+                    callback(data);
+                });
+
+        }
+
+        function cerrarCaja(sucursal_id, importe, callback) {
+            return $http.post(url, {function:'cerrarCaja', sucursal_id: sucursal_id, importe: importe})
+                .success(function(data){
+                    callback(data);
+                })
+                .error(function(data){
+                    callback(data);
+                });
+
+        }
+
+        function abrirCaja(sucursal_id, importe, callback) {
+            return $http.post(url, {function:'abrirCaja', sucursal_id: sucursal_id, importe: importe})
+                .success(function(data){
+                    callback(data);
+                })
+                .error(function(data){
+                    callback(data);
+                });
+
+        }
+
         function getSaldoInicial(sucursal_id, callback){
             return $http.get(url + '?function=getSaldoInicial&sucursal_id='+sucursal_id)
+                .success(function (data) {
+                    callback(data)
+                })
+                .error(function (data) {
+                    callback(data)
+                });
+        }
+
+        function getSaldoFinalAnterior(sucursal_id, callback){
+            return $http.get(url + '?function=getSaldoFinalAnterior&sucursal_id='+sucursal_id)
+                .success(function (data) {
+                    callback(data)
+                })
+                .error(function (data) {
+                    callback(data)
+                });
+        }
+
+        function checkEstado(sucursal_id, callback){
+            return $http.get(url + '?function=checkEstado&sucursal_id='+sucursal_id)
                 .success(function (data) {
                     callback(data)
                 })

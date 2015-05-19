@@ -24,6 +24,7 @@ angular.module('myApp', [
     'nombreapp.stock.movimientos',
     'nombreapp.stock.resultados',
     'nombreapp.stock.totalConcepto',
+    'nombreapp.stock.abrirCerrarCaja',
     'nombreapp.nav',
     'ac-search-panel'
 ]).
@@ -34,6 +35,7 @@ angular.module('myApp', [
 function MainCtrl(){
     var vm = this;
     vm.data = [{ref:'#/cajas',name:'Caja'},
+        {ref:'#/abrir_cerrar_caja',name:'Apertura/Cierre de Caja'},
         {ref:'#/resumen_caja_diaria',name:'Resumen de Caja Diaria'},
         {ref:'#/historico_caja_diaria',name:'Histórico de Cajas Diarias'},
         {ref:'#/movimientos',name:'Movimientos'},
