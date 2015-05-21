@@ -3,7 +3,8 @@
     'use strict';
 
 
-    angular.module('nombreapp.stock.clientes', ['ngRoute', 'toastr'])
+    angular.module('nombreapp.stock.clientes', ['ngRoute', 'toastr', 'nombreapp.stock.nacionalidades'
+        ,'acAngularLoginClient'])
 
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/clientes/:id', {
@@ -15,18 +16,37 @@
         .controller('ClientesController', ClientesController)
         .service('ClientesService', ClientesService);
 
-    ClientesController.$inject = ["$scope", "$routeParams", "ClientesService", "$location", "toastr"];
-    function ClientesController($scope, $routeParams, ClientesService, $location, toastr) {
+    ClientesController.$inject = ['acAngularLoginClientService', "$scope", "$routeParams", "ClientesService", "$location", "toastr", 'acNacionalidadesService'];
+    function ClientesController(acAngularLoginClientService, $scope, $routeParams, ClientesService, $location, toastr, acNacionalidadesService) {
+        acAngularLoginClientService.checkCookie();
+
         var vm = this;
         vm.isUpdate = false;
         
         vm.save = save;
         vm.delete = deleteCliente;
         vm.id = $routeParams.id;
+        vm.nacionalidades = [];
+        vm.nacionalidad = {};
         vm.cliente = {
-            nombre: ''
+            nombre: '',
+            apellido: '',
+            mail: '',
+            nacionalidad_id: '',
+            tipo_doc: 0,
+            nro_doc: '',
+            comentarios: '',
+            marcado: 0,
+            fecha_nacimiento: ''
         };
 
+
+
+        acNacionalidadesService.get(function(data){
+            //console.log(data);
+            vm.nacionalidades = data;
+            vm.nacionalidad = data[11];
+        });
 
         if (vm.id == 0) {
             vm.isUpdate = false;
@@ -45,7 +65,7 @@
             if (r) {
 
                 ClientesService.deleteCliente(vm.id, function (data) {
-                    toastr.success('Cliente eliminada');
+                    toastr.success('Cliente eliminado');
                     $location.path('/listado_clientes');
                 });
             }
@@ -138,6 +158,7 @@
             return $http.post(url,
                 {function: _function, cliente: JSON.stringify(cliente)})
                 .success(function (data) {
+                    console.log(data);
                     callback(data);
                 })
                 .error();

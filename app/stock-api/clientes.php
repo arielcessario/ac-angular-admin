@@ -9,11 +9,11 @@ $decoded = json_decode($data);
 if ($decoded->function == 'getClientes') {
     getClientes();
 }elseif($decoded->function == 'save'){
-    saveCliente($decoded->cliente);
+    save($decoded->cliente);
 }elseif($decoded->function == 'deleteCliente'){
     deleteCliente($decoded->id);
 }elseif($decoded->function == 'update'){
-    updateCliente($decoded->cliente);
+    update($decoded->cliente);
 }
 
 
@@ -25,53 +25,59 @@ function getClientes(){
     echo json_encode($results);
 }
 
-function saveCliente($cliente){
+function save($cliente)
+{
     $db = new MysqliDb();
-    $item_decoded = json_decode($cliente);
-//    $fotos_decoded = json_decode($producto->fotos);
-    $data = array(
-        'nombre' => $item_decoded->nombre
-    );
+    $decoded = json_decode($cliente);
+
+    $data = Array(
+        "nombre" => $decoded->nombre,
+        "apellido" => $decoded->apellido,
+        "mail" => $decoded->mail,
+        "nacionalidad_id" => $decoded->nacionalidad_id,
+        "tipo_doc" => $decoded->tipo_doc,
+        "nro_doc" => $decoded->nro_doc,
+        "comentarios" => $decoded->comentarios,
+        "marcado" => $decoded->marcado,
+        "fecha_nacimiento" => $decoded->fecha_nacimiento,
+        "saldo" => $decoded->saldo);
 
 
-    $results = $db->insert('clientes', $data);
-
-
-    $res = ['status' => 1, 'results' => 0];
-    if ($results > -1) {
-        $res["results"] = $results;
-        echo json_encode($res);
-
+    $id = $db->insert("clientes", $data);
+    if ($id) {
+        echo $id;
     } else {
-        $res->status = 0;
-        echo $res;
+        echo json_encode(Array("Error" => $db->getLastError()));
     }
-
 }
 
-function updateCliente($cliente){
+
+function update($item)
+{
+
     $db = new MysqliDb();
-    $item_decoded = json_decode($cliente);
-//    $fotos_decoded = json_decode($producto->fotos);
-    $data = array(
-        'nombre' => $item_decoded->nombre
-    );
 
-    $db->where('cliente_id', $item_decoded->cliente_id);
+    $decoded = json_decode($item);
 
+    $data = Array(
+        "nombre" => $decoded->nombre,
+        "apellido" => $decoded->apellido,
+        "mail" => $decoded->mail,
+        "nacionalidad_id" => $decoded->nacionalidad_id,
+        "tipo_doc" => $decoded->tipo_doc,
+        "nro_doc" => $decoded->nro_doc,
+        "comentarios" => $decoded->comentarios,
+        "marcado" => $decoded->marcado,
+        "fecha_nacimiento" => $decoded->fecha_nacimiento,
+        "saldo" => $decoded->saldo);
 
-    $results = $db->update('clientes', $data);
+    $db->where("cliente_id", $decoded->cliente_id);
 
-
-    $res = ['status' => 1, 'results' => 0];
-    if ($results) {
-
-        $res["results"] = 1;
-        echo json_encode($res);
-
+    $id = $db->update("clientes", $data);
+    if ($id) {
+        echo $id;
     } else {
-        $res->status = 0;
-        echo $res;
+        echo json_encode(Array("Error" => $db->getLastError()));
     }
 
 }

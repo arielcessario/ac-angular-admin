@@ -4,7 +4,7 @@
     var currentScriptPath = scripts[scripts.length - 1].src;
 
     angular.module('nombreapp.stock.cajas', ['ngRoute', 'nombreapp.stock.productos', 'nombreapp.stock.clientes', 'toastr'
-        , 'acMovimientos', 'nombreapp.stock.consultaStock'])
+        , 'acMovimientos', 'nombreapp.stock.consultaStock', 'acAngularLoginClient'])
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/cajas', {
                 templateUrl: currentScriptPath.replace('.js', '.html'),
@@ -16,9 +16,11 @@
 
 
     CajasController.$inject = ['$routeParams', 'ProductosService', 'CajasService', 'toastr', '$location', '$window',
-        'ClientesService', 'MovimientosService', 'MovimientoStockFinal', 'ConsultaStockService'];
+        'ClientesService', 'MovimientosService', 'MovimientoStockFinal', 'ConsultaStockService', 'acAngularLoginClientService'];
     function CajasController($routeParams, ProductosService, CajasService, toastr, $location, $window, ClientesService,
-                             MovimientosService, MovimientoStockFinal, ConsultaStockService) {
+                             MovimientosService, MovimientoStockFinal, ConsultaStockService, acAngularLoginClientService) {
+
+        acAngularLoginClientService.checkCookie();
 
         var vm = this;
         vm.isUpdate = false;
