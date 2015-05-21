@@ -39,8 +39,7 @@ function save($cliente)
         "nro_doc" => $decoded->nro_doc,
         "comentarios" => $decoded->comentarios,
         "marcado" => $decoded->marcado,
-        "fecha_nacimiento" => $decoded->fecha_nacimiento,
-        "saldo" => $decoded->saldo);
+        "fecha_nacimiento" => $decoded->fecha_nacimiento);
 
 
     $id = $db->insert("clientes", $data);
@@ -68,8 +67,7 @@ function update($item)
         "nro_doc" => $decoded->nro_doc,
         "comentarios" => $decoded->comentarios,
         "marcado" => $decoded->marcado,
-        "fecha_nacimiento" => $decoded->fecha_nacimiento,
-        "saldo" => $decoded->saldo);
+        "fecha_nacimiento" => $decoded->fecha_nacimiento);
 
     $db->where("cliente_id", $decoded->cliente_id);
 

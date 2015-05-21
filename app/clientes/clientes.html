@@ -14,29 +14,20 @@
             <input type="text" id="nombre" name="nombre" ng-model="clientesCtrl.cliente.nombre" ng-maxlength="100"
                    required><br>
             <label for="nombre">Nombre</label>
-        <span style="color:red" ng-show="clientesForm.nombre.$dirty && clientesForm.nombre.$invalid">
-            <span ng-show="clientesForm.nombre.$error.required">Debe ingresar un Nombre</span>
-            <span ng-show="clientesForm.nombre.$error.maxlength">El Nombre es demasiado largo (Máximo 100)</span>
-        </span>
+
         </div>
         <div>
             <input type="text" id="apellido" name="apellido" ng-model="clientesCtrl.cliente.apellido" ng-maxlength="100"
                    required><br>
             <label for="apellido">Apellido</label>
-        <span style="color:red" ng-show="clientesForm.apellido.$dirty && clientesForm.apellido.$invalid">
-            <span ng-show="clientesForm.apellido.$error.required">Debe ingresar un Nombre</span>
-            <span ng-show="clientesForm.apellido.$error.maxlength">El Nombre es demasiado largo (Máximo 100)</span>
-        </span>
+
         </div>
 
         <div>
             <input type="text" id="mail" name="mail" ng-model="clientesCtrl.cliente.mail" ng-maxlength="100"
                    required><br>
             <label for="mail">Mail</label>
-        <span style="color:red" ng-show="clientesForm.mail.$dirty && clientesForm.mail.$invalid">
-            <span ng-show="clientesForm.mail.$error.required">Debe ingresar un Nombre</span>
-            <span ng-show="clientesForm.mail.$error.maxlength">El Nombre es demasiado largo (Máximo 100)</span>
-        </span>
+
         </div>
 
 
@@ -47,9 +38,7 @@
                     ng-model="clientesCtrl.nacionalidad">
 
             </select><br><label for="nacionalidad">Nacionalidad</label>
-        <span style="color:red" ng-show="productForm.nacionalidad.$dirty && productForm.nacionalidad.$invalid">
-            <span ng-show="productForm.nacionalidad.$error.required">nacionalidad es obligatorio</span>
-        </span>
+
         </div>
 
         <div>
@@ -60,9 +49,7 @@
                 <option value="2">CI</option>
                 <option value="3">Otro</option>
             </select><br><label for="tipo_doc">Tipo Doc.</label>
-        <span style="color:red" ng-show="productForm.tipo_doc.$dirty && productForm.tipo_doc.$invalid">
-            <span ng-show="productForm.tipo_doc.$error.required">tipo_doc es obligatorio</span>
-        </span>
+
         </div>
 
 
@@ -70,20 +57,14 @@
             <input type="text" id="nro_doc" name="nro_doc" ng-model="clientesCtrl.cliente.nro_doc" ng-maxlength="100"
                    required><br>
             <label for="nro_doc">Nro. Doc.</label>
-        <span style="color:red" ng-show="clientesForm.nro_doc.$dirty && clientesForm.nro_doc.$invalid">
-            <span ng-show="clientesForm.nro_doc.$error.required">Debe ingresar un Nombre</span>
-            <span ng-show="clientesForm.nro_doc.$error.maxlength">El Nombre es demasiado largo (Máximo 100)</span>
-        </span>
+
         </div>
 
         <div>
             <input type="text" id="comentarios" name="comentarios" ng-model="clientesCtrl.cliente.comentarios" ng-maxlength="100"
-                   required><br>
+                   required ng-init="clientesCtrl.cliente.comentarios = ' '"><br>
             <label for="comentarios">Comentarios</label>
-        <span style="color:red" ng-show="clientesForm.comentarios.$dirty && clientesForm.comentarios.$invalid">
-            <span ng-show="clientesForm.comentarios.$error.required">Debe ingresar un Nombre</span>
-            <span ng-show="clientesForm.comentarios.$error.maxlength">El Nombre es demasiado largo (Máximo 100)</span>
-        </span>
+
         </div>
 
         <div>
@@ -92,19 +73,14 @@
                 <option value="1">Si</option>
                 <option value="0" selected>No</option>
             </select><br><label for="marcado">Marcado</label>
-        <span style="color:red" ng-show="productForm.marcado.$dirty && productForm.marcado.$invalid">
-            <span ng-show="productForm.marcado.$error.required">marcado es obligatorio</span>
-        </span>
+
         </div>
 
         <div>
             <input type="text" id="fecha_nacimiento" name="fecha_nacimiento" ng-model="clientesCtrl.cliente.fecha_nacimiento" ng-maxlength="100"
                    required><br>
             <label for="fecha_nacimiento">Fecha Nacimiento</label>
-        <span style="color:red" ng-show="clientesForm.fecha_nacimiento.$dirty && clientesForm.fecha_nacimiento.$invalid">
-            <span ng-show="clientesForm.fecha_nacimiento.$error.required">Debe ingresar un Nombre</span>
-            <span ng-show="clientesForm.fecha_nacimiento.$error.maxlength">El Nombre es demasiado largo (Máximo 100)</span>
-        </span>
+
         </div>
 
         
@@ -116,7 +92,7 @@
         <!--ng-disabled="clientesForm.user.$dirty && clientesForm.user.$invalid ||-->
         <!--clientesForm.email.$dirty && clientesForm.email.$invalid">-->
         <div class="btn"><input type="submit" ng-click="clientesCtrl.save();"
-                                ng-disabled="clientesForm.$invalid" class="relieve-2 btn-ok btn-big" value="">
+                                 class="relieve-2 btn-ok btn-big" value="">
             <label>Guardar Producto</label>
         </div>
 

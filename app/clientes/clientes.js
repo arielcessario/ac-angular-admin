@@ -4,7 +4,7 @@
 
 
     angular.module('nombreapp.stock.clientes', ['ngRoute', 'toastr', 'nombreapp.stock.nacionalidades'
-        ,'acAngularLoginClient'])
+        , 'acAngularLoginClient'])
 
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/clientes/:id', {
@@ -22,7 +22,7 @@
 
         var vm = this;
         vm.isUpdate = false;
-        
+
         vm.save = save;
         vm.delete = deleteCliente;
         vm.id = $routeParams.id;
@@ -41,8 +41,7 @@
         };
 
 
-
-        acNacionalidadesService.get(function(data){
+        acNacionalidadesService.get(function (data) {
             //console.log(data);
             vm.nacionalidades = data;
             vm.nacionalidad = data[11];
@@ -55,7 +54,7 @@
 
             ClientesService.getClienteByID(vm.id, function (data) {
                 vm.cliente = data;
-                
+
             });
         }
 
@@ -71,9 +70,29 @@
             }
         }
 
-        function save() {
 
-           
+        function save() {
+            if (vm.cliente.nombre == '') {
+                toastr.error('El nombre es obligatorio');
+                return;
+            }
+            if (vm.cliente.apellido == '') {
+                toastr.error('El apellido es obligatorio');
+                return;
+            }
+            if (vm.cliente.mail == '') {
+                toastr.error('El mail es obligatorio');
+                return;
+            }
+            if (vm.cliente.nro_doc == '') {
+                toastr.error('El Nro de documento es obligatorio');
+                return;
+            }
+            if (vm.cliente.fecha_nacimiento == '') {
+                toastr.error('La fecha de nacimiento es obligatoria');
+                return;
+            }
+
 
             if (vm.isUpdate) {
                 ClientesService.saveCliente(vm.cliente, 'update', function (data) {
@@ -84,16 +103,13 @@
             } else {
                 ClientesService.saveCliente(vm.cliente, 'save', function (data) {
 
-
                     toastr.success('Cliente salvada con exito');
                     $location.path('/listado_clientes');
                 });
             }
         }
 
-
     }
-
 
 
     ClientesService.$inject = ['$http'];
@@ -150,7 +166,6 @@
             })
 
         }
-
 
 
         function saveCliente(cliente, _function, callback) {

@@ -25,9 +25,18 @@
         </div>
 
         <div ng-repeat="movimiento in asiento" class="full-width">
-            <div ng-if="movimiento.cuenta_id.indexOf('4.1.1.') > -1 " class="form-flex">
-                <div>{{movimiento.detalles[2].detalle}}</div>
-                <div>{{movimiento.detalles[1].detalle}} x {{movimiento.detalles[0].detalle | currency}}</div>
+            <div ng-if="movimiento.cuenta_id.indexOf('4.1.1.') > -1 " class="full-width">
+
+                <div ng-if="movimiento.cuenta_id == '4.1.1.01'" class="form-flex">
+                    <div>{{movimiento.detalles[2].detalle}}</div>
+                    <div>{{movimiento.detalles[1].detalle}} x {{movimiento.detalles[0].detalle | currency}}</div>
+                </div>
+
+                <div ng-if="movimiento.cuenta_id == '4.1.1.02'" class="form-flex">
+                    <div>{{movimiento.detalles[0].detalle}}</div>
+                    <div>{{movimiento.detalles[4].detalle}} x {{movimiento.importe | currency}}</div>
+                </div>
+
             </div>
 
             <div ng-if="movimiento.cuenta_id.indexOf('1.1.1.0') > -1" class="form-flex total">

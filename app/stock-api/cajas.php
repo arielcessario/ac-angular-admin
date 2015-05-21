@@ -136,7 +136,7 @@ else valor
 end detalle
 
  from detallesmovimientos
- where detalle_tipo_id in (3,8,9,10,13) and movimiento_id =  " . $row['movimiento_id'] . ";";
+ where detalle_tipo_id in (2,3,8,9,10,13) and movimiento_id =  " . $row['movimiento_id'] . ";";
         $detalles = $db->rawQuery($SQL);
 
         $row["detalles"] = $detalles;
@@ -150,13 +150,17 @@ end detalle
 function getCajaDiariaFromTo($sucursal_id, $asiento_id_inicio, $asiento_id_fin)
 {
     $db = new MysqliDb();
-    $lastCaja = getLastCaja($sucursal_id);
     $resultsDetalles = [];
 
-    $results = $db->rawQuery("select movimiento_id, asiento_id, fecha, cuenta_id, usuario_id, importe, 0 detalles
-from movimientos m where m.sucursal_id = " . $sucursal_id . " and (m.cuenta_id like '1.1.1.%' or m.cuenta_id = '1.1.2.01'
+    $params = array($sucursal_id, $asiento_id_inicio, $asiento_id_fin + 1);
+
+    $SQL = "select movimiento_id, asiento_id, fecha, cuenta_id, usuario_id, importe, 0 detalles
+from movimientos m where m.sucursal_id = ? and (m.cuenta_id like '1.1.1.%' or m.cuenta_id = '1.1.2.01'
 or m.cuenta_id like '4.1.1.%')
-and asiento_id >= " . $asiento_id_inicio . " and asiento_id < " . $asiento_id_fin . ";");
+and (asiento_id >= ? and asiento_id < ?);";
+
+
+    $results = $db->rawQuery($SQL, $params, false);
 
     foreach ($results as $row) {
         $SQL = "select
@@ -167,7 +171,7 @@ else valor
 end detalle
 
  from detallesmovimientos
- where detalle_tipo_id in (3,8,9,10,13) and movimiento_id =  " . $row['movimiento_id'] . ";";
+ where detalle_tipo_id in (2,3,8,9,10,13) and movimiento_id =  " . $row['movimiento_id'] . ";";
         $detalles = $db->rawQuery($SQL);
 
         $row["detalles"] = $detalles;

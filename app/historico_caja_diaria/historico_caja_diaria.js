@@ -31,7 +31,7 @@
         function filtroSucursal() {
             CajasService.getCajasBySucursal(vm.sucursal.sucursal_id, function (data) {
                 vm.cajas = data;
-                vm.caja = data[0];
+                //vm.caja = data[0];
             })
         }
 
@@ -39,8 +39,9 @@
             vm.sucursales = data;
             vm.sucursal = data[0];
             CajasService.getCajasBySucursal(vm.sucursal.sucursal_id, function (data) {
+
                 vm.cajas = data;
-                vm.caja = data[0];
+                //vm.caja = data[0];
             })
         });
 

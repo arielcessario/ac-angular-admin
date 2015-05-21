@@ -29,6 +29,7 @@ angular.module('myApp', [
     'nombreapp.stock.totalConcepto',
     'nombreapp.stock.abrirCerrarCaja',
     'nombreapp.stock.nacionalidades',
+    'nombreapp.stock.servicios',
     'nombreapp.nav',
     'ac-search-panel'
 ]).
@@ -49,7 +50,9 @@ function MainCtrl(acAngularLoginClientService){
 
     acAngularLoginClientService.checkCookie();
 
-    vm.data = [{ref:'#/cajas',name:'Caja'},
+    vm.data = [
+        {ref:'#/cajas',name:'Caja'},
+        {ref:'#/servicios',name:'Servicios'},
         {ref:'#/abrir_cerrar_caja',name:'Apertura/Cierre de Caja'},
         {ref:'#/resumen_caja_diaria',name:'Resumen de Caja Diaria'},
         {ref:'#/historico_caja_diaria',name:'Histórico de Cajas Diarias'},

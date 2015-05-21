@@ -1,0 +1,38 @@
+<div ng-controller="ListadoClientesController as listadoClientesCtrl">
+    <div class="title"><h1>Listado Clientes</h1></div>
+    <div class="v-spacer"></div>
+
+    <div class="full-width">
+
+        <input type="text" ng-model="listadoClientesCtrl.filtro" class="full-width" required/>
+        <label>Buscar...</label>
+    </div>
+    <div class="lista-flex" ng-repeat="cliente in listadoClientesCtrl.clientes | filter:listadoClientesCtrl.filtro">
+
+        <span>{{cliente.nombre}}</span>
+        <span>{{cliente.apellido}}</span>
+
+
+        <div>
+            <div class="btn" ng-if="cliente.marcado == 1">
+                <button class="btn-medium btn-close"></button>
+                <label>No alojar</label>
+            </div>
+            <div class="btn">
+                <button ng-click="listadoClientesCtrl.detalle(cliente.cliente_id)"
+                        class="btn-medium btn-visibility"></button>
+                <label>Mostrar Detalle</label>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="btn">
+
+        <input type="button" class="relieve-2 btn-add  btn-big" value=""
+               onclick="window.location='#/clientes/0';"/>
+
+        <label>Nuevo Cliente</label>
+    </div>
+</div>
