@@ -7,36 +7,70 @@
         <input type="text" ng-model="listadoDeudoresCtrl.filtro" class="full-width" required/>
         <label>Buscar...</label>
     </div>
-    <div class="lista-flex" ng-repeat="deudor in listadoDeudoresCtrl.deudores | filter:listadoDeudoresCtrl.filtro">
 
-        <span>{{deudor.nombre}}</span>
-        <span>{{deudor.apellido}}</span>
-        <span>{{deudor.saldo | currency}}</span>
+    <table st-table="listadoDeudoresCtrl.deudores" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th >Apellido</th>
+            <th>Saldo</th>
+            <th style="width: 5%;text-align: center" colspan="2">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
 
+        <tr ng-repeat="row in listadoDeudoresCtrl.deudores | filter:listadoDeudoresCtrl.filtro">
 
-        <div>
-            <div class="btn">
-                <button class="btn-medium btn-archive"></button>
-                <label>Cancelar Deuda</label>
-            </div>
-            <div class="btn">
-                <button ng-click="listadoDeudoresCtrl.mostrarDetalle = deudor;"
+            <td class="">{{row.nombre}}</td>
+            <td class="">{{row.apellido}}</td>
+            <td class="">{{row.saldo | currency}}</td>
+            <td class="">
+                <div class="btn">
+                    <button class="btn-medium btn-archive" ng-click="listadoDeudoresCtrl.cancelarDeuda();"></button>
+                    <label>Cancelar Deuda</label>
+                </div>
+            </td>
+            <td class="">
+                <button ng-click="listadoDeudoresCtrl.detalle(row.cliente_id);"
                         class="btn-medium btn-visibility"></button>
                 <label>Ver Detalle</label>
-            </div>
+            </td>
 
-        </div>
+        </tr>
+        </tbody>
+    </table>
 
 
-    </div>
+    <!--<div class="lista-flex" ng-repeat="deudor in listadoDeudoresCtrl.deudores | filter:listadoDeudoresCtrl.filtro">-->
 
-    <div ng-if="listadoDeudoresCtrl.mostrarDetalle !== [];">
-        <h2>Detalle de deuda</h2>
+        <!--<span>{{deudor.nombre}}</span>-->
+        <!--<span>{{deudor.apellido}}</span>-->
+        <!--<span>{{deudor.saldo | currency}}</span>-->
 
-        <div style="display: flex;" ng-repeat="detalle in listadoDeudoresCtrl.mostrarDetalle.detalles">
-            <span class="descr">{{detalle.fecha}}</span>
-            <span>{{detalle.importe | currency}}</span>
-        </div>
-    </div>
+
+        <!--<div>-->
+            <!--<div class="btn">-->
+                <!--<button class="btn-medium btn-archive"></button>-->
+                <!--<label>Cancelar Deuda</label>-->
+            <!--</div>-->
+            <!--<div class="btn">-->
+                <!--<button ng-click="listadoDeudoresCtrl.mostrarDetalle = deudor;"-->
+                        <!--class="btn-medium btn-visibility"></button>-->
+                <!--<label>Ver Detalle</label>-->
+            <!--</div>-->
+
+        <!--</div>-->
+
+
+    <!--</div>-->
+
+    <!--<div ng-if="listadoDeudoresCtrl.mostrarDetalle !== [];">-->
+        <!--<h2>Detalle de deuda</h2>-->
+
+        <!--<div style="display: flex;" ng-repeat="detalle in listadoDeudoresCtrl.mostrarDetalle.detalles">-->
+            <!--<span class="descr">{{detalle.fecha}}</span>-->
+            <!--<span>{{detalle.importe | currency}}</span>-->
+        <!--</div>-->
+    <!--</div>-->
 
 </div>

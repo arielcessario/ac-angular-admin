@@ -122,6 +122,7 @@
         service.saveCliente = saveCliente;
         service.deleteCliente = deleteCliente;
         service.getDeudores = getDeudores;
+        service.getDeudorById = getDeudorById;
         service.actualizarSaldo = actualizarSaldo;
 
 
@@ -149,6 +150,16 @@
                 .error(function (data) {
                     callback(data);
                 });
+        }
+
+        function getDeudorById(id, callback){
+            getDeudores(function(data){
+                var response = data.filter(function(elem, index, array){
+                    return id = elem.cliente_id;
+                })[0];
+
+                callback(response);
+            })
         }
 
         function getClientes(callback) {

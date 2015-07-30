@@ -106,7 +106,25 @@
                 function (data) {
                     //console.log(MovimientoStockFinal.stocks_finales);
                     ConsultaStockService.updateStock(MovimientoStockFinal.stocks_finales, function (data) {
-                        toastr.success('Venta realizada con éxito.');
+
+                        ClientesService.actualizarSaldo(vm.cliente.cliente_id, parseFloat(vm.total) * -1, function(data){
+                            console.log(data);
+                            if(data){
+                                vm.detalles =[];
+                                vm.cliente = {};
+
+                                vm.forma_pago = '01';
+                                vm.desc_porc = 0;
+                                vm.desc_cant = 0;
+                                vm.a_cobrar = 0;
+                                vm.paga_con = 0;
+                                vm.vuelto = 0;
+                                vm.total = 0;
+                                toastr.success('Venta realizada con éxito.');
+                            }
+
+                        });
+
 
                         //console.log(data);
                     });

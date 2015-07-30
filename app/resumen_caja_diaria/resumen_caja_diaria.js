@@ -164,7 +164,8 @@
                             }
 
                             //Si es compra de mercaderías
-                            if (vm.asientos[i].asiento[x].cuenta_id.indexOf('1.1.7.01') > -1) {
+                            if (vm.asientos[i].asiento[x].cuenta_id.indexOf('1.1.7.01') > -1 &&
+                                parseFloat(vm.asientos[i].asiento[x].importe) > 0) {
                                 detalle_caja.asiento_id = vm.asientos[i].asiento[x].asiento_id;
 
                                 detalle_caja.asiento_id = vm.asientos[i].asiento[x].asiento_id;

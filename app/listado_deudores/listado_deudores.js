@@ -24,9 +24,14 @@
         vm.deudores = [];
         vm.detalle = detalle;
         vm.mostrarDetalle = [];
+        vm.cancelarDeuda = cancelarDeuda;
+
+        function cancelarDeuda(){
+            $location.path("/cancelar_deuda/"+vm.id);
+        }
 
         function detalle(id){
-            $location.path('/deudores/'+id);
+            $location.path('/detalle_deudores/'+id);
         }
 
         ClientesService.getDeudores(

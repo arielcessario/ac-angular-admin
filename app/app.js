@@ -37,6 +37,8 @@ angular.module('myApp', [
     'nombreapp.stock.ventasWeb',
     'nombreapp.stock.listadoVentasWeb',
     'nombreapp.stock.ofertas',
+    'nombreapp.stock.detalleDeudores',
+    'nombreapp.stock.cancelarDeuda',
     'nombreapp.nav',
     'ac-search-panel'
 ]).

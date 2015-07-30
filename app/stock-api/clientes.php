@@ -116,22 +116,37 @@ function getDeudores()
     $db = new MysqliDb();
     $deudores = array();
 
-    $results = $db->rawQuery('Select cliente_id, nombre, apellido, saldo, 0 detalles from clientes where saldo>0;');
+    $results = $db->rawQuery('Select cliente_id, nombre, apellido, saldo, 0 asientos from clientes where saldo <= -1;');
 
-    foreach ($results as $row) {
 
-        $detalle = $db->rawQuery("select * from movimientos where cuenta_id like '1.1.2.%' and movimiento_id in
-(select movimiento_id from detallesmovimientos where detalle_tipo_id = 3 and valor = ".$row["cliente_id"].");");
+    foreach ($results as $key => $row) {
+//        $movimientos = $db->rawQuery("select movimiento_id from detallesmovimientos where detalle_tipo_id = 3 and valor = ".$row["cliente_id"].");");
+        $asientos = $db->rawQuery("select asiento_id, fecha, cuenta_id, sucursal_id, importe, movimiento_id, 0 detalles
+from movimientos where cuenta_id like '1.1.2.%' and movimiento_id in
+(select movimiento_id from detallesmovimientos where detalle_tipo_id = 3 and valor = " . $row["cliente_id"] . ");");
 
-        $row["detalles"] = $detalle;
+        foreach ($asientos as $key_mov => $movimento) {
+            $detalles = $db->rawQuery("select detalle_tipo_id,
+                                      CASE when (detalle_tipo_id = 8) then
+                                        (select concat(producto_id, ' - ' , nombre) from productos where producto_id = valor)
+                                      when (detalle_tipo_id  != 8) then valor
+                                      end valor from detallesmovimientos
+                                      where movimiento_id = (select movimiento_id from movimientos where cuenta_id like '4.1.1.%' and asiento_id=" . $movimento["asiento_id"] . ");");
+            $asientos[$key_mov]["detalles"] = $detalles;
+        }
 
-        array_push($deudores, $row);
+        $results[$key]["asientos"] = $asientos;
+//        $row["detalles"] = $detalle;
+
+//        array_push($deudores, $row);
     }
 
-    echo json_encode($deudores);
+
+    echo json_encode($results);
 }
 
-function actualizarSaldo($cliente_id, $importe){
+function actualizarSaldo($cliente_id, $importe)
+{
     $db = new MysqliDb();
 //    $data = Array(
 //        "saldo" => $importe);
@@ -139,11 +154,9 @@ function actualizarSaldo($cliente_id, $importe){
 //    $db->where("cliente_id", $decoded->cliente_id);
 
 
-
-
 //    $id = $db->update("clientes", $data);
 //    if ($id) {
-        echo $db->rawQuery('update clientes set saldo = saldo + ' . $importe .'where cliente_id = ' . $cliente_id);
+    echo json_encode($db->rawQuery('update clientes set saldo = saldo + ' . $importe . ' where cliente_id = ' . $cliente_id));
 //    } else {
 //        echo json_encode(Array("Error" => $db->getLastError()));
 //    }
