@@ -1,5 +1,5 @@
 <div ng-controller="MovimientosController as movimientosCtrl">
-    <div class="title"><h1>Historico de Caja</h1></div>
+    <div class="title"><h1>Movimientos por mes</h1></div>
     <div class="v-spacer"></div>
 
     <div>
@@ -42,6 +42,7 @@
         <div style="text-align: center;">C. Ahorro</div>
         <div style="text-align: center;">Cta. Cte.</div>
         <div style="text-align: center;">CA u$s</div>
+        <div style="text-align: center;">Merc. Pag.</div>
         <div style="text-align: center;">General</div>
         <div style="min-width: 100px;text-align: center;"></div>
 
@@ -54,6 +55,7 @@
         <div style="text-align: center;">{{movimientosCtrl.resultado_inicial.ca}}</div>
         <div style="text-align: center;">{{movimientosCtrl.resultado_inicial.cc}}</div>
         <div style="text-align: center;">{{movimientosCtrl.resultado_inicial.me}}</div>
+        <div style="text-align: center;">{{movimientosCtrl.resultado_inicial.mp}}</div>
         <div style="text-align: center;">{{movimientosCtrl.resultado_inicial.general}}</div>
         <div style="min-width: 100px;text-align: center;"></div>
 
@@ -86,6 +88,9 @@
                     <div ng-if="movimiento.me !== 0">{{movimiento.me}}</div>
                 </div>
                 <div style="text-align: center;">
+                    <div ng-if="movimiento.mp !== 0">{{movimiento.mp}}</div>
+                </div>
+                <div style="text-align: center;">
                     <div ng-if="movimiento.general !== 0">{{movimiento.general}}</div>
                 </div>
                 <div style="min-width: 100px;text-align: center;">{{movimiento.importe | currency}}</div>
@@ -109,6 +114,7 @@
         <div style="text-align: center;">{{movimientosCtrl.resultado_posterior.ca}}</div>
         <div style="text-align: center;">{{movimientosCtrl.resultado_posterior.cc}}</div>
         <div style="text-align: center;">{{movimientosCtrl.resultado_posterior.me}}</div>
+        <div style="text-align: center;">{{movimientosCtrl.resultado_posterior.mp}}</div>
         <div style="text-align: center;">{{movimientosCtrl.resultado_posterior.general}}</div>
         <div style="min-width: 100px;text-align: center;"></div>
 

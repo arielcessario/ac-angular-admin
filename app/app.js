@@ -6,9 +6,12 @@ angular.module('myApp', [
     'ngCookies',
     'ngAnimate',
     'ngAnimate',
+    'smart-table',
     'acAngularLoginClient',
+    'ac-utils',
     'nombreapp.stock.productos',
     'nombreapp.stock.listadoProductos',
+    'nombreapp.stock.pagoProveedores',
     'appname.stock.pedidos',
     'nombreapp.stock.listadoPedidos',
     'nombreapp.stock.consultaStock',
@@ -30,6 +33,10 @@ angular.module('myApp', [
     'nombreapp.stock.abrirCerrarCaja',
     'nombreapp.stock.nacionalidades',
     'nombreapp.stock.servicios',
+    'nombreapp.stock.listadoDeudores',
+    'nombreapp.stock.ventasWeb',
+    'nombreapp.stock.listadoVentasWeb',
+    'nombreapp.stock.ofertas',
     'nombreapp.nav',
     'ac-search-panel'
 ]).
@@ -51,7 +58,7 @@ function MainCtrl(acAngularLoginClientService){
     acAngularLoginClientService.checkCookie();
 
     vm.data = [
-        {ref:'#/cajas',name:'Caja'},
+        {ref:'#/cajas/0',name:'Caja'},
         {ref:'#/servicios',name:'Servicios'},
         {ref:'#/abrir_cerrar_caja',name:'Apertura/Cierre de Caja'},
         {ref:'#/resumen_caja_diaria',name:'Resumen de Caja Diaria'},
@@ -63,10 +70,13 @@ function MainCtrl(acAngularLoginClientService){
         {ref:'#/listado_pedidos',name:'Lista de Pedidos'},
         {ref:'#/listado_categorias',name:'Lista de Categorias'},
         {ref:'#/listado_clientes',name:'Lista de Clientes'},
+        {ref:'#/listado_deudores',name:'Lista de Deudores'},
+        {ref:'#/listado_ventas_web',name:'Lista de Ventas Web'},
         {ref:'#/clientes/0',name:'Nuevo Cliente'},
         {ref:'#/productos/0',name:'Nuevo Producto'},
         {ref:'#/pedidos/0',name:'Nuevo Pedido'},
         {ref:'#/categorias/0',name:'Nueva Categoria'},
+        {ref:'#/ofertas',name:'Ofertas'},
         {ref:'#/gastos/0',name:'Gastos'},
         {ref:'#/depositos/0',name:'Depositos'},
         {ref:'#/a_reponer',name:'A Reponer'},

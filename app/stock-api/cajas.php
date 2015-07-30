@@ -124,13 +124,13 @@ function getCajaDiaria($sucursal_id)
 
     $results = $db->rawQuery("select movimiento_id, asiento_id, fecha, cuenta_id, usuario_id, importe, 0 detalles
 from movimientos m where m.sucursal_id = " . $sucursal_id . " and (m.cuenta_id like '1.1.1.%' or m.cuenta_id = '1.1.2.01'
-or m.cuenta_id like '4.1.1.%')
-and asiento_id >= " . $lastCaja['asiento_inicio_id'] . ";");
+or m.cuenta_id like '4.1.1.%' or m.cuenta_id like '1.1.7.%')
+    and asiento_id >= " . $lastCaja['asiento_inicio_id'] . ";");
 
     foreach ($results as $row) {
         $SQL = "select
 detalle_tipo_id,
-case when (detalle_tipo_id = 8) then (select nombre from productos where producto_id = valor)
+case when (detalle_tipo_id = 8) then (select concat(producto_id, ' - ', nombre) from productos where producto_id = valor)
 when (detalle_tipo_id = 3) then (select concat(nombre, ' ', apellido) from clientes where cliente_id = valor)
 else valor
 end detalle

@@ -8,16 +8,21 @@ $decoded = json_decode($data);
 
 if ($decoded->function == 'getClientes') {
     getClientes();
-}elseif($decoded->function == 'save'){
+} elseif ($decoded->function == 'save') {
     save($decoded->cliente);
-}elseif($decoded->function == 'deleteCliente'){
+} elseif ($decoded->function == 'deleteCliente') {
     deleteCliente($decoded->id);
-}elseif($decoded->function == 'update'){
+} elseif ($decoded->function == 'update') {
     update($decoded->cliente);
+} elseif ($decoded->function == 'getDeudores') {
+    getDeudores();
+} elseif ($decoded->function == 'actualizarSaldo') {
+    actualizarSaldo($decoded->cliente_id, $decoded->importe);
 }
 
 
-function getClientes(){
+function getClientes()
+{
     $db = new MysqliDb();
 
     $results = $db->get('clientes');
@@ -50,7 +55,6 @@ function save($cliente)
     }
 }
 
-
 function update($item)
 {
 
@@ -80,7 +84,8 @@ function update($item)
 
 }
 
-function deleteCliente($cliente){
+function deleteCliente($cliente)
+{
     $db = new MysqliDb();
 //    $item_decoded = json_decode($cliente);
 //    $fotos_decoded = json_decode($producto->fotos);
@@ -103,4 +108,43 @@ function deleteCliente($cliente){
         echo $res;
     }
 
+}
+
+function getDeudores()
+{
+
+    $db = new MysqliDb();
+    $deudores = array();
+
+    $results = $db->rawQuery('Select cliente_id, nombre, apellido, saldo, 0 detalles from clientes where saldo>0;');
+
+    foreach ($results as $row) {
+
+        $detalle = $db->rawQuery("select * from movimientos where cuenta_id like '1.1.2.%' and movimiento_id in
+(select movimiento_id from detallesmovimientos where detalle_tipo_id = 3 and valor = ".$row["cliente_id"].");");
+
+        $row["detalles"] = $detalle;
+
+        array_push($deudores, $row);
+    }
+
+    echo json_encode($deudores);
+}
+
+function actualizarSaldo($cliente_id, $importe){
+    $db = new MysqliDb();
+//    $data = Array(
+//        "saldo" => $importe);
+//
+//    $db->where("cliente_id", $decoded->cliente_id);
+
+
+
+
+//    $id = $db->update("clientes", $data);
+//    if ($id) {
+        echo $db->rawQuery('update clientes set saldo = saldo + ' . $importe .'where cliente_id = ' . $cliente_id);
+//    } else {
+//        echo json_encode(Array("Error" => $db->getLastError()));
+//    }
 }

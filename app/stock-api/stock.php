@@ -13,7 +13,7 @@ $data = file_get_contents("php://input");
 
 $decoded = json_decode($data);
 
-if($decoded != null){
+if ($decoded != null) {
     if ($decoded->function == 'save') {
         saveProducto($decoded->producto);
     } elseif ($decoded->function == 'update') {
@@ -44,10 +44,10 @@ if($decoded != null){
         getStock();
     } elseif ($decoded->function == 'updateStock') {
         updateStock($decoded->stock);
-    }elseif ($decoded->function == 'aReponer') {
+    } elseif ($decoded->function == 'aReponer') {
         aReponer();
     }
-}else{
+} else {
 
     $function = $_GET["function"];
     if ($function == 'getProductos') {
@@ -74,7 +74,7 @@ function saveProducto($producto)
         'vendidos' => 0,
         'destacado' => $item_decoded->destacado,
         'categoria_id' => $item_decoded->categoria_id,
-        'insumo' => $item_decoded->insumo
+        'producto_tipo' => $item_decoded->producto_tipo
     );
 
 
@@ -87,6 +87,9 @@ function saveProducto($producto)
         saveFotos($item_decoded->fotos, $results);
         savePrecios($item_decoded->precios, $results);
         saveProveedores($item_decoded->proveedores, $results);
+        if ($item_decoded->producto_tipo == '2') {
+            saveProductosKit($item_decoded->productos_kit, $results);
+        }
 
         $res->results = $results;
         echo $res;
@@ -112,7 +115,7 @@ function updateProducto($producto)
         'vendidos' => 0,
         'destacado' => $item_decoded->destacado,
         'categoria_id' => $item_decoded->categoria_id,
-        'insumo' => $item_decoded->insumo
+        'producto_tipo' => $item_decoded->producto_tipo
     );
 
 
@@ -128,11 +131,17 @@ function updateProducto($producto)
     $db->where('producto_id', $item_decoded->producto_id);
     $db->delete('prov_prod');
 
+    $db->where('kit_id', $item_decoded->producto_id);
+    $db->delete('kits_prods');
+
     $res = array('status' => 1, 'results' => []);
     if ($results) {
         saveFotos($item_decoded->fotos, $item_decoded->producto_id);
         savePrecios($item_decoded->precios, $item_decoded->producto_id);
         saveProveedores($item_decoded->proveedores, $item_decoded->producto_id);
+        if ($item_decoded->producto_tipo == '2') {
+            saveProductosKit($item_decoded->productos_kit, $item_decoded->producto_id);
+        }
 
         $res->results = $results;
         echo $res;
@@ -157,6 +166,22 @@ function saveProveedores($proveedores, $producto_id)
 
     }
 }
+
+function saveProductosKit($productos_kit, $producto_id)
+{
+    $db = new MysqliDb();
+    foreach ($productos_kit as $producto_kit) {
+
+        $data_kit = array(
+            'producto_id' => $producto_kit->producto_id,
+            'kit_id' => $producto_id
+        );
+
+        $db->insert('kits_prods', $data_kit);
+
+    }
+}
+
 
 function savePrecios($precios, $producto_id)
 {
@@ -206,6 +231,9 @@ function deleteProducto($id)
     $db->where("producto_id", $id);
     $db->delete("precios");
 
+    $db->where('kit_id', $id);
+    $db->delete('kits_prods');
+
     echo 'borrado';
 }
 
@@ -215,6 +243,7 @@ function getProductos()
     $precios_arr = array();
     $proveedores_arr = array();
     $stocks_arr = array();
+    $prods_kit_arr = array();
     $final = array();
 //    $results = $db->get('productos');
 
@@ -229,12 +258,13 @@ function getProductos()
             vendidos,
             destacado,
             categoria_id,
-            insumo,
+            producto_tipo,
             (SELECT nombre FROM categorias c WHERE c.categoria_id = p.categoria_id) categoria,
             0 fotos,
             0 precios,
             0 proveedores,
-            0 stocks
+            0 stocks,
+            0 productos_kit
         FROM productos p;");
 
     foreach ($results as $row) {
@@ -268,6 +298,31 @@ function getProductos()
         $db->where("producto_id", $row["producto_id"]);
         $proveedores = $db->get('prov_prod');
         $row["proveedores"] = $proveedores;
+        array_push($prods_kit_arr, $row);
+    }
+
+
+//    Obtiene los productos del kit, y les agrega el stock
+    foreach ($prods_kit_arr as $row) {
+
+//        $db->where("kit_id", $row["producto_id"]);
+//        $producto_kit = $db->get('kits_prods');
+        $productos_kit = $db->rawQuery('select *, 0 stock from productos
+where producto_id in (select producto_id from kits_prods where kit_id = ' . $row["producto_id"] . ')');
+
+//        $kit_stocks = array();
+        foreach ($productos_kit as $key => $stock) {
+
+            $db->where("producto_id", $stock["producto_id"]);
+            $db->where("cant_actual > 0");
+            $db->orderBy('fecha_compra', 'asc');
+            $stocks = $db->get('stock');
+            $productos_kit[$key]["stock"] = $stocks;
+//            $stock["stocks"] = $stocks;
+        }
+
+
+        $row["productos_kit"] = $productos_kit;
         array_push($final, $row);
     }
 
@@ -516,19 +571,47 @@ function getStock()
 {
     $db = new MysqliDb();
 
+//    $results = $db->rawQuery(
+//        "SELECT stock_id,
+//            fecha_compra,
+//            cant_actual,
+//            cant_total,
+//            costo_uni,
+//            producto_id,
+//            sucursal_id,
+//            (SELECT nombre from productos p where s.producto_id = p.producto_id) producto,
+//            (SELECT nombre from proveedores pr where s.proveedor_id = pr.proveedor_id) proveedor,
+//            (SELECT nombre from sucursales ss where s.sucursal_id = ss.sucursal_id) sucursal
+//        FROM stock s
+//        ORDER BY producto_id");
+
     $results = $db->rawQuery(
-        "SELECT stock_id,
-            fecha_compra,
-            cant_actual,
-            cant_total,
-            costo_uni,
-            producto_id,
-            sucursal_id,
-            (SELECT nombre from productos p where s.producto_id = p.producto_id) producto,
-            (SELECT nombre from proveedores pr where s.proveedor_id = pr.proveedor_id) proveedor,
-            (SELECT nombre from sucursales ss where s.sucursal_id = ss.sucursal_id) sucursal
-        FROM stock s
-        ORDER BY producto_id");
+        "SELECT
+    producto_id,
+    SUM(cant_actual) cant_actual,
+    sucursal_id,
+    (SELECT
+            nombre
+        FROM
+            productos p
+        WHERE
+            s.producto_id = p.producto_id) producto,
+    (SELECT
+            nombre
+        FROM
+            proveedores pr
+        WHERE
+            s.proveedor_id = pr.proveedor_id) proveedor,
+    (SELECT
+            nombre
+        FROM
+            sucursales ss
+        WHERE
+            s.sucursal_id = ss.sucursal_id) sucursal
+FROM
+    stock s
+GROUP BY producto_id , sucursal_id , producto , proveedor , sucursal
+ORDER BY producto_id;");
 
     echo json_encode($results);
 }
@@ -545,7 +628,7 @@ function aReponer()
           WHERE p.pto_repo > (SELECT SUM(cant_actual) FROM stock s WHERE s.producto_id=p.producto_id);");
 
 
-    foreach($results as $row){
+    foreach ($results as $row) {
         $db->where("producto_id", $row["producto_id"]);
         $proveedores = $db->get('prov_prod');
         $row["proveedores"] = $proveedores;
@@ -555,16 +638,17 @@ function aReponer()
     echo json_encode($final);
 }
 
-function updateStock($stock){
+function updateStock($stock)
+{
 
     $decoded = json_decode($stock);
 
     $results = true;
 
-    foreach($decoded as $row){
+    foreach ($decoded as $row) {
 
         $db = new MysqliDb();
-        $data = array('cant_actual'=> $row->cant_actual);
+        $data = array('cant_actual' => $row->cant_actual);
         $db->where('stock_id', $row->stock_id);
 
         $results = $db->update('stock', $data);
@@ -572,10 +656,10 @@ function updateStock($stock){
     }
 
 
-    $res = ['status'=>1, 'results' =>1];
-    if($results){
+    $res = ['status' => 1, 'results' => 1];
+    if ($results) {
         echo json_encode($res);
-    }else{
+    } else {
         echo $db->getLastError();
     }
 

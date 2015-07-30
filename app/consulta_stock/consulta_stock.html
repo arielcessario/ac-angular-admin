@@ -23,24 +23,29 @@
         </div>
     </div>
 
-    <div class="ac-grid ">
-        <div class="cabecera lista-flex">
-            <h3>Producto</h3>
-            <h3 >Proveedor</h3>
-            <h3 >Sucursal</h3>
-            <h3>Comprado</h3>
-            <h3>Actual</h3>
-        </div>
 
-        <div class="lista-flex" ng-repeat="stock in consultaStockCtrl.stocks | filter:consultaStockCtrl.filtro">
-            <span>{{stock.producto}}</span> <span>{{stock.proveedor}}</span>
-            <span>{{stock.sucursal}}</span>
-            <span>{{stock.cant_total}}</span> <input type="number" ng-model="stock.cant_actual"
-                                                     ng-blur="consultaStockCtrl.updateStock(stock);"/>
 
-            <div class="btn">
-            </div>
-        </div>
+    <table st-table="consultaStockCtrl.stocks" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Proveedor</th>
+            <th>Sucursal</th>
+            <th>Actual</th>
+        </tr>
+        </thead>
+        <tbody>
 
-    </div>
+        <tr ng-repeat="row in consultaStockCtrl.stocks | filter:consultaStockCtrl.filtro">
+
+            <td class="">{{row.producto}}</td>
+            <td class="">{{row.proveedor}}</td>
+            <td class="">{{row.sucursal}}</td>
+            <td class="">{{row.cant_actual}}</td>
+
+        </tr>
+        </tbody>
+
+    </table>
+
 </div>

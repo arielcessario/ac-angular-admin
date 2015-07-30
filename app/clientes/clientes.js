@@ -121,9 +121,35 @@
         service.getClienteByName = getClienteByName;
         service.saveCliente = saveCliente;
         service.deleteCliente = deleteCliente;
+        service.getDeudores = getDeudores;
+        service.actualizarSaldo = actualizarSaldo;
 
 
         return service;
+
+        function actualizarSaldo(cliente_id, importe, callback) {
+            return $http.post(url, {
+                function: 'actualizarSaldo',
+                importe: importe, cliente_id: cliente_id
+            })
+                .success(function (data) {
+                    callback(data);
+                })
+                .error(function (data) {
+                    callback(data);
+                });
+        }
+
+
+        function getDeudores(callback) {
+            return $http.post(url, {function: 'getDeudores'})
+                .success(function (data) {
+                    callback(data);
+                })
+                .error(function (data) {
+                    callback(data);
+                });
+        }
 
         function getClientes(callback) {
             return $http.post(url,
@@ -155,7 +181,11 @@
                     var n = elemUpper.indexOf(name.toUpperCase());
 
                     if (n === undefined || n === -1) {
-                        n = elem.nombre.indexOf(name);
+                        n = elem.apellido.indexOf(name);
+                    }
+
+                    if (n === undefined || n === -1) {
+                        n = elem.mail.indexOf(name);
                     }
 
                     if (n !== undefined && n > -1) {

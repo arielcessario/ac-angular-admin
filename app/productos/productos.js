@@ -25,8 +25,15 @@
         vm.status = 1;
         vm.destacado = 0;
         vm.fotos = [];
+        vm.producto_kit = {};
+        vm.productos_kit = [];
+        vm.productos_en_kit = [];
+        vm.producto_kit_busqueda = '';
         $scope.agregarImagen = agregarImagen;
         vm.save = save;
+        vm.agregarKit = agregarKit;
+        vm.quitarKit = quitarKit;
+        vm.searchProductoKit = searchProductoKit;
         vm.deleteImage = deleteImage;
         vm.delete = deleteProducto;
         vm.listProveedores = [];
@@ -44,7 +51,8 @@
             categoria: 0,
             sku: '',
             stocks: [],
-            insumo: 0
+            producto_tipo: 0,
+            productos_kit: []
         };
         //vm.proveedores = [
         //    {proveedor_id: '1', nombre: 'prov01'},
@@ -61,6 +69,31 @@
         //vm.mostrar = function(){
         //  console.log(vm.listProveedores);
         //};
+
+
+        function searchProductoKit() {
+            if (vm.producto_kit_busqueda.length > 2) {
+                ProductosService.getProductoByName(vm.producto_kit_busqueda, function (data) {
+                    vm.productos_kit = [];
+                    vm.productos_kit = data;
+                });
+            }
+        }
+
+        function agregarKit(producto_kit) {
+            vm.productos_en_kit.push(producto_kit);
+        }
+
+
+        function quitarKit(producto_kit) {
+            for(var i = 0; i < vm.productos_en_kit.length; i++){
+                if(producto_kit.producto_id == vm.productos_en_kit[i].producto_id){
+
+                    vm.productos_en_kit.splice( i, 1);
+                }
+            }
+            //vm.productos_en_kit(producto);
+        }
 
         ProveedoresService.getProveedores(function (data) {
             //console.log(data);
@@ -80,6 +113,7 @@
             vm.isUpdate = true;
 
             ProductosService.getProductoByID(vm.id, function (data) {
+                //console.log(data);
                 vm.producto = data;
                 vm.producto.ptoRepo = parseInt(data.pto_repo);
 
@@ -104,6 +138,8 @@
                     vm.listProveedores[data.proveedores[i].proveedor_id] = true;
                 }
 
+
+                vm.productos_en_kit = data.productos_kit;
                 //console.log(vm.listProveedores);
 
 
@@ -122,6 +158,41 @@
         }
 
         function save() {
+
+            //if(vm.producto.sku == undefined ||
+            //    vm.producto.sku.length == 0){
+            //    toastr.error('Debe ingresar un SKU');
+            //    return;
+            //}
+            console.log(vm.producto);
+
+            if(vm.producto.descripcion == '' ||
+                vm.producto.descripcion == 0){
+                toastr.error('Debe ingresar una descripcion');
+                return;
+            }
+
+            if(vm.producto.ptoRepo == undefined ||
+                vm.producto.ptoRepo == 0){
+                toastr.error('Debe ingresar un punto de reposición');
+                return;
+            }
+
+
+            if(vm.producto.status == null){
+                toastr.error('Debe ingresar un estado');
+                return;
+            }
+
+            if(vm.producto.categoria_id == null){
+                toastr.error('Debe ingresar una categoria');
+                return;
+            }
+
+            if(vm.producto.destacado == null){
+                toastr.error('Debe indicar si el producto se encuentra destacado');
+                return;
+            }
 
 
             vm.producto.precios = [];
@@ -142,6 +213,8 @@
             precio.tipo = 2;
             precio.precio = vm.precio_web;
             vm.producto.precios.push(precio);
+
+            vm.producto.productos_kit = vm.productos_en_kit;
 
 
             if (vm.listProveedores.length < 1) {
@@ -297,7 +370,7 @@
             //}
 
 
-            return $http.get('./stock-api/stock.php?function=getProductos', {cache: true})
+            return $http.get('./stock-api/stock.php?function=getProductos', {cache: false})
                 .success(function (data) {
                     callback(data);
                     clearCache = false;
@@ -335,6 +408,7 @@
                 var response = data.filter(function (entry) {
                     return entry.producto_id === parseInt(id);
                 })[0];
+                console.log(response);
                 callback(response);
             })
 

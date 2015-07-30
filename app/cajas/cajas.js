@@ -6,7 +6,7 @@
     angular.module('nombreapp.stock.cajas', ['ngRoute', 'nombreapp.stock.productos', 'nombreapp.stock.clientes', 'toastr'
         , 'acMovimientos', 'nombreapp.stock.consultaStock', 'acAngularLoginClient'])
         .config(['$routeProvider', function ($routeProvider) {
-            $routeProvider.when('/cajas', {
+            $routeProvider.when('/cajas/:id', {
                 templateUrl: currentScriptPath.replace('.js', '.html'),
                 controller: 'CajasController'
             });
@@ -16,9 +16,11 @@
 
 
     CajasController.$inject = ['$routeParams', 'ProductosService', 'CajasService', 'toastr', '$location', '$window',
-        'ClientesService', 'MovimientosService', 'MovimientoStockFinal', 'ConsultaStockService', 'acAngularLoginClientService'];
+        'ClientesService', 'MovimientosService', 'MovimientoStockFinal', 'ConsultaStockService', 'acAngularLoginClientService',
+    'AcUtilsService'];
     function CajasController($routeParams, ProductosService, CajasService, toastr, $location, $window, ClientesService,
-                             MovimientosService, MovimientoStockFinal, ConsultaStockService, acAngularLoginClientService) {
+                             MovimientosService, MovimientoStockFinal, ConsultaStockService, acAngularLoginClientService,
+                             AcUtilsService) {
 
         acAngularLoginClientService.checkCookie();
 
@@ -40,6 +42,8 @@
         vm.a_cobrar = 0;
         vm.paga_con = 0;
         vm.vuelto = 0;
+        vm.id = $routeParams.id;
+        vm.cliente_id= -1;
 
 
         vm.agregarDetalle = agregarDetalle;
@@ -48,6 +52,42 @@
         vm.calc_a_cobrar = calc_a_cobrar;
         vm.save = save;
         vm.aCuenta = aCuenta;
+        vm.calcularTotal = calcularTotal;
+        vm.sucursal_id = 1;
+
+
+
+
+        if(vm.id != 0){
+            CajasService.getAsientoCajaById(vm.id, vm.sucursal_id, function(data){
+                console.log(data);
+                for(var i = 0; i<data.length; i++){
+                    if(data[i].cuenta_id.indexOf('1.1.1.01')>-1){
+
+                    }else if(data[i].cuenta_id.indexOf('4.1.1.0')>-1){
+                        vm.detalle = {};
+                        //for(var x=0; x<data[i].detalles.length; x++){
+
+                            vm.detalle = {
+                                producto_id: data[i].detalles[3].detalle.split(' - ')[0],
+                                sku: '',
+                                producto_nombre: data[i].detalles[3].detalle.split(' - ')[1],
+                                cantidad: data[i].detalles[2].detalle,
+                                precio_unidad: data[i].detalles[1].detalle,
+                                precio_total: parseInt(data[i].detalles[2].detalle) * parseFloat(data[i].detalles[1].detalle),
+                                stock: 0,
+                                mp: false
+                            //};
+                        };
+                        vm.detalles.push(vm.detalle);
+                    }
+                }
+                calcularTotal();
+                //vm.detalles = data[1].detalles;
+            });
+        }else{
+
+        }
 
         function aCuenta() {
             //console.log(vm.cliente.cliente_id);
@@ -80,18 +120,57 @@
                 toastr.error('No hay productos seleccionados');
                 return;
             }
-            var cliente_id = -1;
-            if(vm.cliente.cliente_id !== undefined){
-                cliente_id = vm.cliente.cliente_id;
+            //var cliente_id = -1;
+            if (vm.cliente !== undefined && vm.cliente.cliente_id !== undefined) {
+                vm.cliente_id = vm.cliente.cliente_id;
+            }else{
+                if(vm.cliente.nombre !== ''){
+                    if(AcUtilsService.validateEmail(vm.cliente.nombre))
+                    {
+                        vm.cliente = {
+                            nombre: '',
+                            apellido: '',
+                            mail: vm.cliente.nombre,
+                            nacionalidad_id: '',
+                            tipo_doc: 0,
+                            nro_doc: '',
+                            comentarios: '',
+                            marcado: 0,
+                            fecha_nacimiento: ''
+                        };
+                        ClientesService.saveCliente(vm.cliente, 'save', function(data){
+                            vm.cliente_id =data;
+                            finalizarVenta();
+                        });
+                    }
+                }else{
+                    finalizarVenta();
+                }
+
             }
+            finalizarVenta();
+
+
+        }
+
+        function finalizarVenta(){
+            //return;
             //(tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback)
-            MovimientosService.armarMovimiento('001', '00', 1, vm.forma_pago, '00', vm.total, vm.desc_cant, 'Venta de Caja', vm.detalles, cliente_id, 1, '',
+            MovimientosService.armarMovimiento('001', '00', 1, vm.forma_pago, '00', vm.total, vm.desc_cant, 'Venta de Caja', vm.detalles, vm.cliente_id, 1, '',
                 function (data) {
                     //console.log(MovimientoStockFinal.stocks_finales);
                     ConsultaStockService.updateStock(MovimientoStockFinal.stocks_finales, function (data) {
                         toastr.success('Venta realizada con éxito.');
+                        vm.detalles =[];
+                        vm.cliente = {};
 
-                        console.log(data);
+                        vm.forma_pago = '01';
+                        vm.desc_porc = 0;
+                        vm.desc_cant = 0;
+                        vm.a_cobrar = 0;
+                        vm.paga_con = 0;
+                        vm.vuelto = 0;
+                        vm.total = 0;
                     });
                     //console.log(data);
                 });
@@ -155,13 +234,27 @@
 
             vm.total = 0.0;
 
-            for (var i = 0; i < vm.detalles.length; i++) {
-                if (!vm.detalles[i].mp) {
-                    vm.total = parseFloat(vm.total) + parseFloat(vm.detalles[i].precio_total);
-                }
-            }
 
-            calc_a_cobrar('cant')
+            if (vm.forma_pago == '08' ||
+                vm.forma_pago == '09' ||
+                vm.forma_pago == '10') {
+
+
+                for (var i = 0; i < vm.detalles.length; i++) {
+                    vm.total = parseFloat(vm.total) + parseFloat(vm.detalles[i].precio_total);
+                    vm.detalles[i].precio_unidad = Math.round((parseFloat(vm.detalles[i].precio_total) / vm.detalles[i].cantidad)*100)/100 ;
+                }
+
+            } else {
+
+                for (var i = 0; i < vm.detalles.length; i++) {
+                    if (!vm.detalles[i].mp) {
+                        vm.total = parseFloat(vm.total) + parseFloat(vm.detalles[i].precio_total);
+                    }
+                }
+
+            }
+            calc_a_cobrar('cant');
         }
 
         function agregarDetalle() {
@@ -203,6 +296,7 @@
             }
 
 
+            //console.log(vm.producto);
             var encontrado = false;
             for (var i = 0; i < vm.detalles.length; i++) {
                 if (vm.producto.producto_id == vm.detalles[i].producto_id) {
@@ -231,8 +325,10 @@
                     precio_unidad: vm.producto.precios[vm.tipo_precio].precio,
                     precio_total: parseInt(vm.cantidad) * parseFloat(vm.producto.precios[vm.tipo_precio].precio),
                     stock: vm.producto.stocks,
+                    productos_kit: vm.producto.productos_kit,
                     mp: false
                 };
+                //console.log(vm.detalle);
                 vm.detalles.push(vm.detalle);
             }
 
@@ -282,10 +378,11 @@
         service.getSaldoFinalAnterior = getSaldoFinalAnterior;
         service.cerrarCaja = cerrarCaja;
         service.abrirCaja = abrirCaja;
+        service.getAsientoCajaById = getAsientoCajaById;
         return service;
 
-        function totalConcepto(where, fecha_desde, fecha_hasta, callback){
-            return $http.get(url + '?function=totalConcepto&where='+where+'&fecha_desde=' + fecha_desde +'&fecha_hasta='+fecha_hasta)
+        function totalConcepto(where, fecha_desde, fecha_hasta, callback) {
+            return $http.get(url + '?function=totalConcepto&where=' + where + '&fecha_desde=' + fecha_desde + '&fecha_hasta=' + fecha_hasta)
                 .success(function (data) {
                     callback(data)
                 })
@@ -295,8 +392,8 @@
         }
 
 
-        function getMovimientos(fecha_desde, fecha_hasta, callback){
-            return $http.get(url + '?function=getMovimientos&fecha_desde=' + fecha_desde +'&fecha_hasta='+fecha_hasta)
+        function getMovimientos(fecha_desde, fecha_hasta, callback) {
+            return $http.get(url + '?function=getMovimientos&fecha_desde=' + fecha_desde + '&fecha_hasta=' + fecha_hasta)
                 .success(function (data) {
                     callback(data)
                 })
@@ -306,8 +403,8 @@
         }
 
 
-        function getCajaDiariaFromTo(sucursal_id, asiento_id_inicio, asiento_id_fin, callback){
-            return $http.get(url + '?function=getCajaDiariaFromTo&sucursal_id=' + sucursal_id +'&asiento_id_inicio='+asiento_id_inicio+'&asiento_id_fin='+asiento_id_fin)
+        function getCajaDiariaFromTo(sucursal_id, asiento_id_inicio, asiento_id_fin, callback) {
+            return $http.get(url + '?function=getCajaDiariaFromTo&sucursal_id=' + sucursal_id + '&asiento_id_inicio=' + asiento_id_inicio + '&asiento_id_fin=' + asiento_id_fin)
                 .success(function (data) {
                     callback(data)
                 })
@@ -316,8 +413,8 @@
                 });
         }
 
-        function getCajas(callback){
-            return $http.get(url + '?function=getCajas', {cache:true})
+        function getCajas(callback) {
+            return $http.get(url + '?function=getCajas', {cache: true})
                 .success(function (data) {
                     callback(data)
                 })
@@ -326,11 +423,11 @@
                 });
         }
 
-        function getCajasBySucursal(sucursal_id, callback){
-            getCajas(function(data){
-               var response = data.filter(function(elem, index, array){
-                   return elem.sucursal_id == sucursal_id;
-               });
+        function getCajasBySucursal(sucursal_id, callback) {
+            getCajas(function (data) {
+                var response = data.filter(function (elem, index, array) {
+                    return elem.sucursal_id == sucursal_id;
+                });
 
                 callback(response);
             });
@@ -348,46 +445,55 @@
 
         }
 
+        function getAsientoCajaById(asiento_id, sucursal_id, callback){
+            getCajaDiaria(sucursal_id, function(data){
+                var response = data.filter(function(elem, index, array){
+                    return elem.asiento_id == asiento_id;
+                });
+                callback(response);
+            });
+        }
+
         function getHistoricoCajaDiaria(sucursal_id, callback) {
             //return $http.post();
 
         }
 
         function getSaldoFinal(sucursal_id, callback) {
-            return $http.post(url, {function:'getSaldoFinal',sucursal_id: sucursal_id})
-                .success(function(data){
+            return $http.post(url, {function: 'getSaldoFinal', sucursal_id: sucursal_id})
+                .success(function (data) {
                     callback(data);
                 })
-                .error(function(data){
+                .error(function (data) {
                     callback(data);
                 });
 
         }
 
         function cerrarCaja(sucursal_id, importe, callback) {
-            return $http.post(url, {function:'cerrarCaja', sucursal_id: sucursal_id, importe: importe})
-                .success(function(data){
+            return $http.post(url, {function: 'cerrarCaja', sucursal_id: sucursal_id, importe: importe})
+                .success(function (data) {
                     callback(data);
                 })
-                .error(function(data){
+                .error(function (data) {
                     callback(data);
                 });
 
         }
 
         function abrirCaja(sucursal_id, importe, callback) {
-            return $http.post(url, {function:'abrirCaja', sucursal_id: sucursal_id, importe: importe})
-                .success(function(data){
+            return $http.post(url, {function: 'abrirCaja', sucursal_id: sucursal_id, importe: importe})
+                .success(function (data) {
                     callback(data);
                 })
-                .error(function(data){
+                .error(function (data) {
                     callback(data);
                 });
 
         }
 
-        function getSaldoInicial(sucursal_id, callback){
-            return $http.get(url + '?function=getSaldoInicial&sucursal_id='+sucursal_id)
+        function getSaldoInicial(sucursal_id, callback) {
+            return $http.get(url + '?function=getSaldoInicial&sucursal_id=' + sucursal_id)
                 .success(function (data) {
                     callback(data)
                 })
@@ -396,8 +502,8 @@
                 });
         }
 
-        function getSaldoFinalAnterior(sucursal_id, callback){
-            return $http.get(url + '?function=getSaldoFinalAnterior&sucursal_id='+sucursal_id)
+        function getSaldoFinalAnterior(sucursal_id, callback) {
+            return $http.get(url + '?function=getSaldoFinalAnterior&sucursal_id=' + sucursal_id)
                 .success(function (data) {
                     callback(data)
                 })
@@ -406,8 +512,8 @@
                 });
         }
 
-        function checkEstado(sucursal_id, callback){
-            return $http.get(url + '?function=checkEstado&sucursal_id='+sucursal_id)
+        function checkEstado(sucursal_id, callback) {
+            return $http.get(url + '?function=checkEstado&sucursal_id=' + sucursal_id)
                 .success(function (data) {
                     callback(data)
                 })

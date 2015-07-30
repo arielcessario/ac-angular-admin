@@ -19,9 +19,23 @@ $slideDuration: .4s;
 
 body {
   font-family: "Open Sans";
-  font-size: 18px;
+  font-size: 16px;
   background-color: $background-color;
   //  overflow: hidden;
+}
+
+
+.detalle-caja-total-grid{
+  font-weight: bolder;
+  background-color: lightgray !important;
+  border: solid 0px;
+  border-bottom: solid 1px darkslategray;
+  margin-bottom: 20px;
+}
+
+.detalle-caja-subtotal-grid{
+  text-align: right;
+  line-height: 16px;
 }
 
 .ac-main {
@@ -292,6 +306,11 @@ select ~ label {
   background-size: 60% 60%;
 }
 
+.btn-edit {
+  background: #03A9F4 url("icons/core/create.svg") no-repeat 50% 50%;
+  background-size: 60% 60%;
+}
+
 .btn-lock-open {
   background: #FF9800 url("icons/core/lock-open.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
@@ -299,6 +318,11 @@ select ~ label {
 
 .btn-ok {
   background: #51a351 url("icons/core/done.svg") no-repeat 50% 50%;
+  background-size: 60% 60%;
+}
+
+.btn-receipt {
+  background: #51a351 url("icons/core/receipt.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 

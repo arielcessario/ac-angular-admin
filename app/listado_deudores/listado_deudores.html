@@ -1,0 +1,42 @@
+<div ng-controller="ListadoDeudoresController as listadoDeudoresCtrl">
+    <div class="title"><h1>Listado Deudores</h1></div>
+    <div class="v-spacer"></div>
+
+    <div class="full-width">
+
+        <input type="text" ng-model="listadoDeudoresCtrl.filtro" class="full-width" required/>
+        <label>Buscar...</label>
+    </div>
+    <div class="lista-flex" ng-repeat="deudor in listadoDeudoresCtrl.deudores | filter:listadoDeudoresCtrl.filtro">
+
+        <span>{{deudor.nombre}}</span>
+        <span>{{deudor.apellido}}</span>
+        <span>{{deudor.saldo | currency}}</span>
+
+
+        <div>
+            <div class="btn">
+                <button class="btn-medium btn-archive"></button>
+                <label>Cancelar Deuda</label>
+            </div>
+            <div class="btn">
+                <button ng-click="listadoDeudoresCtrl.mostrarDetalle = deudor;"
+                        class="btn-medium btn-visibility"></button>
+                <label>Ver Detalle</label>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div ng-if="listadoDeudoresCtrl.mostrarDetalle !== [];">
+        <h2>Detalle de deuda</h2>
+
+        <div style="display: flex;" ng-repeat="detalle in listadoDeudoresCtrl.mostrarDetalle.detalles">
+            <span class="descr">{{detalle.fecha}}</span>
+            <span>{{detalle.importe | currency}}</span>
+        </div>
+    </div>
+
+</div>

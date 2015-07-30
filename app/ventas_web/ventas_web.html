@@ -1,0 +1,53 @@
+<div class="title">
+    <div class="btn ">
+        <input type="submit" class="btn-back btn-medium no-margin"
+               onclick="window.location='#/listado_ventas_web';"
+               value="">
+        <label>Volver</label>
+    </div>
+    <h1>Ventas a través de la web</h1></div>
+<div class="v-spacer"></div>
+<form ng-controller="VentasWebController  as ventasWebCtrl"
+      name="ventasWebForm" novalidate>
+    <div>
+        <div class="line"><h2>Nombre y Apellido</h2> <span class="descr">{{ventasWebCtrl.ventaWeb.cliente[0].nombre}} {{ventasWebCtrl.ventaWeb.cliente[0].apellido}}</span><br/></div>
+        <div class="line"><h2>Mail</h2> <span class="descr">{{ventasWebCtrl.ventaWeb.cliente[0].mail}}</span><br/></div>
+        <div class="line"><h2>Fecha de Pedido</h2> <span class="descr" ng-if="ventasWebCtrl.ventaWeb.fecha !== '0000-00-00 00:00:00'">{{ventasWebCtrl.ventaWeb.fecha}}</span><br/></div>
+        <div class="line"><h2>Total del Pedido</h2> <span class="descr">{{ventasWebCtrl.ventaWeb.total | currency}}</span><br/></div>
+        <div class="line"><h2>Estado</h2> <span class="descr">{{(ventasWebCtrl.ventaWeb.status == 3)?'Confirmada':'Sin Confirmar'}}</span><br/></div>
+    </div>
+    <br/>
+    <table st-table="ventasWebCtrl.ventaWeb" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio unitario</th>
+            <th>Subtotal</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="row in ventasWebCtrl.ventaWeb.detalle">
+            <td>{{row.nombre}}</td>
+            <td>{{row.cantidad}}</td>
+            <td>{{row.precio | currency}}</td>
+            <td>{{row.precio * row.cantidad | currency}} </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+
+    <div>
+        <!--<input type="submit"-->
+        <!--ng-disabled="ventasWebForm.user.$dirty && ventasWebForm.user.$invalid ||-->
+        <!--ventasWebForm.email.$dirty && ventasWebForm.email.$invalid">-->
+        <div class="btn"><input type="submit" ng-click="ventasWebCtrl.confirmarVentaWeb();"
+                                 class="relieve-2 btn-ok btn-big" value="">
+            <label>Confirmar Venta</label>
+        </div>
+
+    </div>
+
+</form>
+

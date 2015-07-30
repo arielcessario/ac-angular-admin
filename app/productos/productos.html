@@ -1,4 +1,3 @@
-
 <div class="title">
     <div class="btn ">
         <input type="submit" class="btn-back btn-medium no-margin"
@@ -35,10 +34,10 @@
         <div>
             <input type="number" id="ptoRepo" name="ptoRepo" ng-model="productosCtrl.producto.ptoRepo" ng-maxlength="45"
                    required><br><label for="ptoRepo">Punto Reposición</label>
-        <span style="color:red" ng-show="productForm.ptoRepo.$dirty && productForm.ptoRepo.$invalid">
-            <span ng-show="productForm.ptoRepo.$error.required">Punto de Reposición es obligatorio</span>
-            <span ng-show="productForm.ptoRepo.$error.number">Número inválido</span>
-        </span>
+        <!--<span style="color:red" ng-show="productForm.ptoRepo.$dirty && productForm.ptoRepo.$invalid">-->
+            <!--<span ng-show="productForm.ptoRepo.$error.required">Punto de Reposición es obligatorio</span>-->
+            <!--<span ng-show="productForm.ptoRepo.$error.number">Número inválido</span>-->
+        <!--</span>-->
         </div>
 
         <div>
@@ -54,7 +53,7 @@
 
         <div>
             <select name="categoria" id="categoria" ng-model="productosCtrl.producto.categoria_id"
-            ng-options="categoria.categoria_id as categoria.nombre  for categoria in productosCtrl.categorias">
+                    ng-options="categoria.categoria_id as categoria.nombre  for categoria in productosCtrl.categorias">
             </select><br/>
             <label for="categoria">Categoria</label><br>
             <span style="color:red" ng-show="(productForm.categoria.$dirty && productForm.categoria.$invalid)">
@@ -83,10 +82,11 @@
         </div>
 
         <div>
-            <select name="insumo" id="insumo" ng-model="productosCtrl.producto.insumo">
+            <select name="producto_tipo" id="producto_tipo" ng-model="productosCtrl.producto.producto_tipo">
                 <option value="0" selected>Producto</option>
                 <option value="1" selected>Insumo</option>
-            </select><br><label for="insumo">Producto o Insumo</label>
+                <option value="2" selected>Kit</option>
+            </select><br><label for="producto_tipo">Tipo de producto</label>
         <span style="color:red" ng-show="(productForm.insumo.$dirty && productForm.insumo.$invalid)">
             <span ng-show="productForm.insumo.$error.required">insumo is required.</span>
         </span>
@@ -158,7 +158,50 @@
 
             </div>
         </div>
+        <fieldset ng-disabled="productosCtrl.producto.producto_tipo != 2"
+                  style="max-height: 500px; max-width: 25%; min-height: 400px;">
+            <div><h3>Productos a incluir en el Kit</h3>
+            </div>
+            <label for="nombre">Nombre</label>
+            <input ng-keyup="productosCtrl.searchProductoKit();"
+                   type="text" ng-model="productosCtrl.producto_kit_busqueda"><br>
 
+            <div style="overflow: auto; max-height: 200px">
+                <table st-table="productosCtrl.productos_kit" class="table table-striped">
+                    <tbody>
+
+                    <tr ng-repeat="row in productosCtrl.productos_kit">
+
+                        <td>
+                            {{row.nombre}}
+                        </td>
+                        <td>
+                            <div class="btn btn-add btn-small" ng-click="productosCtrl.agregarKit(row);">
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="overflow: auto; max-height: 200px">
+                <label for="nombre">Agregados</label>
+                <table st-table="productosCtrl.productos_en_kit" class="table table-striped">
+                    <tbody>
+
+                    <tr ng-repeat="row in productosCtrl.productos_en_kit">
+
+                        <td>
+                            {{row.nombre}}
+                        </td>
+                        <td>
+                            <div class="btn btn-delete btn-small" ng-click="productosCtrl.quitarKit(row);">
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
 
         <div>
             <div><h3>Fotos</h3><br/>
@@ -177,6 +220,8 @@
                 </div>
             </div>
         </div>
+
+
     </div>
     <br/>
 
@@ -184,8 +229,7 @@
         <!--<input type="submit"-->
         <!--ng-disabled="productForm.user.$dirty && productForm.user.$invalid ||-->
         <!--productForm.email.$dirty && productForm.email.$invalid">-->
-        <div class="btn"><input type="submit" ng-click="productosCtrl.save();"
-                                ng-disabled="productForm.$invalid" class="relieve-2 btn-ok btn-big" value="">
+        <div class="btn"><input type="submit" ng-click="productosCtrl.save();" class="relieve-2 btn-ok btn-big" value="">
             <label>Guardar Producto</label>
         </div>
 
