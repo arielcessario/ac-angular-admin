@@ -8,6 +8,7 @@ angular.module('myApp', [
     'ngAnimate',
     'smart-table',
     'acAngularLoginClient',
+    'acAngularWaiting',
     'ac-utils',
     'nombreapp.stock.productos',
     'nombreapp.stock.listadoProductos',

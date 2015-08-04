@@ -11,12 +11,38 @@
         }])
         .controller('AcUtilsController', AcUtilsController)
         .factory('AcUtilsService', AcUtilsService)
+        .service('AcUtilsGlobals', AcUtilsGlobals)
+        .directive('acLastListItem', AcLastListItem)
     ;
 
+
+    AcLastListItem.$inject = ['AcUtilsGlobals', '$rootScope'];
+    function AcLastListItem(AcUtilsGlobals, $rootScope) {
+        return function (scope, element, attrs) {
+            //angular.element(element).css('color', 'blue');
+
+            if (scope.$last) {
+                //window.alert("im the last!");
+
+                AcUtilsGlobals.isWaiting = false;
+                $rootScope.$broadcast('IsWaiting');
+            }
+
+
+        };
+    }
 
     AcUtilsController.$inject = [];
     function AcUtilsController() {
     }
+
+    AcUtilsGlobals.$inject = [];
+    function AcUtilsGlobals() {
+        this.isWaiting = false;
+    }
+
+
+
 
     AcUtilsService.$inject = [];
     function AcUtilsService() {

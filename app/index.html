@@ -18,13 +18,15 @@
     <link rel="stylesheet" href="bower_components/angular-toastr/dist/angular-toastr.min.css">
     <link rel="stylesheet" href="bower_components/ac-angular-lateral-nav/app/nav/nav.css">
     <link rel="stylesheet" href="bower_components/ac-angular-search-panel/app/search-panel/search-panel.css">
+    <link rel="stylesheet" href="ac-angular-waiting/ac-angular-waiting.css">
     <link rel="stylesheet" href="estilos/estilo-base.css">
     <link rel="stylesheet" href="estilos/table-style.css">
     <link rel="stylesheet" href="app.css">
     <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body ng-controller="MainCtrl as mainCtrl">
-
+<div style="position: fixed; top: 0; left: 0; right: 0; height: 200px; background-color: #B0BEC5;"></div>
+<ac-angular-waiting></ac-angular-waiting>
 <nav-bar menu-list="mainCtrl.data"></nav-bar>
 
 
@@ -51,6 +53,7 @@
 <script src="bower_components/ac-angular-movimientos/app/movimientos-list.js"></script>
 <script src="bower_components/ac-angular-login-client/app/verify-login.js"></script>
 <script src="bower_components/angular-smart-table/dist/smart-table.min.js"></script>
+<script src="ac-angular-waiting/ac-angular-waiting.js"></script>
 <script src="app.js"></script>
 <script src="utils/utils.js"></script>
 <script src="productos/productos.js"></script>

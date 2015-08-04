@@ -17,10 +17,10 @@
 
     CajasController.$inject = ['$routeParams', 'ProductosService', 'CajasService', 'toastr', '$location', '$window',
         'ClientesService', 'MovimientosService', 'MovimientoStockFinal', 'ConsultaStockService', 'acAngularLoginClientService',
-    'AcUtilsService'];
+    'AcUtilsService', 'AcUtilsGlobals', '$rootScope'];
     function CajasController($routeParams, ProductosService, CajasService, toastr, $location, $window, ClientesService,
                              MovimientosService, MovimientoStockFinal, ConsultaStockService, acAngularLoginClientService,
-                             AcUtilsService) {
+                             AcUtilsService, AcUtilsGlobals, $rootScope) {
 
         acAngularLoginClientService.checkCookie();
 
@@ -133,6 +133,10 @@
         }
 
         function save() {
+            AcUtilsGlobals.isWaiting = true;
+            $rootScope.$broadcast('IsWaiting');
+
+
 
             if (vm.detalles.length < 1) {
                 toastr.error('No hay productos seleccionados');
@@ -189,6 +193,8 @@
                         vm.paga_con = 0;
                         vm.vuelto = 0;
                         vm.total = 0;
+                        AcUtilsGlobals.isWaiting = false;
+                        $rootScope.$broadcast('IsWaiting');
                     });
                     //console.log(data);
                 });

@@ -265,7 +265,8 @@ function getProductos()
             0 proveedores,
             0 stocks,
             0 productos_kit
-        FROM productos p;");
+        FROM productos p
+        ORDER BY nombre;");
 
     foreach ($results as $row) {
 

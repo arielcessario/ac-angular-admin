@@ -344,6 +344,7 @@
         var clearCache = false;
 
         service.getProductos = getProductos;
+        service.getProductosFromTo = getProductosFromTo;
         service.getProductoByID = getProductoByID;
         service.getProductoByNameOrSKU = getProductoByNameOrSKU;
         service.getProductoByName = getProductoByName;
@@ -390,6 +391,12 @@
             //}).error(function(){
             //    alert("error");
             //});
+        }
+
+        function getProductosFromTo(start, amount, callback){
+            getProductos(function(data){
+               callback(data.splice(start, start + amount));
+            });
         }
 
         //function getProductos(callback) {

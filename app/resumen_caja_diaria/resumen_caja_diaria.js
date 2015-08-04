@@ -14,9 +14,9 @@
 
 
     ResumenCajaDiariaController.$inject = ['CajasService', '$location', 'MovimientosService',
-        'SucursalesService', '$timeout', '$interval'];
+        'SucursalesService', '$timeout', '$interval', 'AcUtilsGlobals','$rootScope'];
     function ResumenCajaDiariaController(CajasService, $location, MovimientosService,
-                                         SucursalesService, $timeout, $interval) {
+                                         SucursalesService, $timeout, $interval, AcUtilsGlobals, $rootScope) {
 
         var vm = this;
         vm.asientos = [];
@@ -62,6 +62,10 @@
 
 
         function getDetalles() {
+            AcUtilsGlobals.isWaiting = true;
+            $rootScope.$broadcast('IsWaiting');
+
+
             CajasService.getSaldoInicial(vm.sucursal.sucursal_id, function (data) {
 
                 //console.log(data);
@@ -189,6 +193,10 @@
                     vm.asientos = detalles_caja;
                     //console.log(detalles_caja);
                     //console.log(vm.asientos);
+
+
+                    AcUtilsGlobals.isWaiting = false;
+                    $rootScope.$broadcast('IsWaiting');
 
 
                 });

@@ -7,25 +7,69 @@
         <input type="text" ng-model="listadoProductosCtrl.filtro.nombre" class="full-width" required/>
         <label>Buscar...</label>
     </div>
-    <div class="lista-flex" ng-repeat="producto in listadoProductosCtrl.productos | filter:listadoProductosCtrl.filtro">
 
-        <span>{{producto.nombre}}</span>
-        <div class="btn" ng-if="producto.destacado == 1">
-            <button class="btn-medium btn-star-outlined"></button>
-            <label>Destacado</label>
-        </div>
-        <div ng-if="producto.destacado != 1"> </div>
-        <span>{{producto.categoria}}</span>
-        <span class="descr">{{producto.descripcion}}</span>
+    <table st-table="listadoProductosCtrl.productos" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Destacado</th>
+            <th>Categoria</th>
+            <th>Imagen</th>
+            <th>Detalle</th>
+        </tr>
+        </thead>
+        <tbody>
 
-        <div class="btn">
-            <button ng-click="listadoProductosCtrl.detalle(producto.producto_id)"
-                    class="btn-medium btn-visibility"></button>
-            <label>Mostrar Detalle</label>
-        </div>
+        <tr ng-repeat="row in listadoProductosCtrl.productos | filter:listadoProductosCtrl.filtro"
+            ac-last-list-item>
+
+            <td class="">{{row.nombre}}</td>
+            <td class="">
+                <div class="btn" ng-if="row.destacado == 1">
+                    <button class="btn-small btn-star-outlined"></button>
+                    <label>Destacado</label>
+                </div>
+            </td>
+            <td class="">{{row.categoria}}</td>
+            <td class="">
+                <img src="{{row.fotos[0].path + row.fotos[0].nombre}}"
+                     alt="{{row.fotos[0].nombre}}"
+                     height="100" width="100" style="background-color: #dddddd;">
+            </td>
+            <!--<td class="">{{row.descripcion}}</td>-->
+            <td class="">
+                <div class="btn">
+                    <button ng-click="listadoProductosCtrl.detalle(row.producto_id)"
+                            class="btn-medium btn-visibility"></button>
+                    <label>Mostrar Detalle</label>
+                </div>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
 
 
-    </div>
+    <!--<div class="lista-flex" ng-repeat="producto in listadoProductosCtrl.productos | filter:listadoProductosCtrl.filtro">-->
+
+        <!--<span>{{producto.nombre}}</span>-->
+
+        <!--<div class="btn" ng-if="producto.destacado == 1">-->
+            <!--<button class="btn-medium btn-star-outlined"></button>-->
+            <!--<label>Destacado</label>-->
+        <!--</div>-->
+        <!--<div ng-if="producto.destacado != 1"></div>-->
+        <!--<span>{{producto.categoria}}</span>-->
+        <!--<span class="descr">{{producto.descripcion}}</span>-->
+
+        <!--<div class="btn">-->
+            <!--<button ng-click="listadoProductosCtrl.detalle(producto.producto_id)"-->
+                    <!--class="btn-medium btn-visibility"></button>-->
+            <!--<label>Mostrar Detalle</label>-->
+        <!--</div>-->
+
+
+    <!--</div>-->
 
     <div class="btn">
 
