@@ -30,7 +30,8 @@ function saveCategoria($categoria){
     $item_decoded = json_decode($categoria);
 //    $fotos_decoded = json_decode($producto->fotos);
     $data = array(
-        'nombre' => $item_decoded->nombre
+        'nombre' => $item_decoded->nombre,
+        'parent_id' => $item_decoded->parent_id
     );
 
 
@@ -54,7 +55,8 @@ function updateCategoria($categoria){
     $item_decoded = json_decode($categoria);
 //    $fotos_decoded = json_decode($producto->fotos);
     $data = array(
-        'nombre' => $item_decoded->nombre
+        'nombre' => $item_decoded->nombre,
+        'parent_id' => $item_decoded->parent_id
     );
 
     $db->where('categoria_id', $item_decoded->categoria_id);

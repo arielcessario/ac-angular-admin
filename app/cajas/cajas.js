@@ -17,10 +17,10 @@
 
     CajasController.$inject = ['$routeParams', 'ProductosService', 'CajasService', 'toastr', '$location', '$window',
         'ClientesService', 'MovimientosService', 'MovimientoStockFinal', 'ConsultaStockService', 'acAngularLoginClientService',
-    'AcUtilsService', 'AcUtilsGlobals', '$rootScope'];
+    'AcUtilsService', 'AcUtilsGlobals', '$rootScope', 'ProductosServiceUtils'];
     function CajasController($routeParams, ProductosService, CajasService, toastr, $location, $window, ClientesService,
                              MovimientosService, MovimientoStockFinal, ConsultaStockService, acAngularLoginClientService,
-                             AcUtilsService, AcUtilsGlobals, $rootScope) {
+                             AcUtilsService, AcUtilsGlobals, $rootScope, ProductosServiceUtils) {
 
         acAngularLoginClientService.checkCookie();
 
@@ -193,6 +193,10 @@
                         vm.paga_con = 0;
                         vm.vuelto = 0;
                         vm.total = 0;
+
+                        ProductosServiceUtils.clearCache = true;
+                        ProductosService.getProductos(function(data){});
+
                         AcUtilsGlobals.isWaiting = false;
                         $rootScope.$broadcast('IsWaiting');
                     });

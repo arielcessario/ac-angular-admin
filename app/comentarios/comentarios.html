@@ -1,0 +1,38 @@
+<div class="title">
+    <div class="btn ">
+        <input type="submit" class="btn-back btn-medium no-margin"
+               onclick="window.location='#/listado_noticias';"
+               value="">
+        <label>Volver</label>
+    </div>
+    <h1>Listado de comentarios</h1>
+</div>
+<div class="v-spacer"></div>
+<table st-table="comentariosCtrl.noticias" class="table table-striped">
+    <thead>
+    <tr>
+        <th>Fecha</th>
+        <th >Titulo</th>
+        <th >Detalles</th>
+        <th style="width: 5%;text-align: center" colspan="2">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr ng-repeat="row in comentariosCtrl.noticias | filter:comentariosCtrl.filtro">
+
+        <td class="">{{row.fecha}}</td>
+        <td class="">{{row.titulo}}</td>
+        <td class="">{{row.detalles}}</td>
+        <td class="">
+            <div class="btn">
+                <button class="btn-medium btn-archive" ng-click="comentariosCtrl.cancelarDeuda();"></button>
+                <label>Borrar Comentario</label>
+            </div>
+        </td>
+        
+
+    </tr>
+    </tbody>
+</table>
+

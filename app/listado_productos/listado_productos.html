@@ -4,7 +4,8 @@
 
     <div class="full-width">
 
-        <input type="text" ng-model="listadoProductosCtrl.filtro.nombre" class="full-width" required/>
+        <input type="text" ng-model="listadoProductosCtrl.filtro.nombre" class="full-width" required
+               ng-keyup="(listadoProductosCtrl.filtro.nombre.length > 0)?listadoProductosCtrl.start = 0:listadoProductosCtrl.start = listadoProductosCtrl.lastView;"/>
         <label>Buscar...</label>
     </div>
 
@@ -20,7 +21,7 @@
         </thead>
         <tbody>
 
-        <tr ng-repeat="row in listadoProductosCtrl.productos | filter:listadoProductosCtrl.filtro"
+        <tr ng-repeat="row in listadoProductosCtrl.productos | filter:listadoProductosCtrl.filtro | limitTo:listadoProductosCtrl.limit:listadoProductosCtrl.start"
             ac-last-list-item>
 
             <td class="">{{row.nombre}}</td>
@@ -46,27 +47,39 @@
             </td>
 
         </tr>
-        </tbody>
+        <!--</tbody>-->
+        <!--<tfoot>-->
+        <!--<tr>-->
+        <!--<td colspan="5" class="text-center" style="display: flex;">-->
+        <!-- -->
+        <!--</td>-->
+        <!--</tr>-->
+        <!--</tfoot>-->
     </table>
 
+    <div style="display: flex; width: 100%; align-content: space-around;">
+        <div style="flex: 5;"></div>
+        <div style="height: 40px; width: 40px;text-align: center;line-height:40px;"
+             class="btn btn-empty btn-small relieve-1"
+             ng-click="listadoProductosCtrl.retroceder();">Ant.
+        </div>
+        <!--<div style="max-width: 100%;display: flex; overflow-x: auto; scrollbar-face-color: #000000;">-->
 
-    <!--<div class="lista-flex" ng-repeat="producto in listadoProductosCtrl.productos | filter:listadoProductosCtrl.filtro">-->
-
-        <!--<span>{{producto.nombre}}</span>-->
-
-        <!--<div class="btn" ng-if="producto.destacado == 1">-->
-            <!--<button class="btn-medium btn-star-outlined"></button>-->
-            <!--<label>Destacado</label>-->
+        <!--<div style="text-align: center;line-height:25px;margin: 5px; min-width: 25px; height: 25px; cursor: pointer;"-->
+        <!--class="btn btn-empty btn-small" ng-repeat="numero in listadoProductosCtrl.paginas"-->
+        <!--ng-click="listadoProductosCtrl.irAPagina($index);">{{$index + 1}}</div>-->
         <!--</div>-->
-        <!--<div ng-if="producto.destacado != 1"></div>-->
-        <!--<span>{{producto.categoria}}</span>-->
-        <!--<span class="descr">{{producto.descripcion}}</span>-->
+        <div style="margin-top: 10px;"><span>Página {{listadoProductosCtrl.pagina}} de {{listadoProductosCtrl.paginas}}</span></div>
+        <div style="margin-top: 10px;">Ir a <input style="width: 40px;" type="number" ng-model="listadoProductosCtrl.pagina"
+                         ng-change="listadoProductosCtrl.irAPagina();"
+                         ng-keyup="listadoProductosCtrl.irAPagina();"></div>
 
-        <!--<div class="btn">-->
-            <!--<button ng-click="listadoProductosCtrl.detalle(producto.producto_id)"-->
-                    <!--class="btn-medium btn-visibility"></button>-->
-            <!--<label>Mostrar Detalle</label>-->
-        <!--</div>-->
+        <div style="height: 40px; width: 40px;text-align: center;line-height:40px;"
+             class="btn btn-empty btn-small relieve-1"
+             ng-click="listadoProductosCtrl.avanzar();">Sig.
+        </div>
+        <div style="flex: 5;"></div>
+    </div>
 
 
     <!--</div>-->

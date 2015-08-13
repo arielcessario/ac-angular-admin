@@ -225,7 +225,9 @@
                     callback(data);
                     clearCache = false;
                 })
-                .error();
+                .error(function(data){
+
+                });
 
 
         }
@@ -238,7 +240,7 @@
                     callback(data);
                     clearCache = true;
                 })
-                .error();
+                .error(function(data){});
         }
 
     }

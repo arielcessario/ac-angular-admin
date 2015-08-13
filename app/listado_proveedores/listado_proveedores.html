@@ -1,0 +1,76 @@
+<div ng-controller="ListadoProveedoresController as listadoProveedoresCtrl">
+    <div class="title"><h1>Listado Proveedores</h1></div>
+    <div class="v-spacer"></div>
+
+    <div class="full-width">
+
+        <input type="text" ng-model="listadoProveedoresCtrl.filtro" class="full-width" required/>
+        <label>Buscar...</label>
+    </div>
+
+
+    <table st-table="listadoProveedoresCtrl.proveedores" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Cuit</th>
+            <th>Telefono</th>
+            <th>Mail</th>
+            <th style="width: 5%;">Modificar</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr ng-repeat="row in listadoProveedoresCtrl.proveedores | filter:listadoProveedoresCtrl.filtro"
+            ac-last-list-item>
+
+            <td class="">{{row.nombre}}</td>
+            <td class="">{{row.cuit}}</td>
+            <td class="">{{row.telefono}}</td>
+            <td class="">{{row.mail}}</td>
+
+            <td class="">
+                <div class="btn">
+                    <button ng-click="listadoProveedoresCtrl.detalle(row.proveedor_id)"
+                            class="btn-medium btn-visibility"></button>
+                    <label>Mostrar Detalle</label>
+                </div>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+
+
+
+
+
+    <!--<div class="lista-flex" ng-repeat="proveedor in listadoProveedoresCtrl.proveedores | filter:listadoProveedoresCtrl.filtro">-->
+
+        <!--<span>{{proveedor.nombre}}</span>-->
+        <!--<span>{{proveedor.cuit}}</span>-->
+
+
+        <!--<div>-->
+            <!--<div class="btn" ng-if="proveedor.marcado == 1">-->
+                <!--<button class="btn-medium btn-close"></button>-->
+                <!--<label>No alojar</label>-->
+            <!--</div>-->
+            <!--<div class="btn">-->
+                <!--<button ng-click="listadoProveedoresCtrl.detalle(proveedor.proveedor_id)"-->
+                        <!--class="btn-medium btn-visibility"></button>-->
+                <!--<label>Mostrar Detalle</label>-->
+            <!--</div>-->
+
+        <!--</div>-->
+
+    <!--</div>-->
+
+    <div class="btn">
+
+        <input type="button" class="relieve-2 btn-add  btn-big" value=""
+               onclick="window.location='#/proveedores/0';"/>
+
+        <label>Nuevo Proveedor</label>
+    </div>
+</div>

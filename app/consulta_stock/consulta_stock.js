@@ -106,7 +106,7 @@
                 .success(function (data) {
                     callback(data);
                 })
-                .error();
+                .error(function(data){});
         }
 
         function getConStock(callback){
@@ -130,7 +130,7 @@
                 .success(function (data) {
                     callback(data);
                 })
-                .error();
+                .error(function(data){});
         }
 
     }

@@ -80,7 +80,9 @@
                     .success(function (data) {
                         callback(data);
                     })
-                    .error();
+                    .error(function(data){
+
+                    });
             }
 
             function getVentasWebByID(id, callback) {

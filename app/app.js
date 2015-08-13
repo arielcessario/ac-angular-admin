@@ -5,7 +5,6 @@ angular.module('myApp', [
     'ngRoute',
     'ngCookies',
     'ngAnimate',
-    'ngAnimate',
     'smart-table',
     'acAngularLoginClient',
     'acAngularWaiting',
@@ -40,6 +39,11 @@ angular.module('myApp', [
     'nombreapp.stock.ofertas',
     'nombreapp.stock.detalleDeudores',
     'nombreapp.stock.cancelarDeuda',
+    'nombreapp.stock.listadoProveedores',
+    'nombreapp.stock.trasladarStock',
+    'nombreapp.stock.noticias',
+    'nombreapp.stock.listadoNoticias',
+    'nombreapp.stock.comentarios',
     'nombreapp.nav',
     'ac-search-panel'
 ]).
@@ -48,8 +52,8 @@ angular.module('myApp', [
     }]).controller('MainCtrl', MainCtrl);
 
 
-MainCtrl.$inject = ['acAngularLoginClientService'];
-function MainCtrl(acAngularLoginClientService){
+MainCtrl.$inject = ['acAngularLoginClientService', 'ProductosServiceUtils', 'ProductosService'];
+function MainCtrl(acAngularLoginClientService, ProductosServiceUtils, ProductosService){
     var vm = this;
 
     vm.logout = logout;
@@ -59,6 +63,9 @@ function MainCtrl(acAngularLoginClientService){
     }
 
     acAngularLoginClientService.checkCookie();
+
+    ProductosServiceUtils.clearCache = true;
+    ProductosService.getProductos(function(data){});
 
     vm.data = [
         {ref:'#/cajas/0',name:'Caja'},
@@ -74,15 +81,18 @@ function MainCtrl(acAngularLoginClientService){
         {ref:'#/listado_categorias',name:'Lista de Categorias'},
         {ref:'#/listado_clientes',name:'Lista de Clientes'},
         {ref:'#/listado_deudores',name:'Lista de Deudores'},
+        {ref:'#/listado_proveedores',name:'Lista de Proveedores'},
         {ref:'#/listado_ventas_web',name:'Lista de Ventas Web'},
         {ref:'#/clientes/0',name:'Nuevo Cliente'},
         {ref:'#/productos/0',name:'Nuevo Producto'},
         {ref:'#/pedidos/0',name:'Nuevo Pedido'},
+        {ref:'#/proveedores/0',name:'Nuevo Proveedor'},
         {ref:'#/categorias/0',name:'Nueva Categoria'},
         {ref:'#/ofertas',name:'Ofertas'},
         {ref:'#/gastos/0',name:'Gastos'},
         {ref:'#/depositos/0',name:'Depositos'},
         {ref:'#/a_reponer',name:'A Reponer'},
+        {ref:'#/trasladar_stock',name:'Mover Mercadería'},
         {ref:'#/consulta_stock',name:'Consulta de Stock'}
     ];
 }

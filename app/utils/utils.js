@@ -39,6 +39,7 @@
     AcUtilsGlobals.$inject = [];
     function AcUtilsGlobals() {
         this.isWaiting = false;
+        this.sucursal_auxiliar_id = -1;
     }
 
 

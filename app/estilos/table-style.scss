@@ -60,14 +60,24 @@ tr {
 }
 
 
+
+
 .table-row{
-  background-color: white !important;
+  background-color: white;
   border-top-width: 0px !important;
   padding-bottom: 0px !important;
 }
+
+
+
 .table-row-result{
   //background-color: lightgray !important;
   font-weight: bold;
-  padding-bottom: 30px !important;
-  border-top-width: 1px !important;
+  padding-bottom: 40px !important;
+  border-top-width: 2px !important;
+  background-color: white !important;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>.table-row-caja, .table-striped>tbody>tr:nth-child(odd)>.table-row-caja {
+  background: #f9f9f9 ;
 }

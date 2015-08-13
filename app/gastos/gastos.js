@@ -62,7 +62,9 @@
                 .success(function (data) {
                     callback(data);
                 })
-                .error();
+                .error(function(data){
+
+                });
         }
 
         function getGastoByID(id, callback) {
@@ -106,7 +108,7 @@
                 .success(function (data) {
                     callback(data);
                 })
-                .error();
+                .error(function(data){});
         }
 
 
@@ -116,7 +118,7 @@
                 .success(function (data) {
                     callback(data);
                 })
-                .error();
+                .error(function(data){});
         }
 
     }

@@ -20,10 +20,7 @@
 .ac-waiting-01,
 .ac-waiting-02,
 .ac-waiting-03{
-    border-radius: 50px;
-    height: 50px;
-    width: 50px;
-    position: absolute;
+
 }
 
 .ac-waiting-texto{
@@ -38,7 +35,10 @@
 }
 
 .ac-waiting-01{
-
+    border-radius: 50px;
+    height: 50px;
+    width: 50px;
+    position: absolute;
     left: calc(50% - 5px);
     top: calc(50% - 35px);
     -webkit-animation: ac-waiting 1.5s;
@@ -55,7 +55,10 @@
 }
 
 .ac-waiting-02{
-
+    border-radius: 100px;
+    height: 100px;
+    width: 100px;
+    position: absolute;
     left: calc(50% - 5px);
     top: calc(50% - 10px);
     -webkit-animation: ac-waiting 1.1s;
@@ -72,7 +75,10 @@
 }
 
 .ac-waiting-03{
-
+    border-radius: 80px;
+    height: 80px;
+    width: 80px;
+    position: absolute;
     left: calc(50% - 50px);
     top: calc(50% - 0px);
     -webkit-animation: ac-waiting 1.7s;

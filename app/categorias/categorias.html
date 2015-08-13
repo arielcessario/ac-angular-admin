@@ -9,7 +9,15 @@
 <div class="v-spacer"></div>
 <form ng-controller="CategoriasController  as categoriasCtrl"
       name="categoriasForm" novalidate>
-    <div class="form-flex">
+    <div class="form-flex" style="justify-content:flex-start !important;">
+        <div>
+            <label class="title-mi-cuenta" style="margin-right: 10px">Categoria Principal</label>
+            <select ng-click=""
+                    ng-model="categoriasCtrl.categoria.parent_id"
+                    ng-options="categoria.categoria_id as categoria.nombre for categoria in categoriasCtrl.padres"
+                    class="">
+            </select>
+        </div>
         <div>
             <input type="text" id="nombre" name="nombre" ng-model="categoriasCtrl.categoria.nombre" ng-maxlength="100"
                    required><br>

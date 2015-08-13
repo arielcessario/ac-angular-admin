@@ -72,7 +72,7 @@
                 vm.saldoInicial = parseFloat(data.replace('"', ''));
 
                 CajasService.getCajaDiaria(vm.sucursal.sucursal_id, function (data) {
-                    console.log(data);
+                    //console.log(data);
                     var asiento = [];
                     for (var i = 0; i < data.length; i++) {
                         if (data[i].cuenta_id.indexOf('1.1.1.0') > -1) {

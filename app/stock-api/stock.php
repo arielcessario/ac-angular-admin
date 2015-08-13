@@ -46,6 +46,8 @@ if ($decoded != null) {
         updateStock($decoded->stock);
     } elseif ($decoded->function == 'aReponer') {
         aReponer();
+    } elseif ($decoded->function == 'trasladar') {
+        trasladar($decoded->origen_id, $decoded->destino_id, $decoded->producto_id, $decoded->cantidad);
     }
 } else {
 
@@ -664,5 +666,76 @@ function updateStock($stock)
         echo $db->getLastError();
     }
 
+}
+
+function trasladar($origen_id, $destino_id, $producto_id, $cantidad)
+{
+    $db = new MysqliDb();
+    $cant_a_mover = $cantidad;
+
+    $stock_origen = $db->rawQuery('select stock_id, cant_actual, costo_uni, proveedor_id from stock where sucursal_id = ' . $origen_id . '
+     and producto_id = ' . $producto_id . ' order by stock_id asc');
+    foreach ($stock_origen as $row) {
+
+        if ($cant_a_mover > 0 && $row["cant_actual"] > 0) {
+            if ($row["cant_actual"] < $cant_a_mover) {
+                $db->where('stock_id', $row['stock_id']);
+                $data = array('cant_actual' => 0);
+                $db->update('stock', $data);
+
+
+                $insertar = array('producto_id' => $producto_id,
+                    'proveedor_id' => $row['proveedor_id'],
+                    'sucursal_id' => $destino_id,
+                    'cant_actual' => $cant_a_mover - $row["cant_actual"],
+                    'cant_total' => $cant_a_mover - $row["cant_actual"],
+                    'costo_uni' => $row['costo_uni']
+                );
+                $db->insert('stock', $insertar);
+
+                $cant_a_mover = $cant_a_mover - $row["cant_actual"];
+            }
+
+            if ($row["cant_actual"] > $cant_a_mover) {
+
+                $db->where('stock_id', $row['stock_id']);
+                $data = array('cant_actual' => $row["cant_actual"] - $cant_a_mover);
+                $db->update('stock', $data);
+
+                $insertar = array('producto_id' => $producto_id,
+                    'proveedor_id' => $row['proveedor_id'],
+                    'sucursal_id' => $destino_id,
+                    'cant_actual' => $cant_a_mover,
+                    'cant_total' => $cant_a_mover,
+                    'costo_uni' => $row['costo_uni']
+                );
+                $db->insert('stock', $insertar);
+
+                $cant_a_mover = 0;
+
+            }
+
+            if ($row["cant_actual"] == $cant_a_mover) {
+
+                $db->where('stock_id', $row['stock_id']);
+                $data = array('cant_actual' => 0);
+                $db->update('stock', $data);
+
+
+                $insertar = array('producto_id' => $producto_id,
+                    'proveedor_id' => $row['proveedor_id'],
+                    'sucursal_id' => $destino_id,
+                    'cant_actual' => $cant_a_mover,
+                    'cant_total' => $cant_a_mover,
+                    'costo_uni' => $row['costo_uni']
+                );
+                $db->insert('stock', $insertar);
+
+                $cant_a_mover = 0;
+            }
+        }
+    }
+
+    echo json_encode($db->getLastError());
 }
 //Stock -

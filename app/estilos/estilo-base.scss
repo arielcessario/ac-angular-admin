@@ -161,7 +161,8 @@ body {
 input[type="text"],
 input[type="password"],
 input[type="email"],
-input[type="number"] {
+input[type="number"],
+textarea{
   border: solid 0px;
   border-bottom-width: 1px;
   border-bottom-color: #2196F3;
@@ -289,6 +290,12 @@ select ~ label {
   background-size: 60% 60%;
 }
 
+.btn-empty {
+  background-color: #FF9800;
+  background-size: 60% 60%;
+  cursor: pointer;
+}
+
 .btn-archive {
   background: #FF9800 url("icons/core/archive.svg") no-repeat 50% 50%;
 //  -webkit-filter: invert(100%);
@@ -385,6 +392,22 @@ button:hover ~ label {
 
 .relieve-2:hover {
   box-shadow: 0px 10px 15px #ababab;
+
+}
+
+
+.relieve-1 {
+  box-shadow: 0px 1px 5px #adadad;
+  -webkit-transition: all .3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+
+}
+
+.relieve-1:hover {
+  box-shadow: 0px 3px 10px #ababab;
 
 }
 

@@ -23,9 +23,18 @@
         vm.save = save;
         vm.delete = deleteCategoria;
         vm.id = $routeParams.id;
+        vm.parent_categories = -1;
+        vm.padres = [];
         vm.categoria = {
-            nombre: ''
+            nombre: '',
+            parent_id: -1
         };
+
+
+        CategoriasService.getCategoriasPadres(function(data){
+            vm.padres = data;
+            vm.padres.unshift({nombre: 'Sin Padre', parent_id: -1});
+        });
 
 
         if (vm.id == 0) {
@@ -34,8 +43,9 @@
             vm.isUpdate = true;
 
             CategoriasService.getCategoriaByID(vm.id, function (data) {
+
+
                 vm.categoria = data;
-                
             });
         }
 
@@ -52,8 +62,7 @@
         }
 
         function save() {
-
-           
+            //console.log(vm.categoria);
 
             if (vm.isUpdate) {
                 CategoriasService.saveCategoria(vm.categoria, 'update', function (data) {
@@ -81,6 +90,7 @@
         var service = {};
         var url = './stock-api/categorias.php';
         service.getCategorias = getCategorias;
+        service.getCategoriasPadres = getCategoriasPadres;
         service.getCategoriaByID = getCategoriaByID;
         service.getCategoriaByName = getCategoriaByName;
         service.saveCategoria = saveCategoria;
@@ -96,7 +106,20 @@
                 .success(function (data) {
                     callback(data);
                 })
-                .error();
+                .error(function(data){
+
+                });
+        }
+
+        function getCategoriasPadres(callback) {
+            getCategorias(function (data) {
+                //console.log(data);
+                var response = data.filter(function (entry) {
+                    return entry.parent_id == -1;
+                });
+                callback(response);
+            })
+
         }
 
         function getCategoriaByID(id, callback) {

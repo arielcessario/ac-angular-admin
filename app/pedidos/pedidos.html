@@ -25,20 +25,18 @@
         <div class="line">
             <label for="proveedor"><h2>Proveedor</h2></label><br>
             <select name="proveedor" id="proveedor" ng-model="pedidosCtrl.pedido.proveedor_id"
-                    ng-init="pedidosCtrl.pedido.proveedor_id=1;"
                     ng-options="proveedor.proveedor_id as proveedor.nombre  for proveedor in pedidosCtrl.proveedores"
                     ng-click="pedidosCtrl.cleanProductos();">
             </select>
-            <span style="color:red" ng-show="(pedidosForm.proveedor.$dirty && pedidosForm.proveedor.$invalid)">
-            <span ng-show="pedidosForm.proveedor.$error.required">proveedorname is required.</span>
         </span>
         </div>
 
         <div class="line">
             <label for="sucursal"><h2>Sucursal</h2></label><br>
-            <select name="sucursal" id="sucursal" ng-model="pedidosCtrl.pedido.sucursal_id">
-                <option value="1">Suc 1</option>
-                <option value="2">Suc 2</option>
+            <select name="sucursal" id="sucursal" ng-model="pedidosCtrl.pedido.sucursal_id"
+                    ng-options="sucursal.sucursal_id as sucursal.nombre  for sucursal in pedidosCtrl.sucursales">
+                <!--<option value="1">Suc 1</option>-->
+                <!--<option value="2">Suc 2</option>-->
             </select>
         <span style="color:red" ng-show="(pedidosForm.sucursal.$dirty && pedidosForm.sucursal.$invalid)">
             <span ng-show="pedidosForm.sucursal.$error.required">sucursalname is required.</span>

@@ -15,11 +15,13 @@
 
         .controller('ProductosController', ProductosController)
         .service('ProductosService', ProductosService)
+        .service('ProductosServiceUtils', ProductosServiceUtils)
         .directive('dbinfOnFilesSelected', dbinfOnFilesSelected);
 
     ProductosController.$inject = ["$http", "$scope", "$routeParams", "ProductosService", "$location", "toastr", 'ProveedoresService',
-        'CategoriasService'];
-    function ProductosController($http, $scope, $routeParams, ProductosService, $location, toastr, ProveedoresService, CategoriasService) {
+        'CategoriasService', 'ProductosServiceUtils'];
+    function ProductosController($http, $scope, $routeParams, ProductosService, $location, toastr, ProveedoresService, CategoriasService,
+                                 ProductosServiceUtils) {
         var vm = this;
         vm.isUpdate = false;
         vm.status = 1;
@@ -86,63 +88,70 @@
 
 
         function quitarKit(producto_kit) {
-            for(var i = 0; i < vm.productos_en_kit.length; i++){
-                if(producto_kit.producto_id == vm.productos_en_kit[i].producto_id){
+            for (var i = 0; i < vm.productos_en_kit.length; i++) {
+                if (producto_kit.producto_id == vm.productos_en_kit[i].producto_id) {
 
-                    vm.productos_en_kit.splice( i, 1);
+                    vm.productos_en_kit.splice(i, 1);
                 }
             }
             //vm.productos_en_kit(producto);
         }
 
-        ProveedoresService.getProveedores(function (data) {
-            //console.log(data);
-            vm.proveedores = data;
-
-        });
-
-        CategoriasService.getCategorias(function (data) {
-            vm.categorias = data;
-            vm.producto.categoria_id = data[0].categoria_id;
-        });
-
 
         if (vm.id == 0) {
+            CategoriasService.getCategorias(function (data) {
+                vm.categorias = data;
+                vm.producto.categoria_id = data[0].categoria_id;
+            });
+
+            ProveedoresService.getProveedores(function (data) {
+                //console.log(data);
+                vm.proveedores = data;
+
+            });
+
             vm.isUpdate = false;
         } else {
             vm.isUpdate = true;
-
-            ProductosService.getProductoByID(vm.id, function (data) {
+            ProveedoresService.getProveedores(function (data) {
                 //console.log(data);
-                vm.producto = data;
-                vm.producto.ptoRepo = parseInt(data.pto_repo);
+                vm.proveedores = data;
+                CategoriasService.getCategorias(function (data) {
+                    vm.categorias = data;
+                    vm.producto.categoria_id = data[0].categoria_id;
+                    ProductosService.getProductoByID(vm.id, function (data) {
+                        //console.log(data);
+                        vm.producto = data;
+                        vm.producto.ptoRepo = parseInt(data.pto_repo);
 
-                vm.precio_minorista = 0;
-                vm.precio_mayorista = 0;
-                vm.precio_web = 0;
+                        vm.precio_minorista = 0;
+                        vm.precio_mayorista = 0;
+                        vm.precio_web = 0;
 
-                for (var i = 0; i < 3; i++) {
+                        for (var i = 0; i < 3; i++) {
 
-                    if (data.precios[i].precio_tipo_id == 0) {
-                        vm.precio_minorista = parseFloat(data.precios[i].precio);
-                    }
-                    if (data.precios[i].precio_tipo_id == 1) {
-                        vm.precio_mayorista = parseFloat(data.precios[i].precio);
-                    }
-                    if (data.precios[i].precio_tipo_id == 2) {
-                        vm.precio_web = parseFloat(data.precios[i].precio);
-                    }
-                }
+                            if (data.precios[i].precio_tipo_id == 0) {
+                                vm.precio_minorista = parseFloat(data.precios[i].precio);
+                            }
+                            if (data.precios[i].precio_tipo_id == 1) {
+                                vm.precio_mayorista = parseFloat(data.precios[i].precio);
+                            }
+                            if (data.precios[i].precio_tipo_id == 2) {
+                                vm.precio_web = parseFloat(data.precios[i].precio);
+                            }
+                        }
 
-                for (var i = 0; i < data.proveedores.length; i++) {
-                    vm.listProveedores[data.proveedores[i].proveedor_id] = true;
-                }
-
-
-                vm.productos_en_kit = data.productos_kit;
-                //console.log(vm.listProveedores);
+                        for (var i = 0; i < data.proveedores.length; i++) {
+                            vm.listProveedores[data.proveedores[i].proveedor_id] = true;
+                        }
 
 
+                        vm.productos_en_kit = data.productos_kit;
+                        //console.log(vm.listProveedores);
+
+
+                    });
+                });
             });
         }
 
@@ -164,32 +173,32 @@
             //    toastr.error('Debe ingresar un SKU');
             //    return;
             //}
-            console.log(vm.producto);
+            //console.log(vm.producto);
 
-            if(vm.producto.descripcion == '' ||
-                vm.producto.descripcion == 0){
+            if (vm.producto.descripcion == '' ||
+                vm.producto.descripcion == 0) {
                 toastr.error('Debe ingresar una descripcion');
                 return;
             }
 
-            if(vm.producto.ptoRepo == undefined ||
-                vm.producto.ptoRepo == 0){
+            if (vm.producto.ptoRepo == undefined ||
+                vm.producto.ptoRepo == 0) {
                 toastr.error('Debe ingresar un punto de reposición');
                 return;
             }
 
 
-            if(vm.producto.status == null){
+            if (vm.producto.status == null) {
                 toastr.error('Debe ingresar un estado');
                 return;
             }
 
-            if(vm.producto.categoria_id == null){
+            if (vm.producto.categoria_id == null) {
                 toastr.error('Debe ingresar una categoria');
                 return;
             }
 
-            if(vm.producto.destacado == null){
+            if (vm.producto.destacado == null) {
                 toastr.error('Debe indicar si el producto se encuentra destacado');
                 return;
             }
@@ -237,11 +246,13 @@
                 ProductosService.saveProducto(vm.producto, 'update', function (data) {
 
                     uploadImages();
+                    ProductosServiceUtils.clearCache = true;
                 });
             } else {
                 ProductosService.saveProducto(vm.producto, 'save', function (data) {
 
                     uploadImages();
+                    ProductosServiceUtils.clearCache = true;
                 });
             }
         }
@@ -316,6 +327,11 @@
         }
     }
 
+    function ProductosServiceUtils() {
+        this.clearCache = true;
+    }
+
+
     function dbinfOnFilesSelected() {
         return {
             restrict: 'A',
@@ -337,11 +353,11 @@
         }
     }
 
-    ProductosService.$inject = ['$http', '$cacheFactory'];
-    function ProductosService($http, $cacheFactory) {
+    ProductosService.$inject = ['$http', '$cacheFactory', 'ProductosServiceUtils', 'AcUtilsGlobals'];
+    function ProductosService($http, $cacheFactory, ProductosServiceUtils, AcUtilsGlobals) {
         var service = {};
         var sucursal_id = 1;
-        var clearCache = false;
+        var clearCache = true;
 
         service.getProductos = getProductos;
         service.getProductosFromTo = getProductosFromTo;
@@ -352,6 +368,7 @@
         service.getProductosVenta = getProductosVenta;
         service.saveProducto = saveProducto;
         service.deleteProducto = deleteProducto;
+        service.getProductoByNameOrSKUAndSucursal = getProductoByNameOrSKUAndSucursal;
 
 
         return service;
@@ -359,24 +376,31 @@
         function getProductos(callback) {
             var $httpDefaultCache = $cacheFactory.get('$http');
             var cachedData = [];
-            if (clearCache) {
-                $httpDefaultCache.remove('./stock-api/stock.php?function=getProductos');
 
 
+            if ($httpDefaultCache.get('./stock-api/stock.php?function=getProductos') != undefined) {
+                if (ProductosServiceUtils.clearCache) {
+                    $httpDefaultCache.remove('./stock-api/stock.php?function=getProductos');
+                }
+                else {
+                    //console.log('lo');
+                    cachedData = $httpDefaultCache.get('./stock-api/stock.php?function=getProductos');
+                    callback(cachedData);
+                    return;
+                }
             }
-            //else {
-            //
-            //    cachedData = $httpDefaultCache.get('./stock-api/stock.php?function=getProductos');
-            //    return cachedData;
-            //}
 
 
             return $http.get('./stock-api/stock.php?function=getProductos', {cache: false})
                 .success(function (data) {
+                    $httpDefaultCache.put('./stock-api/stock.php?function=getProductos', data);
+                    ProductosServiceUtils.clearCache = false;
                     callback(data);
-                    clearCache = false;
+
                 })
-                .error();
+                .error(function(data){
+
+                });
 
             //return cachedData;
 
@@ -393,9 +417,9 @@
             //});
         }
 
-        function getProductosFromTo(start, amount, callback){
-            getProductos(function(data){
-               callback(data.splice(start, start + amount));
+        function getProductosFromTo(start, amount, callback) {
+            getProductos(function (data) {
+                callback(data.splice(start, start + amount));
             });
         }
 
@@ -415,7 +439,7 @@
                 var response = data.filter(function (entry) {
                     return entry.producto_id === parseInt(id);
                 })[0];
-                console.log(response);
+                //console.log(response);
                 callback(response);
             })
 
@@ -423,7 +447,8 @@
 
         function getProductoByNameOrSKU(name, callback) {
             getProductos(function (data) {
-                var response = data.filter(function (elem) {
+                var response = data.filter(function (elem, index, array) {
+
                     var elemUpper = elem.nombre.toUpperCase();
 
                     var n = elemUpper.indexOf(name.toUpperCase());
@@ -436,6 +461,63 @@
 
                     for (var i = 0; i < elem.stocks.length; i++) {
                         if (elem.stocks[i].sucursal_id == sucursal_id) {
+                            stockEnSucursal = true;
+                        }
+
+                    }
+
+                    if (stockEnSucursal && ((n !== undefined && n > -1) || elem.sku == name )) {
+
+                        //var retorno = angular.clone(elem);
+
+                        //return elem;
+                        //var detalle = {
+                        //    categoria: elem.categoria,
+                        //    cagegoria_id:elem.categoria_id,
+                        //    cuenta_id:elem.cuenta_id,
+                        //    descripcion:elem.descripcion,
+                        //    destacado:elem.destacado,
+                        //    fotos:elem.fotos,
+                        //    nombre:elem.nombre,
+                        //    precios:elem.precios,
+                        //    producto_id:elem.producto_id,
+                        //    producto_tipo:elem.producto_tipo,
+                        //    productos_kit:elem.productos_kit,
+                        //    proveedores:elem.proveedores,
+                        //    pto_repo:elem.pto_repo,
+                        //    sku:elem.sku,
+                        //    status:elem.status,
+                        //    stocks:elem.stocks,
+                        //    vendidos:elem.vendidos
+                        //};
+                        return elem;
+                    }
+                });
+                callback(response);
+            })
+
+        }
+
+
+
+
+        function getProductoByNameOrSKUAndSucursal(name, callback) {
+            getProductos(function (data) {
+                var response = data.filter(function (elem) {
+                    var elemUpper = elem.nombre.toUpperCase();
+
+                    var n = elemUpper.indexOf(name.toUpperCase());
+
+                    if (n === undefined || n === -1) {
+                        n = elem.nombre.indexOf(name);
+                    }
+
+                    var stockEnSucursal = false;
+                    //console.log(AcUtilsGlobals.sucursal_auxiliar_id);
+
+                    for (var i = 0; i < elem.stocks.length; i++) {
+                        //console.log(elem.stocks[i].sucursal_id);
+                        if (elem.stocks[i].sucursal_id == AcUtilsGlobals.sucursal_auxiliar_id) {
                             stockEnSucursal = true;
                         }
 
@@ -550,7 +632,7 @@
                     callback(data);
                     clearCache = true;
                 })
-                .error();
+                .error(function(data){});
         }
 
 
@@ -560,7 +642,7 @@
                 .success(function (data) {
                     callback(data);
                 })
-                .error();
+                .error(function(data){});
         }
 
     }

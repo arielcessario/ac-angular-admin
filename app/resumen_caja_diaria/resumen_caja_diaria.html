@@ -24,7 +24,7 @@
 
         <tr ng-repeat="row in resumenCajaDiariaCtrl.asientos">
 
-            <td class="table-row"
+            <td class="table-row table-row-caja"
                 ng-class="{'table-row-result':(row.cuenta_id.indexOf('1.1.1.') > -1 || row.cuenta_id.indexOf('1.1.2.') > -1) &&
                 (row.description.indexOf('Cancelación de deuda ') <0 || row.cuenta_id.indexOf('1.1.1.') > -1)}">
                 {{row.description}}
@@ -41,7 +41,7 @@
                     <!--<label>Modificar movimiento</label>-->
                 <!--</div>-->
             </td>
-            <td class="table-row"
+            <td class="table-row table-row-caja"
                 ng-class="{'table-row-result':(row.cuenta_id.indexOf('1.1.1.') > -1 || row.cuenta_id.indexOf('1.1.2.') > -1) &&
                 (row.description.indexOf('Cancelación de deuda ' )< 0 || row.cuenta_id.indexOf('1.1.1.') > -1)}"
                 style="text-align: right;">{{row.valor}}</td>
