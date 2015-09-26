@@ -1,4 +1,5 @@
 'use strict';
+window.conProductos = true;
 
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
@@ -9,6 +10,7 @@ angular.module('myApp', [
     'acAngularLoginClient',
     'acAngularWaiting',
     'ac-utils',
+    'slider.manager',
     'nombreapp.stock.productos',
     'nombreapp.stock.listadoProductos',
     'nombreapp.stock.pagoProveedores',
@@ -66,6 +68,8 @@ function MainCtrl(acAngularLoginClientService, ProductosServiceUtils, ProductosS
 
     ProductosServiceUtils.clearCache = true;
     ProductosService.getProductos(function(data){});
+
+
 
     vm.data = [
         {ref:'#/cajas/0',name:'Caja'},

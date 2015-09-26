@@ -120,7 +120,9 @@ function updateNoticia($noticia)
     $data = array("titulo" => $decoded->titulo,
         "detalles" => $decoded->detalles,
         "creador_id" => $decoded->creador_id,
-        "vistas" => 0);
+        "vistas" => 0,
+        "tipo" => $decoded->tipo,
+        "fecha" => $decoded->fecha);
 
     $results = $db->update('noticias', $data);
 
@@ -180,7 +182,8 @@ function saveNoticia($noticia)
     $data = array("titulo" => $decoded->titulo,
         "detalles" => $decoded->detalle,
         "creador_id" => $decoded->creador_id,
-        "vistas" => 0);
+        "vistas" => 0,
+        "tipo" => $decoded->tipo);
 
     $results = $db->insert('noticias', $data);
 
@@ -210,7 +213,7 @@ function saveNoticia($noticia)
 function getNoticias()
 {
     $db = new MysqliDb();
-    $results = $db->rawQuery('Select noticia_id, titulo, detalles, fecha, creador_id, vistas, 0 fotos, 0 comentarios from noticias;');
+    $results = $db->rawQuery('Select noticia_id, titulo, detalles, fecha, creador_id, vistas, tipo, 0 fotos, 0 comentarios from noticias;');
 
     foreach($results as $key => $row){
         $db->where('noticia_id', $row["noticia_id"]);

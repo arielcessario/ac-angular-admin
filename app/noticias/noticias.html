@@ -10,15 +10,24 @@
 <div class="v-spacer"></div>
 <form ng-controller="NoticiasController  as noticiasCtrl"
       name="productForm" novalidate>
-    <div class="form-flex">
-        <div style="width: 100%;">
+    <div style="display: flex; flex-direction: row; justify-content: flex-start;">
+        <div>
             <input type="text" id="titulo" name="titulo" ng-model="noticiasCtrl.noticia.titulo" ng-maxlength="45"
                    required><br>
             <label for="titulo">Titulo</label>
-        <span style="color:red" ng-show="productForm.titulo.$dirty && productForm.titulo.$invalid">
-            <span ng-show="productForm.titulo.$error.required">Debe ingresar un Titulo</span>
-            <span ng-show="productForm.titulo.$error.maxlength">El Titulo es demasiado largo (Máximo 45)</span>
-        </span>
+        </div>
+        <div>
+            <select name="" id="tipo_precio" ng-model="noticiasCtrl.noticia.tipo">
+                <option value="0">Noticia</option>
+                <option value="1">Evento</option>
+            </select>
+            <br><label for="tipo_precio">Noticia o Evento</label>
+        </div>
+
+        <div  ng-if="noticiasCtrl.noticia.tipo == 1;">
+            <input type="date" id="fecha" name="fecha" ng-model="noticiasCtrl.noticia.fecha" ng-maxlength="45"
+                   required><br>
+            <label for="titulo">Fecha</label>
         </div>
 
     </div>

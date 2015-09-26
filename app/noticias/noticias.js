@@ -44,6 +44,7 @@
             fecha: '',
             creador_id: 0,
             vistas: 0,
+            tipo: 0,
             fotos: [],
             comentarios: []
         };
@@ -73,6 +74,7 @@
 
             NoticiasService.getNoticiaByID(vm.id, function (data) {
                 //console.log(data);
+                data.tipo = "" + data.tipo;
                 vm.noticia = data;
 
             });
@@ -90,19 +92,17 @@
         }
 
 
-        function comentarios(){
-            $location.path('/comentarios/'+vm.id);
+        function comentarios() {
+            $location.path('/comentarios/' + vm.id);
         }
 
         function save() {
 
 
-
-            //console.log(vm.noticia);
-
             if (vm.isUpdate) {
                 NoticiasService.save(vm.noticia, 'updateNoticia', function (data) {
 
+                    console.log(data);
                     uploadImages();
                     NoticiasServiceUtils.clearCache = true;
                 });
@@ -141,7 +141,9 @@
             //console.log(files.files[0]);
             //console.log(vm.fotos);
 
-            if(vm.fotos.length == 0){return;}
+            if (vm.fotos.length == 0) {
+                return;
+            }
 
             var form_data = new FormData();
 
@@ -229,7 +231,6 @@
         service.deleteNoticia = deleteNoticia;
 
 
-
         return service;
 
         function getNoticias(callback) {
@@ -255,6 +256,13 @@
                     //console.log(data);
                     //$httpDefaultCache.put('./stock-api/noticias.php?function=getNoticias', data);
                     //NoticiasServiceUtils.clearCache = false;
+
+                    for (var i = 0; i < data.length; i++) {
+                        var fecha = new Date(data[i].fecha);
+
+                        data[i].fecha = new Date((fecha.getMonth() + 1) + '/' + fecha.getDate() + '/' + fecha.getFullYear());
+                    }
+
                     callback(data);
 
                 })
@@ -266,10 +274,9 @@
         }
 
 
-
         function getNoticiaByID(id, callback) {
             getNoticias(function (data) {
-                console.log(data);
+                //console.log(data);
                 var response = data.filter(function (entry) {
                     return entry.noticia_id === parseInt(id);
                 })[0];
@@ -288,7 +295,7 @@
                     callback(data);
                     clearCache = true;
                 })
-                .error(function(data){
+                .error(function (data) {
 
                 });
         }
@@ -303,7 +310,7 @@
                     callback(data);
                     clearCache = true;
                 })
-                .error(function(data){
+                .error(function (data) {
 
                 });
         }
@@ -315,7 +322,7 @@
                 .success(function (data) {
                     callback(data);
                 })
-                .error(function(data){
+                .error(function (data) {
 
                 });
         }

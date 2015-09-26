@@ -20,7 +20,7 @@
 
         <tr ng-repeat="row in listadoNoticiasCtrl.noticias | filter:listadoNoticiasCtrl.filtro">
 
-            <td class="">{{row.fecha}}</td>
+            <td class="">{{row.fecha | date}}</td>
             <td class="">{{row.titulo}}</td>
             <td class="">
                 <div class="btn">

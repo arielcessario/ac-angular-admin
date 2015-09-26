@@ -31,8 +31,12 @@
         NoticiasService.getNoticias(
             function (data){
                 //console.log(data);
+                //for(var i = 0; i<data.length; i++){
+                //
+                //    var fecha = data[i].fecha.getDate();
+                //    console.log(fecha);
+                //}
                 vm.noticias = data;
-                //console.log(vm.noticias);
             }
         );
 

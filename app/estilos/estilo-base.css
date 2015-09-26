@@ -71,7 +71,7 @@ body {
   background-color: #ececec;
 }
 
-/* line 28, estilo-base.scss */
+/* line 27, estilo-base.scss */
 .detalle-caja-total-grid {
   font-weight: bolder;
   background-color: lightgray !important;
@@ -80,13 +80,13 @@ body {
   margin-bottom: 20px;
 }
 
-/* line 36, estilo-base.scss */
+/* line 35, estilo-base.scss */
 .detalle-caja-subtotal-grid {
   text-align: right;
   line-height: 16px;
 }
 
-/* line 41, estilo-base.scss */
+/* line 40, estilo-base.scss */
 .ac-main {
   position: absolute;
   z-index: 1;
@@ -102,7 +102,7 @@ body {
   box-shadow: 0px 2px 4px #AAAAAA;
 }
 @media (min-width: 1025px) {
-  /* line 41, estilo-base.scss */
+  /* line 40, estilo-base.scss */
   .ac-main {
     width: 80%;
     max-width: 80%;
@@ -110,7 +110,7 @@ body {
   }
 }
 @media (max-width: 1024px) {
-  /* line 41, estilo-base.scss */
+  /* line 40, estilo-base.scss */
   .ac-main {
     width: 96%;
     max-width: 96%;
@@ -118,7 +118,7 @@ body {
   }
 }
 
-/* line 72, estilo-base.scss */
+/* line 71, estilo-base.scss */
 .ac-main.ng-enter {
   -webkit-animation: view-enter 0.5s !important;
   -moz-animation: view-enter 0.5s !important;
@@ -127,7 +127,7 @@ body {
   animation: view-enter 0.5s !important;
 }
 
-/* line 80, estilo-base.scss */
+/* line 79, estilo-base.scss */
 .ac-main.ng-leave {
   -webkit-animation: view-leave 0.5s !important;
   -moz-animation: view-leave 0.5s !important;
@@ -152,7 +152,7 @@ body {
     transform: translate(0, 1000px);
   }
 }
-/* line 113, estilo-base.scss */
+/* line 112, estilo-base.scss */
 .ac-login {
   width: 20%;
   max-width: 20%;
@@ -160,7 +160,7 @@ body {
   min-height: 40%;
 }
 
-/* line 123, estilo-base.scss */
+/* line 119, estilo-base.scss */
 .form-flex, .lista-flex {
   display: flex;
   flex-direction: row;
@@ -168,7 +168,7 @@ body {
   align-items: flex-start;
 }
 
-/* line 132, estilo-base.scss */
+/* line 127, estilo-base.scss */
 .total {
   font-weight: 700;
   border: 0px solid;
@@ -176,12 +176,12 @@ body {
   border-top-width: 1px;
 }
 
-/* line 141, estilo-base.scss */
+/* line 134, estilo-base.scss */
 .form-flex {
   flex-wrap: wrap;
 }
 
-/* line 146, estilo-base.scss */
+/* line 139, estilo-base.scss */
 .lista-flex {
   flex-wrap: nowrap;
   border: solid 0px;
@@ -189,7 +189,7 @@ body {
   border-bottom-color: rgba(59, 80, 206, 0.1);
 }
 
-/* line 153, estilo-base.scss */
+/* line 146, estilo-base.scss */
 .con-anim {
   -webkit-transition: all 0.4s;
   -moz-transition: all 0.4s;
@@ -198,11 +198,12 @@ body {
   transition: all 0.4s;
 }
 
-/* line 161, estilo-base.scss */
+/* line 154, estilo-base.scss */
 input[type="text"],
 input[type="password"],
 input[type="email"],
 input[type="number"],
+input[type="date"],
 textarea {
   border: solid 0px;
   border-bottom-width: 1px;
@@ -211,7 +212,7 @@ textarea {
   margin: 10px;
 }
 
-/* line 173, estilo-base.scss */
+/* line 167, estilo-base.scss */
 select {
   min-width: 200px;
   margin: 10px !important;
@@ -221,22 +222,23 @@ select {
   background-color: transparent;
 }
 
-/* line 182, estilo-base.scss */
+/* line 176, estilo-base.scss */
 input[type="number"] {
   max-width: 200px;
   width: auto;
 }
 
-/* line 187, estilo-base.scss */
+/* line 181, estilo-base.scss */
 *:focus {
   outline: 0;
 }
 
-/* line 191, estilo-base.scss */
+/* line 185, estilo-base.scss */
 input[type="text"] ~ label,
 input[type="password"] ~ label,
 input[type="email"] ~ label,
 input[type="number"] ~ label,
+input[type="date"] ~ label,
 select ~ label {
   color: #666666;
   position: relative;
@@ -250,7 +252,14 @@ select ~ label {
   transition: all 0.4s;
 }
 
-/* line 208, estilo-base.scss */
+/* line 203, estilo-base.scss */
+input[type="date"] ~ label {
+  color: #000000;
+  top: -60px;
+  font-size: 16px;
+}
+
+/* line 210, estilo-base.scss */
 input[type="text"]:focus ~ label,
 input[type="text"]:valid ~ label,
 input[type="password"]:focus ~ label,
@@ -265,12 +274,12 @@ select ~ label {
   font-size: 16px;
 }
 
-/* line 247, estilo-base.scss */
+/* line 249, estilo-base.scss */
 .btn {
   display: inline-block;
 }
 
-/* line 251, estilo-base.scss */
+/* line 253, estilo-base.scss */
 .btn-small {
   border-radius: 20px;
   height: 20px;
@@ -280,7 +289,7 @@ select ~ label {
   margin: 10px;
 }
 
-/* line 259, estilo-base.scss */
+/* line 261, estilo-base.scss */
 .btn-small ~ label {
   position: absolute;
   margin-top: -20px;
@@ -298,7 +307,7 @@ select ~ label {
   clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
 }
 
-/* line 263, estilo-base.scss */
+/* line 265, estilo-base.scss */
 .btn-medium {
   border-radius: 35px;
   height: 35px;
@@ -308,7 +317,7 @@ select ~ label {
   margin: 10px;
 }
 
-/* line 271, estilo-base.scss */
+/* line 273, estilo-base.scss */
 .btn-medium ~ label {
   position: absolute;
   margin-top: -40px;
@@ -326,7 +335,7 @@ select ~ label {
   clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
 }
 
-/* line 275, estilo-base.scss */
+/* line 277, estilo-base.scss */
 .btn-big {
   border-radius: 50px;
   height: 50px;
@@ -336,7 +345,7 @@ select ~ label {
   margin: 10px;
 }
 
-/* line 283, estilo-base.scss */
+/* line 285, estilo-base.scss */
 .btn-big ~ label {
   position: absolute;
   margin-top: -50px;
@@ -354,112 +363,112 @@ select ~ label {
   clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
 }
 
-/* line 287, estilo-base.scss */
+/* line 289, estilo-base.scss */
 .btn-back {
   background: url("icons/core/arrow-back.svg") no-repeat 50% 50%;
   -webkit-filter: invert(100%);
   background-size: 60% 60%;
 }
 
-/* line 293, estilo-base.scss */
+/* line 295, estilo-base.scss */
 .btn-empty {
   background-color: #FF9800;
   background-size: 60% 60%;
   cursor: pointer;
 }
 
-/* line 299, estilo-base.scss */
+/* line 301, estilo-base.scss */
 .btn-archive {
   background: #FF9800 url("icons/core/archive.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 305, estilo-base.scss */
+/* line 307, estilo-base.scss */
 .btn-lock {
   background: url("icons/core/lock-outline.svg") no-repeat 50% 50%;
   -webkit-filter: invert(100%);
   background-size: 60% 60%;
 }
 
-/* line 311, estilo-base.scss */
+/* line 313, estilo-base.scss */
 .btn-add {
   background: #51a351 url("icons/core/add.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 316, estilo-base.scss */
+/* line 318, estilo-base.scss */
 .btn-edit {
   background: #03A9F4 url("icons/core/create.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 321, estilo-base.scss */
+/* line 323, estilo-base.scss */
 .btn-lock-open {
   background: #FF9800 url("icons/core/lock-open.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 326, estilo-base.scss */
+/* line 328, estilo-base.scss */
 .btn-ok {
   background: #51a351 url("icons/core/done.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 331, estilo-base.scss */
+/* line 333, estilo-base.scss */
 .btn-receipt {
   background: #51a351 url("icons/core/receipt.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 336, estilo-base.scss */
+/* line 338, estilo-base.scss */
 .btn-star-outlined {
   background: #51a351 url("icons/core/star-outline.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 341, estilo-base.scss */
+/* line 343, estilo-base.scss */
 .btn-cut {
   background: #FF9800 url("icons/core/content-cut.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 346, estilo-base.scss */
+/* line 348, estilo-base.scss */
 .btn-delete {
   background: #F44336 url("icons/core/delete.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 351, estilo-base.scss */
+/* line 353, estilo-base.scss */
 .btn-delete-black {
   background: url("icons/core/delete-black.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 356, estilo-base.scss */
+/* line 358, estilo-base.scss */
 .btn-like {
   background: #03A9F4 url("icons/core/thumb-up.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 361, estilo-base.scss */
+/* line 363, estilo-base.scss */
 .btn-refresh {
   background: #03A9F4 url("icons/core/refresh.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 366, estilo-base.scss */
+/* line 368, estilo-base.scss */
 .btn-close {
   background: #F44336 url("icons/core/close.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 371, estilo-base.scss */
+/* line 373, estilo-base.scss */
 .btn-visibility {
   background: #03A9F4 url("icons/core/visibility.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 376, estilo-base.scss */
+/* line 378, estilo-base.scss */
 input[type=submit]:hover ~ label,
 input[type=button]:hover ~ label,
 button:hover ~ label {
@@ -467,7 +476,7 @@ button:hover ~ label {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
-/* line 383, estilo-base.scss */
+/* line 385, estilo-base.scss */
 .relieve-2 {
   box-shadow: 0px 5px 10px #adadad;
   -webkit-transition: all .3s;
@@ -477,12 +486,12 @@ button:hover ~ label {
   transition: all 0.3s;
 }
 
-/* line 393, estilo-base.scss */
+/* line 395, estilo-base.scss */
 .relieve-2:hover {
   box-shadow: 0px 10px 15px #ababab;
 }
 
-/* line 399, estilo-base.scss */
+/* line 400, estilo-base.scss */
 .relieve-1 {
   box-shadow: 0px 1px 5px #adadad;
   -webkit-transition: all .3s;
@@ -492,12 +501,12 @@ button:hover ~ label {
   transition: all 0.3s;
 }
 
-/* line 409, estilo-base.scss */
+/* line 410, estilo-base.scss */
 .relieve-1:hover {
   box-shadow: 0px 3px 10px #ababab;
 }
 
-/* line 414, estilo-base.scss */
+/* line 415, estilo-base.scss */
 span {
   display: inline-block;
   width: 150px;
@@ -505,13 +514,13 @@ span {
   padding: 5px;
 }
 @media (max-width: 1025px) {
-  /* line 414, estilo-base.scss */
+  /* line 415, estilo-base.scss */
   span {
     width: 100px !important;
   }
 }
 
-/* line 426, estilo-base.scss */
+/* line 427, estilo-base.scss */
 .descr {
   min-width: 400px !important;
   max-width: 400px !important;
@@ -519,7 +528,7 @@ span {
   overflow: auto;
 }
 @media (max-width: 1025px) {
-  /* line 426, estilo-base.scss */
+  /* line 427, estilo-base.scss */
   .descr {
     width: 300px;
   }
@@ -598,34 +607,34 @@ h3 {
   margin: 5px;
   padding: 5px;
 }
-/* line 514, estilo-base.scss */
+/* line 513, estilo-base.scss */
 .ac-grid .descr-grid {
   width: 200px;
   min-width: 200px;
 }
-/* line 520, estilo-base.scss */
+/* line 519, estilo-base.scss */
 .ac-grid div span, .ac-grid div input {
   width: 130px !important;
 }
 @media (max-width: 1025px) {
-  /* line 520, estilo-base.scss */
+  /* line 519, estilo-base.scss */
   .ac-grid div span, .ac-grid div input {
     width: 100px !important;
   }
 }
 
-/* line 530, estilo-base.scss */
+/* line 529, estilo-base.scss */
 .full-width {
   width: 100% !important;
 }
 
-/* line 534, estilo-base.scss */
+/* line 533, estilo-base.scss */
 .line {
   display: flex;
   flex-direction: row;
 }
 
-/* line 539, estilo-base.scss */
+/* line 538, estilo-base.scss */
 .line-separator {
   width: 100%;
   border: 0 solid;
@@ -633,25 +642,25 @@ h3 {
   border-bottom-color: #ababab;
 }
 
-/* line 547, estilo-base.scss */
+/* line 546, estilo-base.scss */
 .v-spacer {
   height: 60px;
   width: 0px;
 }
 
-/* line 554, estilo-base.scss */
+/* line 552, estilo-base.scss */
 .half-v-spacer {
   height: 20px;
   width: 0px;
 }
 
-/* line 560, estilo-base.scss */
+/* line 558, estilo-base.scss */
 .selected {
   background-color: #009688;
   color: #ffffff;
 }
 
-/* line 565, estilo-base.scss */
+/* line 563, estilo-base.scss */
 .label--checkbox {
   position: relative;
   margin: .5rem;
@@ -660,14 +669,14 @@ h3 {
   cursor: pointer;
 }
 
-/* line 576, estilo-base.scss */
+/* line 574, estilo-base.scss */
 .checkbox {
   position: relative;
   top: -0.375rem;
   margin: 0 1rem 0 0;
   cursor: pointer;
 }
-/* line 584, estilo-base.scss */
+/* line 582, estilo-base.scss */
 .checkbox:before {
   -moz-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
@@ -681,7 +690,7 @@ h3 {
   height: 1rem;
   border: 2px solid #f2f2f2;
 }
-/* line 600, estilo-base.scss */
+/* line 598, estilo-base.scss */
 .checkbox:checked:before {
   -moz-transform: rotate(-45deg);
   -ms-transform: rotate(-45deg);
@@ -692,7 +701,7 @@ h3 {
   border-top-style: none;
   border-right-style: none;
 }
-/* line 611, estilo-base.scss */
+/* line 609, estilo-base.scss */
 .checkbox:after {
   content: "";
   position: absolute;
@@ -704,7 +713,7 @@ h3 {
   cursor: pointer;
 }
 
-/* line 627, estilo-base.scss */
+/* line 625, estilo-base.scss */
 .button--round {
   -moz-transition: background 0.3s ease-in-out;
   -o-transition: background 0.3s ease-in-out;
@@ -719,18 +728,18 @@ h3 {
   text-decoration: none;
   text-align: center;
 }
-/* line 642, estilo-base.scss */
+/* line 640, estilo-base.scss */
 .button--round i {
   font-size: 1rem;
   line-height: 220%;
   vertical-align: middle;
 }
-/* line 648, estilo-base.scss */
+/* line 646, estilo-base.scss */
 .button--round:hover {
   background: #3b50ce;
 }
 
-/* line 653, estilo-base.scss */
+/* line 651, estilo-base.scss */
 .button--sticky {
   position: fixed;
   right: 2rem;
@@ -757,7 +766,7 @@ h3 {
     transform: translateY(0);
   }
 }
-/* line 695, estilo-base.scss */
+/* line 692, estilo-base.scss */
 ac-angular-login-client {
   height: 30px;
   width: 30px;
