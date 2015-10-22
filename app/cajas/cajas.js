@@ -3,33 +3,29 @@
     var scripts = document.getElementsByTagName("script");
     var currentScriptPath = scripts[scripts.length - 1].src;
 
-    angular.module('nombreapp.stock.cajas', ['ngRoute', 'nombreapp.stock.productos', 'nombreapp.stock.clientes', 'toastr'
-        , 'acMovimientos', 'nombreapp.stock.consultaStock', 'acAngularLoginClient'])
+    angular.module('nombreapp.stock.cajas', ['ngRoute'])
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/cajas/:id', {
                 templateUrl: currentScriptPath.replace('.js', '.html'),
-                controller: 'CajasController'
+                controller: 'CajasController',
+                data: {requiresLogin: false}
             });
         }])
         .controller('CajasController', CajasController)
         .service('CajasService', CajasService);
 
 
-    CajasController.$inject = ['$routeParams', 'ProductosService', 'CajasService', 'toastr', '$location', '$window',
-        'ClientesService', 'MovimientosService', 'MovimientoStockFinal', 'ConsultaStockService', 'acAngularLoginClientService',
-    'AcUtilsService', 'AcUtilsGlobals', '$rootScope', 'ProductosServiceUtils'];
-    function CajasController($routeParams, ProductosService, CajasService, toastr, $location, $window, ClientesService,
-                             MovimientosService, MovimientoStockFinal, ConsultaStockService, acAngularLoginClientService,
-                             AcUtilsService, AcUtilsGlobals, $rootScope, ProductosServiceUtils) {
+    CajasController.$inject = ['$routeParams', 'ProductService', 'CajasService', 'toastr',
+        'UserService', 'MovimientosService', 'MovimientoStockFinal', 'ConsultaStockService',
+        'AcUtils', 'AcUtilsGlobals', '$rootScope', 'ProductVars', 'StockService', 'StockVars'];
+    function CajasController($routeParams, ProductService, CajasService, toastr,
+                             UserService, MovimientosService, MovimientoStockFinal, ConsultaStockService,
+                             AcUtils, AcUtilsGlobals, $rootScope, ProductVars, StockService, StockVars) {
 
-        acAngularLoginClientService.checkCookie();
 
         var vm = this;
         vm.isUpdate = false;
-        vm.tipo_precio = 0;
-        vm.fn_clientes = ClientesService.getClienteByName;
-        vm.fn_productos = ProductosService.getProductoByName;
-        vm.fn_productos_sku = ProductosService.getProductoByNameOrSKU;
+        vm.tipo_precio = '0';
         vm.cliente = {};
         vm.producto = {};
         vm.detalle = {};
@@ -43,40 +39,37 @@
         vm.paga_con = 0;
         vm.vuelto = 0;
         vm.id = $routeParams.id;
-        vm.cliente_id= -1;
+        vm.cliente_id = -1;
 
+        StockVars.reducido = true;
 
         vm.agregarDetalle = agregarDetalle;
         vm.removeDetalle = removeDetalle;
-        vm.agregarMP = agregarMP;
         vm.calc_a_cobrar = calc_a_cobrar;
         vm.save = save;
         vm.aCuenta = aCuenta;
         vm.calcularTotal = calcularTotal;
-        vm.sucursal_id = 1;
+        //vm.sucursal_id = 1;
 
+        //
+        if (vm.id != 0) {
+            CajasService.getAsientoCajaById(vm.id, vm.sucursal_id, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].cuenta_id.indexOf('1.1.1.01') > -1) {
 
-
-
-        if(vm.id != 0){
-            CajasService.getAsientoCajaById(vm.id, vm.sucursal_id, function(data){
-                console.log(data);
-                for(var i = 0; i<data.length; i++){
-                    if(data[i].cuenta_id.indexOf('1.1.1.01')>-1){
-
-                    }else if(data[i].cuenta_id.indexOf('4.1.1.0')>-1){
+                    } else if (data[i].cuenta_id.indexOf('4.1.1.0') > -1) {
                         vm.detalle = {};
                         //for(var x=0; x<data[i].detalles.length; x++){
 
-                            vm.detalle = {
-                                producto_id: data[i].detalles[3].detalle.split(' - ')[0],
-                                sku: '',
-                                producto_nombre: data[i].detalles[3].detalle.split(' - ')[1],
-                                cantidad: data[i].detalles[2].detalle,
-                                precio_unidad: data[i].detalles[1].detalle,
-                                precio_total: parseInt(data[i].detalles[2].detalle) * parseFloat(data[i].detalles[1].detalle),
-                                stock: 0,
-                                mp: false
+                        vm.detalle = {
+                            producto_id: data[i].detalles[3].detalle.split(' - ')[0],
+                            sku: '',
+                            producto_nombre: data[i].detalles[3].detalle.split(' - ')[1],
+                            cantidad: data[i].detalles[2].detalle,
+                            precio_unidad: data[i].detalles[1].detalle,
+                            precio_total: parseInt(data[i].detalles[2].detalle) * parseFloat(data[i].detalles[1].detalle),
+                            stock: 0,
+                            mp: false
                             //};
                         };
                         vm.detalles.push(vm.detalle);
@@ -85,10 +78,10 @@
                 calcularTotal();
                 //vm.detalles = data[1].detalles;
             });
-        }else{
+        } else {
 
         }
-
+        //
         function aCuenta() {
             //console.log(vm.cliente.cliente_id);
             if (vm.cliente === undefined || vm.cliente.cliente_id === undefined || vm.cliente === {}) {
@@ -107,10 +100,9 @@
                     //console.log(MovimientoStockFinal.stocks_finales);
                     ConsultaStockService.updateStock(MovimientoStockFinal.stocks_finales, function (data) {
 
-                        ClientesService.actualizarSaldo(vm.cliente.cliente_id, parseFloat(vm.total) * -1, function(data){
-                            console.log(data);
-                            if(data){
-                                vm.detalles =[];
+                        UserService.update(vm.cliente.cliente_id, vm.cliente.saldo - parseFloat(vm.total), function (data) {
+                            if (!isNaN(data) && data > -1) {
+                                vm.detalles = [];
                                 vm.cliente = {};
 
                                 vm.forma_pago = '01';
@@ -121,6 +113,8 @@
                                 vm.vuelto = 0;
                                 vm.total = 0;
                                 toastr.success('Venta realizada con éxito.');
+                            } else {
+                                toastr.error('Error al realizar la venta');
                             }
 
                         });
@@ -137,7 +131,6 @@
             $rootScope.$broadcast('IsWaiting');
 
 
-
             if (vm.detalles.length < 1) {
                 toastr.error('No hay productos seleccionados');
                 return;
@@ -145,10 +138,9 @@
             //var cliente_id = -1;
             if (vm.cliente !== undefined && vm.cliente.cliente_id !== undefined) {
                 vm.cliente_id = vm.cliente.cliente_id;
-            }else{
-                if(vm.cliente.nombre !== ''){
-                    if(AcUtilsService.validateEmail(vm.cliente.nombre))
-                    {
+            } else {
+                if (vm.cliente.nombre !== '') {
+                    if (AcUtils.validateEmail(vm.cliente.nombre)) {
                         vm.cliente = {
                             nombre: '',
                             apellido: '',
@@ -160,12 +152,12 @@
                             marcado: 0,
                             fecha_nacimiento: ''
                         };
-                        ClientesService.saveCliente(vm.cliente, 'save', function(data){
-                            vm.cliente_id =data;
+                        UserService.create(vm.cliente, function (data) {
+                            vm.cliente_id = data;
                             finalizarVenta();
                         });
                     }
-                }else{
+                } else {
                     finalizarVenta();
                 }
 
@@ -175,7 +167,7 @@
 
         }
 
-        function finalizarVenta(){
+        function finalizarVenta() {
             //return;
             //(tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback)
             MovimientosService.armarMovimiento('001', '00', 1, vm.forma_pago, '00', vm.total, vm.desc_cant, 'Venta de Caja', vm.detalles, vm.cliente_id, 1, '',
@@ -183,7 +175,7 @@
                     //console.log(MovimientoStockFinal.stocks_finales);
                     ConsultaStockService.updateStock(MovimientoStockFinal.stocks_finales, function (data) {
                         toastr.success('Venta realizada con éxito.');
-                        vm.detalles =[];
+                        vm.detalles = [];
                         vm.cliente = {};
 
                         vm.forma_pago = '01';
@@ -194,8 +186,9 @@
                         vm.vuelto = 0;
                         vm.total = 0;
 
-                        ProductosServiceUtils.clearCache = true;
-                        ProductosService.getProductos(function(data){});
+                        ProductVars.clearCache = true;
+                        ProductService.get(function (data) {
+                        });
 
                         AcUtilsGlobals.isWaiting = false;
                         $rootScope.$broadcast('IsWaiting');
@@ -236,28 +229,28 @@
             vm.vuelto = (vm.paga_con > 0 && vm.paga_con !== null) ? vm.a_cobrar - vm.paga_con : 0;
 
         }
-
-        function quitarMP(index) {
-            var indice = -1;
-            for (var i = 0; i < vm.list_mp.length; i++) {
-                if (index == vm.list_mp[i]) {
-                    indice = i;
-                }
-            }
-
-            if (indice > -1) {
-                vm.list_mp.splice(indice, 1);
-            }
-            calcularTotal();
-        }
-
-        function agregarMP(detalle) {
-
-            detalle.mp = !detalle.mp;
-            calcularTotal();
-
-        }
-
+        //
+        //function quitarMP(index) {
+        //    var indice = -1;
+        //    for (var i = 0; i < vm.list_mp.length; i++) {
+        //        if (index == vm.list_mp[i]) {
+        //            indice = i;
+        //        }
+        //    }
+        //
+        //    if (indice > -1) {
+        //        vm.list_mp.splice(indice, 1);
+        //    }
+        //    calcularTotal();
+        //}
+        //
+        //function agregarMP(detalle) {
+        //
+        //    detalle.mp = !detalle.mp;
+        //    calcularTotal();
+        //
+        //}
+        //
         function calcularTotal() {
 
             vm.total = 0.0;
@@ -270,7 +263,7 @@
 
                 for (var i = 0; i < vm.detalles.length; i++) {
                     vm.total = parseFloat(vm.total) + parseFloat(vm.detalles[i].precio_total);
-                    vm.detalles[i].precio_unidad = Math.round((parseFloat(vm.detalles[i].precio_total) / vm.detalles[i].cantidad)*100)/100 ;
+                    vm.detalles[i].precio_unidad = Math.round((parseFloat(vm.detalles[i].precio_total) / vm.detalles[i].cantidad) * 100) / 100;
                 }
 
             } else {
@@ -287,6 +280,7 @@
 
         function agregarDetalle() {
             var sucursal_id = 1;
+            var stockSucursal = vm.producto.cant_actual;
 
             if (vm.producto.producto_id === undefined || vm.producto.producto_id == -1
                 || vm.producto.producto_id == '') {
@@ -306,25 +300,20 @@
                 return;
             }
 
-            var stockSucursal = 0;
-            for (var i = 0; i < vm.producto.stocks.length; i++) {
-                if (vm.producto.stocks[i].sucursal_id == sucursal_id) {
-                    stockSucursal = stockSucursal + parseInt(vm.producto.stocks[i].cant_actual);
-                }
 
-            }
-            if (stockSucursal == 0) {
+
+            if (vm.producto.cant_actual == 0) {
                 toastr.error('No hay stock suficiente.');
                 return;
             }
 
-            if (stockSucursal < vm.cantidad) {
+
+            if (vm.producto.cant_actual < vm.cantidad) {
                 toastr.error('No hay stock suficiente. Solo quedan ' + stockSucursal + ' productos.');
                 return;
             }
 
 
-            //console.log(vm.producto);
             var encontrado = false;
             for (var i = 0; i < vm.detalles.length; i++) {
                 if (vm.producto.producto_id == vm.detalles[i].producto_id) {
@@ -343,17 +332,17 @@
                 }
             }
 
-
+            var prod = angular.copy(vm.producto);
             if (!encontrado) {
                 vm.detalle = {
-                    producto_id: vm.producto.producto_id,
-                    sku: vm.producto.sku,
-                    producto_nombre: vm.producto.nombre,
+                    producto_id: prod.producto_id,
+                    sku: prod.sku,
+                    producto_nombre: prod.nombreProducto,
                     cantidad: vm.cantidad,
-                    precio_unidad: vm.producto.precios[vm.tipo_precio].precio,
-                    precio_total: parseInt(vm.cantidad) * parseFloat(vm.producto.precios[vm.tipo_precio].precio),
-                    stock: vm.producto.stocks,
-                    productos_kit: vm.producto.productos_kit,
+                    precio_unidad: prod.precios[vm.tipo_precio].precio,
+                    precio_total: parseInt(vm.cantidad) * parseFloat(prod.precios[vm.tipo_precio].precio),
+                    stock: prod.stock,
+                    productos_kit: prod.kits,
                     mp: false
                 };
                 //console.log(vm.detalle);
@@ -363,16 +352,12 @@
 
             //console.log(vm.detalles);
 
-            vm.producto.producto_id = '';
-            vm.producto.nombre = '';
-            vm.cantidad = '';
-            vm.producto.precios[vm.tipo_precio].precio = '';
             vm.producto = {};
-            vm.detalle = {};
+            vm.cantidad = undefined;
             calcularTotal();
-            var elem = document.getElementById('input02');
+            var elem = document.getElementById('producto-search');
             elem.focus();
-            elem.value = null;
+            elem.value = '';
         }
 
         function removeDetalle(index) {
@@ -380,10 +365,10 @@
             if (r) {
                 //vm.total = parseFloat(vm.total) - parseFloat(vm.detalles[index].precio_total);
                 vm.detalles.splice(index, 1);
-                quitarMP(index);
+                //quitarMP(index);
             }
 
-            //calcularTotal;
+            calcularTotal();
         }
 
     }
@@ -473,9 +458,9 @@
 
         }
 
-        function getAsientoCajaById(asiento_id, sucursal_id, callback){
-            getCajaDiaria(sucursal_id, function(data){
-                var response = data.filter(function(elem, index, array){
+        function getAsientoCajaById(asiento_id, sucursal_id, callback) {
+            getCajaDiaria(sucursal_id, function (data) {
+                var response = data.filter(function (elem, index, array) {
                     return elem.asiento_id == asiento_id;
                 });
                 callback(response);

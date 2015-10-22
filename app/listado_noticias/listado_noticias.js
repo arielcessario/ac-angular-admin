@@ -1,8 +1,7 @@
 (function(){
     'use strict';
 
-    angular.module('nombreapp.stock.listadoNoticias', ['ngRoute', 'nombreapp.stock.clientes',
-        'acAngularLoginClient'])
+    angular.module('nombreapp.stock.listadoNoticias', ['ngRoute'])
 
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/listado_noticias', {
@@ -14,10 +13,9 @@
         .controller('ListadoNoticiasController', ListadoNoticiasController);
 
 
-    ListadoNoticiasController.$inject = ['acAngularLoginClientService','NoticiasService', '$location'];
-    function ListadoNoticiasController(acAngularLoginClientService, NoticiasService, $location) {
+    ListadoNoticiasController.$inject = ['NoticiasService', '$location'];
+    function ListadoNoticiasController(NoticiasService, $location) {
 
-        acAngularLoginClientService.checkCookie();
 
         var vm = this;
 

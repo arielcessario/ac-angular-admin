@@ -14,14 +14,12 @@
         }])
 
         .controller('ProductosController', ProductosController)
-        .service('ProductosService', ProductosService)
-        .service('ProductosServiceUtils', ProductosServiceUtils)
         .directive('dbinfOnFilesSelected', dbinfOnFilesSelected);
 
-    ProductosController.$inject = ["$http", "$scope", "$routeParams", "ProductosService", "$location", "toastr", 'ProveedoresService',
-        'CategoriasService', 'ProductosServiceUtils'];
-    function ProductosController($http, $scope, $routeParams, ProductosService, $location, toastr, ProveedoresService, CategoriasService,
-                                 ProductosServiceUtils) {
+    ProductosController.$inject = ["$http", "$scope", "$routeParams", "ProductService", "$location", "toastr", 'UserService',
+        'CategoriasService', 'ProductVars'];
+    function ProductosController($http, $scope, $routeParams, ProductService, $location, toastr, UserService, CategoriasService,
+                                 ProductVars) {
         var vm = this;
         vm.isUpdate = false;
         vm.status = 1;
@@ -41,26 +39,27 @@
         vm.listProveedores = [];
         vm.id = $routeParams.id;
         vm.categorias = [];
+        vm.categoria = '0';
         vm.producto = {
             nombre: '',
             descripcion: '',
-            ptoRepo: 0,
-            status: 1,
-            destacado: 0,
+            pto_repo: 0,
+            status: '1',
+            destacado: '0',
             fotos: [],
             precios: [],
             proveedores: [],
-            categoria: 0,
+            categoria: '0',
             sku: '',
             stocks: [],
-            producto_tipo: 0,
-            productos_kit: []
+            producto_tipo: '0',
+            kits: []
         };
         //vm.proveedores = [
-        //    {proveedor_id: '1', nombre: 'prov01'},
-        //    {proveedor_id: '2', nombre: 'prov02'},
-        //    {proveedor_id: '3', nombre: 'prov03'},
-        //    {proveedor_id: '4', nombre: 'prov04'}
+        //    {usuario_id: '1', nombre: 'prov01'},
+        //    {usuario_id: '2', nombre: 'prov02'},
+        //    {usuario_id: '3', nombre: 'prov03'},
+        //    {usuario_id: '4', nombre: 'prov04'}
         //];
         vm.proveedores = [];
 
@@ -75,7 +74,7 @@
 
         function searchProductoKit() {
             if (vm.producto_kit_busqueda.length > 2) {
-                ProductosService.getProductoByName(vm.producto_kit_busqueda, function (data) {
+                ProductService.getByParams('nombre,sku', vm.producto_kit_busqueda, 'false', function (data) {
                     vm.productos_kit = [];
                     vm.productos_kit = data;
                 });
@@ -83,15 +82,22 @@
         }
 
         function agregarKit(producto_kit) {
-            vm.productos_en_kit.push(producto_kit);
+            ProductService.getByParams('producto_id', '' + producto_kit.producto_id, 'true', function (data) {
+                vm.producto.kits.push({
+                    producto_cantidad: 1,
+                    producto_id: producto_kit.producto_id,
+                    nombre: data[0].nombre
+                });
+            });
+
         }
 
 
         function quitarKit(producto_kit) {
-            for (var i = 0; i < vm.productos_en_kit.length; i++) {
-                if (producto_kit.producto_id == vm.productos_en_kit[i].producto_id) {
+            for (var i = 0; i < vm.producto.kits.length; i++) {
+                if (producto_kit.producto_id == vm.producto.kits[i].producto_id) {
 
-                    vm.productos_en_kit.splice(i, 1);
+                    vm.producto.kits.splice(i, 1);
                 }
             }
             //vm.productos_en_kit(producto);
@@ -104,7 +110,7 @@
                 vm.producto.categoria_id = data[0].categoria_id;
             });
 
-            ProveedoresService.getProveedores(function (data) {
+            UserService.getByParams('rol_id', '3', 'true', function (data) {
                 //console.log(data);
                 vm.proveedores = data;
 
@@ -113,40 +119,49 @@
             vm.isUpdate = false;
         } else {
             vm.isUpdate = true;
-            ProveedoresService.getProveedores(function (data) {
-                //console.log(data);
+            UserService.getByParams('rol_id', '3', 'true', function (data) {
                 vm.proveedores = data;
                 CategoriasService.getCategorias(function (data) {
                     vm.categorias = data;
                     vm.producto.categoria_id = data[0].categoria_id;
-                    ProductosService.getProductoByID(vm.id, function (data) {
-                        //console.log(data);
-                        vm.producto = data;
-                        vm.producto.ptoRepo = parseInt(data.pto_repo);
-
+                    ProductService.getByParams('producto_id', vm.id, 'true', function (data) {
+                        vm.producto = data[0];
+                        vm.producto.pto_repo = parseInt(vm.producto.pto_repo);
+                        vm.producto.producto_tipo = '' + vm.producto.producto_tipo;
+                        vm.producto.destacado = '' + vm.producto.destacado;
+                        vm.producto.status = '' + vm.producto.status;
+                        vm.producto.en_slider = '' + vm.producto.en_slider;
+                        vm.producto.en_oferta = '' + vm.producto.en_oferta;
+                        vm.categoria = vm.producto.categorias.length > 0 ? vm.producto.categorias[0].categoria_id : 1;
                         vm.precio_minorista = 0;
                         vm.precio_mayorista = 0;
-                        vm.precio_web = 0;
+                        vm.precio_oferta = 0;
 
                         for (var i = 0; i < 3; i++) {
 
-                            if (data.precios[i].precio_tipo_id == 0) {
-                                vm.precio_minorista = parseFloat(data.precios[i].precio);
+                            if (vm.producto.precios[i].precio_tipo_id == 0) {
+                                vm.precio_minorista = parseFloat(vm.producto.precios[i].precio);
                             }
-                            if (data.precios[i].precio_tipo_id == 1) {
-                                vm.precio_mayorista = parseFloat(data.precios[i].precio);
+                            if (vm.producto.precios[i].precio_tipo_id == 1) {
+                                vm.precio_mayorista = parseFloat(vm.producto.precios[i].precio);
                             }
-                            if (data.precios[i].precio_tipo_id == 2) {
-                                vm.precio_web = parseFloat(data.precios[i].precio);
+                            if (vm.producto.precios[i].precio_tipo_id == 2) {
+                                vm.precio_oferta = parseFloat(vm.producto.precios[i].precio);
                             }
                         }
 
-                        for (var i = 0; i < data.proveedores.length; i++) {
-                            vm.listProveedores[data.proveedores[i].proveedor_id] = true;
+                        for (var i = 0; i < vm.producto.proveedores.length; i++) {
+                            vm.listProveedores[vm.producto.proveedores[i].usuario_id] = true;
                         }
 
+                        for(var i = 0; i< vm.producto.kits.length; i++){
+                            ProductService.getByParams('producto_id', ''+vm.producto.kits[i].producto_id, 'true', function(data){
+                                vm.producto.kits[i].nombre = data[0].nombre;
+                            } );
 
-                        vm.productos_en_kit = data.productos_kit;
+                        }
+
+                        //vm.productos_en_kit = data.productos_kit;
                         //console.log(vm.listProveedores);
 
 
@@ -181,8 +196,8 @@
                 return;
             }
 
-            if (vm.producto.ptoRepo == undefined ||
-                vm.producto.ptoRepo == 0) {
+            if (vm.producto.pto_repo == undefined ||
+                vm.producto.pto_repo == 0) {
                 toastr.error('Debe ingresar un punto de reposición');
                 return;
             }
@@ -193,7 +208,7 @@
                 return;
             }
 
-            if (vm.producto.categoria_id == null) {
+            if (vm.categoria == null) {
                 toastr.error('Debe ingresar una categoria');
                 return;
             }
@@ -207,23 +222,23 @@
             vm.producto.precios = [];
             vm.producto.proveedores = [];
 
-            precio = {};
-            precio.tipo = 0;
-            precio.precio = vm.precio_minorista;
+            precio = {precio_tipo_id:0, precio:vm.precio_minorista};
             vm.producto.precios.push(precio);
 
-            precio = {};
-            precio.tipo = 1;
-            precio.precio = vm.precio_mayorista;
+            precio = {precio_tipo_id:1, precio:vm.precio_mayorista};
             vm.producto.precios.push(precio);
 
 
-            precio = {};
-            precio.tipo = 2;
-            precio.precio = vm.precio_web;
+            precio = {precio_tipo_id:2, precio:vm.precio_oferta};
             vm.producto.precios.push(precio);
 
-            vm.producto.productos_kit = vm.productos_en_kit;
+            if(vm.producto.categorias == undefined || vm.producto.categorias.length == 0){
+                vm.producto.categorias =[];
+                vm.producto.categorias.push({categoria_id:0});
+            }
+            vm.producto.categorias[0].categoria_id = vm.categoria;
+
+            //vm.producto.productos_kit = vm.productos_en_kit;
 
 
             if (vm.listProveedores.length < 1) {
@@ -234,7 +249,7 @@
             for (var prop in vm.listProveedores) {
 
                 if (vm.listProveedores[prop]) {
-                    vm.producto.proveedores.push(prop);
+                    vm.producto.proveedores.push({proveedor_id:prop});
                 }
 
                 //console.log("o." + prop + " = " + vm.listProveedores[prop]);
@@ -243,16 +258,16 @@
             //console.log(vm.producto);
 
             if (vm.isUpdate) {
-                ProductosService.saveProducto(vm.producto, 'update', function (data) {
+                ProductService.update(vm.producto, function (data) {
 
                     uploadImages();
-                    ProductosServiceUtils.clearCache = true;
+                    ProductVars.clearCache = true;
                 });
             } else {
-                ProductosService.saveProducto(vm.producto, 'save', function (data) {
+                ProductService.create(vm.producto, function (data) {
 
                     uploadImages();
-                    ProductosServiceUtils.clearCache = true;
+                    ProductVars.clearCache = true;
                 });
             }
         }
@@ -353,299 +368,7 @@
         }
     }
 
-    ProductosService.$inject = ['$http', '$cacheFactory', 'ProductosServiceUtils', 'AcUtilsGlobals'];
-    function ProductosService($http, $cacheFactory, ProductosServiceUtils, AcUtilsGlobals) {
-        var service = {};
-        var sucursal_id = 1;
-        var clearCache = true;
 
-        service.getProductos = getProductos;
-        service.getProductosFromTo = getProductosFromTo;
-        service.getProductoByID = getProductoByID;
-        service.getProductoByNameOrSKU = getProductoByNameOrSKU;
-        service.getProductoByName = getProductoByName;
-        service.getProductoByNameProv = getProductoByNameProv;
-        service.getProductosVenta = getProductosVenta;
-        service.saveProducto = saveProducto;
-        service.deleteProducto = deleteProducto;
-        service.getProductoByNameOrSKUAndSucursal = getProductoByNameOrSKUAndSucursal;
-
-
-        return service;
-
-        function getProductos(callback) {
-            var $httpDefaultCache = $cacheFactory.get('$http');
-            var cachedData = [];
-
-
-            if ($httpDefaultCache.get('./stock-api/stock.php?function=getProductos') != undefined) {
-                if (ProductosServiceUtils.clearCache) {
-                    $httpDefaultCache.remove('./stock-api/stock.php?function=getProductos');
-                }
-                else {
-                    //console.log('lo');
-                    cachedData = $httpDefaultCache.get('./stock-api/stock.php?function=getProductos');
-                    callback(cachedData);
-                    return;
-                }
-            }
-
-
-            return $http.get('./stock-api/stock.php?function=getProductos', {cache: false})
-                .success(function (data) {
-                    $httpDefaultCache.put('./stock-api/stock.php?function=getProductos', data);
-                    ProductosServiceUtils.clearCache = false;
-                    callback(data);
-
-                })
-                .error(function(data){
-
-                });
-
-            //return cachedData;
-
-            //$http({
-            //    method: 'GET',
-            //    url: './stock-api/stock.php',
-            //    params: 'function=getProductos'
-            //}).success(function(data){
-            //    console.log(data);
-            //    // With the data succesfully returned, call our callback
-            //    callback(data);
-            //}).error(function(){
-            //    alert("error");
-            //});
-        }
-
-        function getProductosFromTo(start, amount, callback) {
-            getProductos(function (data) {
-                callback(data.splice(start, start + amount));
-            });
-        }
-
-        //function getProductos(callback) {
-        //    return $http.post('./stock-api/stock.php',
-        //        {function: 'getProductos'},
-        //        {cache: true})
-        //        .success(function (data) {
-        //            callback(data);
-        //        })
-        //        .error();
-        //}
-
-        function getProductoByID(id, callback) {
-            getProductos(function (data) {
-                //console.log(data);
-                var response = data.filter(function (entry) {
-                    return entry.producto_id === parseInt(id);
-                })[0];
-                //console.log(response);
-                callback(response);
-            })
-
-        }
-
-        function getProductoByNameOrSKU(name, callback) {
-            getProductos(function (data) {
-                var response = data.filter(function (elem, index, array) {
-
-                    var elemUpper = elem.nombre.toUpperCase();
-
-                    var n = elemUpper.indexOf(name.toUpperCase());
-
-                    if (n === undefined || n === -1) {
-                        n = elem.nombre.indexOf(name);
-                    }
-
-                    var stockEnSucursal = false;
-
-                    for (var i = 0; i < elem.stocks.length; i++) {
-                        if (elem.stocks[i].sucursal_id == sucursal_id) {
-                            stockEnSucursal = true;
-                        }
-
-                    }
-
-                    if (stockEnSucursal && ((n !== undefined && n > -1) || elem.sku == name )) {
-
-                        //var retorno = angular.clone(elem);
-
-                        //return elem;
-                        //var detalle = {
-                        //    categoria: elem.categoria,
-                        //    cagegoria_id:elem.categoria_id,
-                        //    cuenta_id:elem.cuenta_id,
-                        //    descripcion:elem.descripcion,
-                        //    destacado:elem.destacado,
-                        //    fotos:elem.fotos,
-                        //    nombre:elem.nombre,
-                        //    precios:elem.precios,
-                        //    producto_id:elem.producto_id,
-                        //    producto_tipo:elem.producto_tipo,
-                        //    productos_kit:elem.productos_kit,
-                        //    proveedores:elem.proveedores,
-                        //    pto_repo:elem.pto_repo,
-                        //    sku:elem.sku,
-                        //    status:elem.status,
-                        //    stocks:elem.stocks,
-                        //    vendidos:elem.vendidos
-                        //};
-                        return elem;
-                    }
-                });
-                callback(response);
-            })
-
-        }
-
-
-
-
-        function getProductoByNameOrSKUAndSucursal(name, callback) {
-            getProductos(function (data) {
-                var response = data.filter(function (elem) {
-                    var elemUpper = elem.nombre.toUpperCase();
-
-                    var n = elemUpper.indexOf(name.toUpperCase());
-
-                    if (n === undefined || n === -1) {
-                        n = elem.nombre.indexOf(name);
-                    }
-
-                    var stockEnSucursal = false;
-                    //console.log(AcUtilsGlobals.sucursal_auxiliar_id);
-
-                    for (var i = 0; i < elem.stocks.length; i++) {
-                        //console.log(elem.stocks[i].sucursal_id);
-                        if (elem.stocks[i].sucursal_id == AcUtilsGlobals.sucursal_auxiliar_id) {
-                            stockEnSucursal = true;
-                        }
-
-                    }
-
-                    if (stockEnSucursal && ((n !== undefined && n > -1) || elem.sku == name )) {
-                        return elem;
-                    }
-                });
-                callback(response);
-            })
-
-        }
-
-
-        function getProductoByName(name, callback) {
-            getProductos(function (data) {
-                //console.log(data);
-                var response = data.filter(function (elem) {
-                    var elemUpper = elem.nombre.toUpperCase();
-
-                    var n = elemUpper.indexOf(name.toUpperCase());
-
-                    if (n === undefined || n === -1) {
-                        n = elem.nombre.indexOf(name);
-                    }
-
-                    if (n !== undefined && n > -1) {
-                        return elem;
-                    }
-                });
-                callback(response);
-            })
-
-        }
-
-        function getProductosVenta(name, sucursal_id, callback) {
-            getProductos(function (data) {
-                //console.log(data);
-                var response = data.filter(function (elem) {
-                    var elemUpper = elem.nombre.toUpperCase();
-
-                    var n = elemUpper.indexOf(name.toUpperCase());
-
-                    if (n === undefined || n === -1) {
-                        n = elem.nombre.indexOf(name);
-                    }
-
-                    if (n !== undefined && n > -1) {
-                        var conStock = false;
-                        for (var i = 0; i < elem.stocks.length; i++) {
-                            if (elem.stocks[i].sucursal_id = sucursal_id) {
-                                conStock = true;
-                            }
-
-                        }
-
-                        if (conStock) {
-                            return elem;
-                        }
-                    }
-                });
-                callback(response);
-            })
-
-        }
-
-        function getProductoByNameProv(name, proveedor_id, callback) {
-            getProductos(function (data) {
-                //console.log(data);
-                var response = data.filter(function (elem) {
-                    //console.log(elem);
-
-                    //console.log('provee ' + proveedor_id);
-
-                    var provs = elem.proveedores;
-                    var prov_encontrado = false;
-                    for (var i = 0; i < provs.length; i++) {
-                        //console.log('for ' + provs[i].proveedor_id);
-                        if (provs[i].proveedor_id == proveedor_id) {
-                            prov_encontrado = true;
-                        }
-                    }
-
-                    if (!prov_encontrado) {
-                        return;
-                    }
-
-                    var elemUpper = elem.nombre.toUpperCase();
-
-                    var n = elemUpper.indexOf(name.toUpperCase());
-
-                    if (n === undefined || n === -1) {
-                        n = elem.nombre.indexOf(name);
-                    }
-
-                    if (n !== undefined && n > -1) {
-                        return elem;
-                    }
-                });
-
-                callback(response);
-            })
-
-        }
-
-        function saveProducto(producto, _function, callback) {
-
-            return $http.post('./stock-api/stock.php',
-                {function: _function, producto: JSON.stringify(producto)})
-                .success(function (data) {
-                    callback(data);
-                    clearCache = true;
-                })
-                .error(function(data){});
-        }
-
-
-        function deleteProducto(id, callback) {
-            return $http.post('./stock-api/stock.php',
-                {function: 'deleteProducto', id: id})
-                .success(function (data) {
-                    callback(data);
-                })
-                .error(function(data){});
-        }
-
-    }
 
 })();
 

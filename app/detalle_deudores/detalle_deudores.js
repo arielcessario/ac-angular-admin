@@ -1,8 +1,7 @@
 (function(){
     'use strict';
 
-    angular.module('nombreapp.stock.detalleDeudores', ['ngRoute', 'nombreapp.stock.clientes',
-        'acAngularLoginClient'])
+    angular.module('nombreapp.stock.detalleDeudores', ['ngRoute'])
 
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/detalle_deudores/:id', {
@@ -14,10 +13,9 @@
         .controller('DetalleDeudoresController', DetalleDeudoresController);
 
 
-    DetalleDeudoresController.$inject = ['acAngularLoginClientService','ClientesService', '$location', '$routeParams'];
-    function DetalleDeudoresController(acAngularLoginClientService, ClientesService, $location, $routeParams) {
+    DetalleDeudoresController.$inject = ['UserService', '$location', '$routeParams'];
+    function DetalleDeudoresController(UserService, $location, $routeParams) {
 
-        acAngularLoginClientService.checkCookie();
 
         var vm = this;
 
@@ -26,7 +24,7 @@
         vm.id = $routeParams.id;
         vm.cliente = {};
 
-        ClientesService.getDeudorById(vm.id, function(data){
+        UserService.getDeudorById(vm.id, function(data){
             vm.cliente = data;
 
         });

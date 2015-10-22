@@ -1,0 +1,38 @@
+<div ng-controller="ListadoUsuariosController as listadoUsuariosCtrl">
+    <div class="title"><h1>Listado Usuarios</h1></div>
+    <div class="v-spacer"></div>
+
+    <div class="full-width">
+
+        <input type="text" ng-model="listadoUsuariosCtrl.filtro" class="full-width" required/>
+        <label>Buscar...</label>
+    </div>
+    <div class="lista-flex" ng-repeat="usuario in listadoUsuariosCtrl.usuarios | filter:listadoUsuariosCtrl.filtro">
+
+        <span>{{usuario.nombre}}</span>
+        <span>{{usuario.apellido}}</span>
+
+
+        <div>
+            <div class="btn" ng-if="usuario.marcado == 1">
+                <button class="btn-medium btn-close"></button>
+                <label>No alojar</label>
+            </div>
+            <div class="btn">
+                <button ng-click="listadoUsuariosCtrl.detalle(usuario.usuario_id)"
+                        class="btn-medium btn-visibility"></button>
+                <label>Mostrar Detalle</label>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="btn">
+
+        <input type="button" class="relieve-2 btn-add  btn-big" value=""
+               onclick="window.location='#/usuarios/0';"/>
+
+        <label>Nuevo Usuario</label>
+    </div>
+</div>

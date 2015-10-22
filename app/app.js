@@ -1,5 +1,6 @@
 'use strict';
 window.conProductos = true;
+window.appName = 'bayres';
 
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
@@ -9,8 +10,14 @@ angular.module('myApp', [
     'smart-table',
     'acAngularLoginClient',
     'acAngularWaiting',
-    'ac-utils',
+    'angular-storage',
+    'angular-jwt',
+    'acUtils',
+    'acUsuarios',
+    'acProductos',
+    'acStocks',
     'slider.manager',
+    'nombreapp.stock.login',
     'nombreapp.stock.productos',
     'nombreapp.stock.listadoProductos',
     'nombreapp.stock.pagoProveedores',
@@ -23,8 +30,8 @@ angular.module('myApp', [
     'nombreapp.stock.categorias',
     'nombreapp.stock.listadoCategorias',
     'nombreapp.stock.cajas',
-    'nombreapp.stock.clientes',
-    'nombreapp.stock.listadoClientes',
+    'nombreapp.stock.usuarios',
+    'nombreapp.stock.listadoUsuarios',
     'nombreapp.stock.gastos',
     'nombreapp.stock.depositos',
     'nombreapp.stock.resumenCajaDiaria',
@@ -34,7 +41,7 @@ angular.module('myApp', [
     'nombreapp.stock.totalConcepto',
     'nombreapp.stock.abrirCerrarCaja',
     'nombreapp.stock.nacionalidades',
-    'nombreapp.stock.servicios',
+    //'nombreapp.stock.servicios',
     'nombreapp.stock.listadoDeudores',
     'nombreapp.stock.ventasWeb',
     'nombreapp.stock.listadoVentasWeb',
@@ -46,34 +53,35 @@ angular.module('myApp', [
     'nombreapp.stock.noticias',
     'nombreapp.stock.listadoNoticias',
     'nombreapp.stock.comentarios',
-    'nombreapp.nav',
-    'ac-search-panel'
+    'nombreapp.nav'
+    //'ac-search-panel'
 ]).
     config(['$routeProvider', function ($routeProvider) {
-        //$routeProvider.otherwise({redirectTo: '/listado_productos'});
+        //$routeProvider.otherwise({redirectTo: '/'});
     }]).controller('MainCtrl', MainCtrl);
 
 
-MainCtrl.$inject = ['acAngularLoginClientService', 'ProductosServiceUtils', 'ProductosService'];
-function MainCtrl(acAngularLoginClientService, ProductosServiceUtils, ProductosService){
+//MainCtrl.$inject = ['acAngularLoginClientService', 'ProductosServiceUtils', 'ProductosService'];
+MainCtrl.$inject = [];
+//function MainCtrl(acAngularLoginClientService, ProductosServiceUtils, ProductosService){
+function MainCtrl(){
     var vm = this;
 
     vm.logout = logout;
 
     function logout(){
-        acAngularLoginClientService.logout();
+        //acAngularLoginClientService.logout();
     }
 
-    acAngularLoginClientService.checkCookie();
 
-    ProductosServiceUtils.clearCache = true;
-    ProductosService.getProductos(function(data){});
+    //ProductosServiceUtils.clearCache = true;
+    //ProductosService.getProductos(function(data){});
 
 
 
     vm.data = [
         {ref:'#/cajas/0',name:'Caja'},
-        {ref:'#/servicios',name:'Servicios'},
+        //{ref:'#/servicios',name:'Servicios'},
         {ref:'#/abrir_cerrar_caja',name:'Apertura/Cierre de Caja'},
         {ref:'#/resumen_caja_diaria',name:'Resumen de Caja Diaria'},
         {ref:'#/historico_caja_diaria',name:'Histórico de Cajas Diarias'},
@@ -83,11 +91,10 @@ function MainCtrl(acAngularLoginClientService, ProductosServiceUtils, ProductosS
         {ref:'#/listado_productos',name:'Lista de Productos'},
         {ref:'#/listado_pedidos',name:'Lista de Pedidos'},
         {ref:'#/listado_categorias',name:'Lista de Categorias'},
-        {ref:'#/listado_clientes',name:'Lista de Clientes'},
+        {ref:'#/listado_usuarios',name:'Lista de Usuarios'},
         {ref:'#/listado_deudores',name:'Lista de Deudores'},
-        {ref:'#/listado_proveedores',name:'Lista de Proveedores'},
         {ref:'#/listado_ventas_web',name:'Lista de Ventas Web'},
-        {ref:'#/clientes/0',name:'Nuevo Cliente'},
+        {ref:'#/usuarios/0',name:'Nuevo Usuario'},
         {ref:'#/productos/0',name:'Nuevo Producto'},
         {ref:'#/pedidos/0',name:'Nuevo Pedido'},
         {ref:'#/proveedores/0',name:'Nuevo Proveedor'},

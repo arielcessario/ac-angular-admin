@@ -16,9 +16,9 @@
         .service('CancelaDeudaPedidoService', CancelaDeudaPedidoService);
 
     CancelaDeudaController.$inject = ["$scope", "$routeParams", "$location", "toastr", "MovimientosService",
-        'CancelaDeudaPedidoService', 'ClientesService'];
+        'CancelaDeudaPedidoService', 'UserService'];
     function CancelaDeudaController($scope, $routeParams, $location, toastr, MovimientosService,
-                                       CancelaDeudaPedidoService, ClientesService) {
+                                       CancelaDeudaPedidoService, UserService) {
         var vm = this;
         vm.comentario = '';
         vm.subtipo = '00';
@@ -30,7 +30,7 @@
         vm.cliente = {};
 
 
-        ClientesService.getDeudorById(vm.id, function (data) {
+        UserService.getDeudorById(vm.id, function (data) {
             data.saldo = parseFloat(data.saldo )*-1;
             vm.cliente = data;
 
@@ -43,7 +43,7 @@
 
             MovimientosService.armarMovimiento('015', vm.subtipo, 1, vm.forma_pago, '', vm.cliente.saldo, '', vm.comentario, '', vm.id, 1, vm.comentario, function (data) {
 
-                ClientesService.actualizarSaldo(vm.cliente.cliente_id, parseFloat(vm.cliente.saldo), function(data){
+                UserService.actualizarSaldo(vm.cliente.cliente_id, parseFloat(vm.cliente.saldo), function(data){
                     console.log(data);
                     if(data){
                         vm.comentario = '';

@@ -18,7 +18,7 @@ $slideDuration: .4s;
 }
 
 body {
-  font-family: "Open Sans";
+  font-family: "Roboto", sans-serif !important;
   font-size: 16px;
   background-color: $background-color;
   //  overflow: hidden;
@@ -151,6 +151,32 @@ body {
   transition: all 0.4s;
 }
 
+
+.ac-result-panel{
+  border: 1px solid #bbbbbb;
+  background-color: white;
+  -webkit-box-shadow: 1px 1px 5px 1px #aaaaaa;
+  -moz-box-shadow: 1px 1px 5px 1px #aaaaaa;
+  box-shadow: 1px 1px 5px 1px #aaaaaa;
+
+  //height: 100%;
+  //max-height: 100px;
+  //overflow-y: auto;
+
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.ac-item-list{
+  padding: 4px;
+}
+
+.ac-item-selected-list,
+.ac-item-list:hover{
+  background-color: #999999;
+  color: white;
+}
+
 input[type="text"],
 input[type="password"],
 input[type="email"],
@@ -180,6 +206,27 @@ input[type="number"] {
 
 *:focus {
   outline: 0;
+}
+
+.input-container{
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  max-width: 300px;
+  width: 300px;
+  @media (min-width: 700px) {
+    width: 100%;
+    max-width: 30%;
+  }
+}
+
+.responsive-container{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  @media (max-width: 700px) {
+    justify-content: space-around;
+  }
 }
 
 input[type="text"] ~ label,

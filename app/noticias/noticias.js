@@ -3,8 +3,7 @@
     'use strict';
 
 
-    angular.module('nombreapp.stock.noticias', ['ngRoute', 'toastr', 'nombreapp.stock.proveedores'
-        , 'nombreapp.stock.categorias'])
+    angular.module('nombreapp.stock.noticias', ['ngRoute'])
 
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/noticias/:id', {

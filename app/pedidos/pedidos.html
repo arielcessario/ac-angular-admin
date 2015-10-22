@@ -25,10 +25,10 @@
         <div class="line">
             <label for="proveedor"><h2>Proveedor</h2></label><br>
             <select name="proveedor" id="proveedor" ng-model="pedidosCtrl.pedido.proveedor_id"
-                    ng-options="proveedor.proveedor_id as proveedor.nombre  for proveedor in pedidosCtrl.proveedores"
+                    ng-options="proveedor.usuario_id as proveedor.nombre  for proveedor in pedidosCtrl.proveedores"
                     ng-click="pedidosCtrl.cleanProductos();">
             </select>
-        </span>
+            </span>
         </div>
 
         <div class="line">
@@ -51,7 +51,7 @@
     <div class="line-separator"></div>
     <h2>Detalle del Pedido</h2>
 
-    <form name="detalleProductoForm" style="display: flex;">
+    <form name="detalleProductoForm" class="responsive-container">
 
         <!--<div><label for="filtro_producto">Producto</label><br>-->
         <!--<input type="text" id="filtro_producto" name="filtro_producto" ng-model="pedidosCtrl.producto.nombre" ng-maxlength="45"-->
@@ -61,41 +61,33 @@
         <!--<span ng-show="pedidosForm.filtro_producto.$error.maxlength">El Nombre es demasiado largo (Máximo 45)</span>-->
         <!--</span>-->
         <!--</div>-->
-
-        <ac-search-panel
-                obj="pedidosCtrl.producto"
-                obj-name="pedidosCtrl.producto.nombre"
-                nombref="pedidosForm"
-                nombre="01"
-                nombre-visible="Producto"
-                font-size="32"
-                width="200"
-                func="pedidosCtrl.fncProductos"
-                extra-filter="pedidosCtrl.pedido.proveedor_id">
-        </ac-search-panel>
-
-        <div>
+        <div class="input-container">
+            <input ac-search-panel
+                   id="producto-search"
+                   service="ProductService"
+                   exact-match="false"
+                   visible="nombre"
+                   ng-model="pedidosCtrl.producto.nombre"
+                   objeto="pedidosCtrl.producto"
+                   params="nombre,sku"
+                   type="text"
+                   required>
+            <label for="producto-search">Producto</label>
+        </div>
+        <div class="input-container">
             <input type="number" id="cantidad" name="cantidad" ng-model="pedidosCtrl.cantidad" ng-maxlength="45"
-                   required><br>
+                   required>
             <label for="cantidad">Cantidad</label>
 
-        <span style="color:red" ng-show="pedidosForm.cantidad.$dirty && pedidosForm.cantidad.$invalid">
-            <span ng-show="pedidosForm.cantidad.$error.required">Debe ingresar un Nombre</span>
-            <span ng-show="pedidosForm.cantidad.$error.maxlength">El Nombre es demasiado largo (Máximo 45)</span>
-        </span>
         </div>
 
 
-        <div>
+        <div class="input-container">
             <input type="number" step="0.01" id="precio_unidad_prod" name="precio_unidad_prod"
                    ng-model="pedidosCtrl.precio_unidad_prod" ng-maxlength="45"
-                   required><br>
+                   required>
             <label for="precio_unidad_prod">Precio</label>
-        <span style="color:red"
-              ng-show="pedidosForm.precio_unidad_prod.$dirty && pedidosForm.precio_unidad_prod.$invalid">
-            <span ng-show="pedidosForm.precio_unidad_prod.$error.required">Debe ingresar un Nombre</span>
-            <span ng-show="pedidosForm.precio_unidad_prod.$error.maxlength">El Nombre es demasiado largo (Máximo 45)</span>
-        </span>
+
         </div>
 
         <div class="btn" ng-if="pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == ''
@@ -106,50 +98,100 @@
         </div>
 
     </form>
-    <div class="ac-grid">
-        <div class="cabecera">
-            <h3>Producto</h3>
 
-            <h3>Precio Total</h3>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Precio Total</th>
+            <th>Precio Unitario</th>
+            <th>Cantidad</th>
+            <th>Faltante</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="row in pedidosCtrl.pedido.pedidos_detalles">
 
-            <h3>Precio Unitario</h3>
+            <td class="">{{row.nombre}}</td>
+            <td class="">{{row.precio_total | currency}}</td>
+            <td class="">
+                $<input type="number"
+                        ng-disabled="!(pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == '')"
+                        step="0.01"
+                        ng-model="row.precio_unidad"
+                        ng-blur="pedidosCtrl.recalcularTotal(row);"
+                        ng-change="(row.precio_unidad<0)?row.precio_unidad=0:row.precio_unidad;
+                   pedidosCtrl.recalcularTotalDetalle(row);"/>
+            </td>
+            <td class="">
+                <input type="number"
+                                ng-disabled="!(pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == '')"
+                                ng-model="row.cantidad"
+                                ng-blur="pedidosCtrl.recalcularTotal(row);"
+                                ng-change="(row.cantidad<0)?row.cantidad=0:row.cantidad;
+                   pedidosCtrl.recalcularTotalDetalle(row);"
+                    /></td>
+            <td class="">
+                <input type="checkbox" ng-click="pedidosCtrl.agregarFaltante(row);"
 
-            <h3>Cantidad</h3>
-
-            <h3>Faltante</h3>
-        </div>
-        <div ng-repeat="detalle in pedidosCtrl.pedido.detalles">
-            <span>{{detalle.producto_nombre}} </span>
-            <span>{{detalle.precio_total | currency}}</span>
-            $<input type="number"
-                    ng-disabled="!(pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == '')"
-                    step="0.01"
-                    ng-model="detalle.precio_unidad"
-                    ng-blur="pedidosCtrl.recalcularTotal(detalle);"
-                    ng-change="(detalle.precio_unidad<0)?detalle.precio_unidad=0:detalle.precio_unidad;
-                   pedidosCtrl.recalcularTotalDetalle(detalle);"/>
-            <input type="number"
-                   ng-disabled="!(pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == '')"
-                   ng-model="detalle.cantidad"
-                   ng-blur="pedidosCtrl.recalcularTotal(detalle);"
-                   ng-change="(detalle.cantidad<0)?detalle.cantidad=0:detalle.cantidad;
-                   pedidosCtrl.recalcularTotalDetalle(detalle);"
-                    />
-            <input type="checkbox" ng-click="pedidosCtrl.agregarFaltante(detalle);"
-
-                   ng-disabled="!(pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == ''
+                                 ng-disabled="!(pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == ''
                    || pedidosCtrl.pedido.fecha_entrega == '0000-00-00 00:00:00')"/>
-
-
-            <div class="btn">
+            </td>
+            <td class=""><div class="btn">
                 <button ng-click="pedidosCtrl.removeDetalle($index)"
                         ng-disabled="!(pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == ''
                         || pedidosCtrl.pedido.fecha_entrega == '0000-00-00 00:00:00')"
                         class="btn-delete-black btn-medium"></button>
                 <label>Sacar del pedido</label>
-            </div>
-        </div>
-    </div>
+            </div></td>
+        </tr>
+        </tbody>
+    </table>
+    <!--<div class="ac-grid">-->
+        <!--<div class="cabecera">-->
+            <!--<h3>Producto</h3>-->
+
+            <!--<h3>Precio Total</h3>-->
+
+            <!--<h3>Precio Unitario</h3>-->
+
+            <!--<h3>Cantidad</h3>-->
+
+            <!--<h3>Faltante</h3>-->
+        <!--</div>-->
+        <!--<div ng-repeat="detalle in pedidosCtrl.pedido.detalles">-->
+            <!--<span>{{detalle.producto_nombre}} </span>-->
+            <!--<span>{{detalle.precio_total | currency}}</span>-->
+            <!--$<input type="number"-->
+                    <!--ng-disabled="!(pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == '')"-->
+                    <!--step="0.01"-->
+                    <!--ng-model="detalle.precio_unidad"-->
+                    <!--ng-blur="pedidosCtrl.recalcularTotal(detalle);"-->
+                    <!--ng-change="(detalle.precio_unidad<0)?detalle.precio_unidad=0:detalle.precio_unidad;-->
+                   <!--pedidosCtrl.recalcularTotalDetalle(detalle);"/>-->
+            <!--<input type="number"-->
+                   <!--ng-disabled="!(pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == '')"-->
+                   <!--ng-model="detalle.cantidad"-->
+                   <!--ng-blur="pedidosCtrl.recalcularTotal(detalle);"-->
+                   <!--ng-change="(detalle.cantidad<0)?detalle.cantidad=0:detalle.cantidad;-->
+                   <!--pedidosCtrl.recalcularTotalDetalle(detalle);"-->
+                    <!--/>-->
+            <!--<input type="checkbox" ng-click="pedidosCtrl.agregarFaltante(detalle);"-->
+
+                   <!--ng-disabled="!(pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == ''-->
+                   <!--|| pedidosCtrl.pedido.fecha_entrega == '0000-00-00 00:00:00')"/>-->
+
+
+            <!--<div class="btn">-->
+                <!--<button ng-click="pedidosCtrl.removeDetalle($index)"-->
+                        <!--ng-disabled="!(pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == ''-->
+                        <!--|| pedidosCtrl.pedido.fecha_entrega == '0000-00-00 00:00:00')"-->
+                        <!--class="btn-delete-black btn-medium"></button>-->
+                <!--<label>Sacar del pedido</label>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 
     <div ng-if="pedidosCtrl.pedido.fecha_entrega == null || pedidosCtrl.pedido.fecha_entrega == ''
     || pedidosCtrl.pedido.fecha_entrega == '0000-00-00 00:00:00'">

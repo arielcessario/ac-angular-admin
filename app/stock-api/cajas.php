@@ -125,7 +125,7 @@ function getCajaDiaria($sucursal_id)
     $results = $db->rawQuery("select movimiento_id, asiento_id, fecha, cuenta_id, usuario_id, importe, 0 detalles
 from movimientos m where m.sucursal_id = " . $sucursal_id . " and (m.cuenta_id like '1.1.1.%' or m.cuenta_id = '1.1.2.01'
 or m.cuenta_id like '4.1.1.%' or m.cuenta_id like '1.1.7.%')
-    and asiento_id >= " . $lastCaja['asiento_inicio_id'] . ";");
+    and asiento_id >= " . $lastCaja['asiento_inicio_id'] . " order by asiento_id, movimiento_id;");
 
     foreach ($results as $row) {
         $SQL = "select
@@ -272,7 +272,12 @@ function getLastCaja($sucursal_id)
     $db = new MysqliDb();
     $results = $db->rawQuery("select * from cajas where caja_id = (select max(caja_id) from cajas) and sucursal_id=" . $sucursal_id . ";");
 
-    return $results[0];
+    if($db->count > 0){
+        return $results[0];
+    }else{
+
+        return array('asiento_inicio_id'=>9999999, 'asiento_cierre_id'=>9999999, 'saldo_inicial'=>0);
+    }
 }
 
 //Realiza la apertura de la caja

@@ -68,11 +68,10 @@
 
             CajasService.getSaldoInicial(vm.sucursal.sucursal_id, function (data) {
 
-                //console.log(data);
                 vm.saldoInicial = parseFloat(data.replace('"', ''));
 
                 CajasService.getCajaDiaria(vm.sucursal.sucursal_id, function (data) {
-                    //console.log(data);
+
                     var asiento = [];
                     for (var i = 0; i < data.length; i++) {
                         if (data[i].cuenta_id.indexOf('1.1.1.0') > -1) {
@@ -192,7 +191,7 @@
                     //vm.gridOptions.data = vm.asientos;
                     vm.asientos = detalles_caja;
                     //console.log(detalles_caja);
-                    //console.log(vm.asientos);
+                    console.log(vm.asientos);
 
 
                     AcUtilsGlobals.isWaiting = false;

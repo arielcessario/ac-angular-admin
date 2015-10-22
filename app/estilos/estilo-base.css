@@ -1,5 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,100,500,700|Open+Sans);
-/* line 5, ../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 5, ../../../../../RailsInstaller/Ruby2.1.0/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -21,52 +21,52 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-/* line 22, ../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 22, ../../../../../RailsInstaller/Ruby2.1.0/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
-/* line 24, ../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../../RailsInstaller/Ruby2.1.0/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 26, ../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../../RailsInstaller/Ruby2.1.0/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 28, ../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../../RailsInstaller/Ruby2.1.0/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 30, ../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../../RailsInstaller/Ruby2.1.0/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../RailsInstaller/Ruby2.1.0/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-/* line 32, ../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 32, ../../../../../RailsInstaller/Ruby2.1.0/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 116, ../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 116, ../../../../../RailsInstaller/Ruby2.1.0/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
 
 /* line 20, estilo-base.scss */
 body {
-  font-family: "Open Sans";
+  font-family: "Roboto", sans-serif !important;
   font-size: 16px;
   background-color: #ececec;
 }
@@ -198,7 +198,31 @@ body {
   transition: all 0.4s;
 }
 
-/* line 154, estilo-base.scss */
+/* line 155, estilo-base.scss */
+.ac-result-panel {
+  border: 1px solid #bbbbbb;
+  background-color: white;
+  -webkit-box-shadow: 1px 1px 5px 1px #aaaaaa;
+  -moz-box-shadow: 1px 1px 5px 1px #aaaaaa;
+  box-shadow: 1px 1px 5px 1px #aaaaaa;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+
+/* line 170, estilo-base.scss */
+.ac-item-list {
+  padding: 4px;
+}
+
+/* line 174, estilo-base.scss */
+.ac-item-selected-list,
+.ac-item-list:hover {
+  background-color: #999999;
+  color: white;
+}
+
+/* line 180, estilo-base.scss */
 input[type="text"],
 input[type="password"],
 input[type="email"],
@@ -212,7 +236,7 @@ textarea {
   margin: 10px;
 }
 
-/* line 167, estilo-base.scss */
+/* line 193, estilo-base.scss */
 select {
   min-width: 200px;
   margin: 10px !important;
@@ -222,18 +246,47 @@ select {
   background-color: transparent;
 }
 
-/* line 176, estilo-base.scss */
+/* line 202, estilo-base.scss */
 input[type="number"] {
   max-width: 200px;
   width: auto;
 }
 
-/* line 181, estilo-base.scss */
+/* line 207, estilo-base.scss */
 *:focus {
   outline: 0;
 }
 
-/* line 185, estilo-base.scss */
+/* line 211, estilo-base.scss */
+.input-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  max-width: 300px;
+  width: 300px;
+}
+@media (min-width: 700px) {
+  /* line 211, estilo-base.scss */
+  .input-container {
+    width: 100%;
+    max-width: 30%;
+  }
+}
+
+/* line 223, estilo-base.scss */
+.responsive-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+@media (max-width: 700px) {
+  /* line 223, estilo-base.scss */
+  .responsive-container {
+    justify-content: space-around;
+  }
+}
+
+/* line 232, estilo-base.scss */
 input[type="text"] ~ label,
 input[type="password"] ~ label,
 input[type="email"] ~ label,
@@ -252,14 +305,14 @@ select ~ label {
   transition: all 0.4s;
 }
 
-/* line 203, estilo-base.scss */
+/* line 250, estilo-base.scss */
 input[type="date"] ~ label {
   color: #000000;
   top: -60px;
   font-size: 16px;
 }
 
-/* line 210, estilo-base.scss */
+/* line 257, estilo-base.scss */
 input[type="text"]:focus ~ label,
 input[type="text"]:valid ~ label,
 input[type="password"]:focus ~ label,
@@ -274,12 +327,12 @@ select ~ label {
   font-size: 16px;
 }
 
-/* line 249, estilo-base.scss */
+/* line 296, estilo-base.scss */
 .btn {
   display: inline-block;
 }
 
-/* line 253, estilo-base.scss */
+/* line 300, estilo-base.scss */
 .btn-small {
   border-radius: 20px;
   height: 20px;
@@ -289,7 +342,7 @@ select ~ label {
   margin: 10px;
 }
 
-/* line 261, estilo-base.scss */
+/* line 308, estilo-base.scss */
 .btn-small ~ label {
   position: absolute;
   margin-top: -20px;
@@ -307,7 +360,7 @@ select ~ label {
   clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
 }
 
-/* line 265, estilo-base.scss */
+/* line 312, estilo-base.scss */
 .btn-medium {
   border-radius: 35px;
   height: 35px;
@@ -317,7 +370,7 @@ select ~ label {
   margin: 10px;
 }
 
-/* line 273, estilo-base.scss */
+/* line 320, estilo-base.scss */
 .btn-medium ~ label {
   position: absolute;
   margin-top: -40px;
@@ -335,7 +388,7 @@ select ~ label {
   clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
 }
 
-/* line 277, estilo-base.scss */
+/* line 324, estilo-base.scss */
 .btn-big {
   border-radius: 50px;
   height: 50px;
@@ -345,7 +398,7 @@ select ~ label {
   margin: 10px;
 }
 
-/* line 285, estilo-base.scss */
+/* line 332, estilo-base.scss */
 .btn-big ~ label {
   position: absolute;
   margin-top: -50px;
@@ -363,112 +416,112 @@ select ~ label {
   clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
 }
 
-/* line 289, estilo-base.scss */
+/* line 336, estilo-base.scss */
 .btn-back {
   background: url("icons/core/arrow-back.svg") no-repeat 50% 50%;
   -webkit-filter: invert(100%);
   background-size: 60% 60%;
 }
 
-/* line 295, estilo-base.scss */
+/* line 342, estilo-base.scss */
 .btn-empty {
   background-color: #FF9800;
   background-size: 60% 60%;
   cursor: pointer;
 }
 
-/* line 301, estilo-base.scss */
+/* line 348, estilo-base.scss */
 .btn-archive {
   background: #FF9800 url("icons/core/archive.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 307, estilo-base.scss */
+/* line 354, estilo-base.scss */
 .btn-lock {
   background: url("icons/core/lock-outline.svg") no-repeat 50% 50%;
   -webkit-filter: invert(100%);
   background-size: 60% 60%;
 }
 
-/* line 313, estilo-base.scss */
+/* line 360, estilo-base.scss */
 .btn-add {
   background: #51a351 url("icons/core/add.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 318, estilo-base.scss */
+/* line 365, estilo-base.scss */
 .btn-edit {
   background: #03A9F4 url("icons/core/create.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 323, estilo-base.scss */
+/* line 370, estilo-base.scss */
 .btn-lock-open {
   background: #FF9800 url("icons/core/lock-open.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 328, estilo-base.scss */
+/* line 375, estilo-base.scss */
 .btn-ok {
   background: #51a351 url("icons/core/done.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 333, estilo-base.scss */
+/* line 380, estilo-base.scss */
 .btn-receipt {
   background: #51a351 url("icons/core/receipt.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 338, estilo-base.scss */
+/* line 385, estilo-base.scss */
 .btn-star-outlined {
   background: #51a351 url("icons/core/star-outline.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 343, estilo-base.scss */
+/* line 390, estilo-base.scss */
 .btn-cut {
   background: #FF9800 url("icons/core/content-cut.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 348, estilo-base.scss */
+/* line 395, estilo-base.scss */
 .btn-delete {
   background: #F44336 url("icons/core/delete.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 353, estilo-base.scss */
+/* line 400, estilo-base.scss */
 .btn-delete-black {
   background: url("icons/core/delete-black.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 358, estilo-base.scss */
+/* line 405, estilo-base.scss */
 .btn-like {
   background: #03A9F4 url("icons/core/thumb-up.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 363, estilo-base.scss */
+/* line 410, estilo-base.scss */
 .btn-refresh {
   background: #03A9F4 url("icons/core/refresh.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 368, estilo-base.scss */
+/* line 415, estilo-base.scss */
 .btn-close {
   background: #F44336 url("icons/core/close.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 373, estilo-base.scss */
+/* line 420, estilo-base.scss */
 .btn-visibility {
   background: #03A9F4 url("icons/core/visibility.svg") no-repeat 50% 50%;
   background-size: 60% 60%;
 }
 
-/* line 378, estilo-base.scss */
+/* line 425, estilo-base.scss */
 input[type=submit]:hover ~ label,
 input[type=button]:hover ~ label,
 button:hover ~ label {
@@ -476,7 +529,7 @@ button:hover ~ label {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
-/* line 385, estilo-base.scss */
+/* line 432, estilo-base.scss */
 .relieve-2 {
   box-shadow: 0px 5px 10px #adadad;
   -webkit-transition: all .3s;
@@ -486,12 +539,12 @@ button:hover ~ label {
   transition: all 0.3s;
 }
 
-/* line 395, estilo-base.scss */
+/* line 442, estilo-base.scss */
 .relieve-2:hover {
   box-shadow: 0px 10px 15px #ababab;
 }
 
-/* line 400, estilo-base.scss */
+/* line 447, estilo-base.scss */
 .relieve-1 {
   box-shadow: 0px 1px 5px #adadad;
   -webkit-transition: all .3s;
@@ -501,12 +554,12 @@ button:hover ~ label {
   transition: all 0.3s;
 }
 
-/* line 410, estilo-base.scss */
+/* line 457, estilo-base.scss */
 .relieve-1:hover {
   box-shadow: 0px 3px 10px #ababab;
 }
 
-/* line 415, estilo-base.scss */
+/* line 462, estilo-base.scss */
 span {
   display: inline-block;
   width: 150px;
@@ -514,13 +567,13 @@ span {
   padding: 5px;
 }
 @media (max-width: 1025px) {
-  /* line 415, estilo-base.scss */
+  /* line 462, estilo-base.scss */
   span {
     width: 100px !important;
   }
 }
 
-/* line 427, estilo-base.scss */
+/* line 474, estilo-base.scss */
 .descr {
   min-width: 400px !important;
   max-width: 400px !important;
@@ -528,13 +581,13 @@ span {
   overflow: auto;
 }
 @media (max-width: 1025px) {
-  /* line 427, estilo-base.scss */
+  /* line 474, estilo-base.scss */
   .descr {
     width: 300px;
   }
 }
 
-/* line 439, estilo-base.scss */
+/* line 486, estilo-base.scss */
 .descr-corta {
   min-width: 200px !important;
   max-width: 200px !important;
@@ -542,13 +595,13 @@ span {
   overflow: auto;
 }
 @media (max-width: 1025px) {
-  /* line 439, estilo-base.scss */
+  /* line 486, estilo-base.scss */
   .descr-corta {
     width: 150px;
   }
 }
 
-/* line 451, estilo-base.scss */
+/* line 498, estilo-base.scss */
 .title {
   position: absolute;
   color: #ffffff;
@@ -561,7 +614,7 @@ span {
   display: flex;
 }
 
-/* line 467, estilo-base.scss */
+/* line 514, estilo-base.scss */
 h1 {
   font-family: Roboto, serif;
   font-weight: 400;
@@ -570,7 +623,7 @@ h1 {
   margin-left: 5px;
 }
 
-/* line 475, estilo-base.scss */
+/* line 522, estilo-base.scss */
 h2 {
   font-family: Roboto, serif;
   font-weight: 400;
@@ -581,7 +634,7 @@ h2 {
   min-width: 200px;
 }
 
-/* line 485, estilo-base.scss */
+/* line 532, estilo-base.scss */
 h3 {
   font-family: Roboto, serif;
   font-weight: 400;
@@ -589,52 +642,52 @@ h3 {
   margin-bottom: 15px;
 }
 @media (max-width: 1025px) {
-  /* line 485, estilo-base.scss */
+  /* line 532, estilo-base.scss */
   h3 {
     width: 100px !important;
   }
 }
 
-/* line 497, estilo-base.scss */
+/* line 544, estilo-base.scss */
 .no-margin {
   margin: 0px !important;
 }
 
-/* line 503, estilo-base.scss */
+/* line 550, estilo-base.scss */
 .ac-grid .cabecera h3 {
   width: 130px;
   display: inline-block;
   margin: 5px;
   padding: 5px;
 }
-/* line 513, estilo-base.scss */
+/* line 560, estilo-base.scss */
 .ac-grid .descr-grid {
   width: 200px;
   min-width: 200px;
 }
-/* line 519, estilo-base.scss */
+/* line 566, estilo-base.scss */
 .ac-grid div span, .ac-grid div input {
   width: 130px !important;
 }
 @media (max-width: 1025px) {
-  /* line 519, estilo-base.scss */
+  /* line 566, estilo-base.scss */
   .ac-grid div span, .ac-grid div input {
     width: 100px !important;
   }
 }
 
-/* line 529, estilo-base.scss */
+/* line 576, estilo-base.scss */
 .full-width {
   width: 100% !important;
 }
 
-/* line 533, estilo-base.scss */
+/* line 580, estilo-base.scss */
 .line {
   display: flex;
   flex-direction: row;
 }
 
-/* line 538, estilo-base.scss */
+/* line 585, estilo-base.scss */
 .line-separator {
   width: 100%;
   border: 0 solid;
@@ -642,25 +695,25 @@ h3 {
   border-bottom-color: #ababab;
 }
 
-/* line 546, estilo-base.scss */
+/* line 593, estilo-base.scss */
 .v-spacer {
   height: 60px;
   width: 0px;
 }
 
-/* line 552, estilo-base.scss */
+/* line 599, estilo-base.scss */
 .half-v-spacer {
   height: 20px;
   width: 0px;
 }
 
-/* line 558, estilo-base.scss */
+/* line 605, estilo-base.scss */
 .selected {
   background-color: #009688;
   color: #ffffff;
 }
 
-/* line 563, estilo-base.scss */
+/* line 610, estilo-base.scss */
 .label--checkbox {
   position: relative;
   margin: .5rem;
@@ -669,14 +722,14 @@ h3 {
   cursor: pointer;
 }
 
-/* line 574, estilo-base.scss */
+/* line 621, estilo-base.scss */
 .checkbox {
   position: relative;
   top: -0.375rem;
   margin: 0 1rem 0 0;
   cursor: pointer;
 }
-/* line 582, estilo-base.scss */
+/* line 629, estilo-base.scss */
 .checkbox:before {
   -moz-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
@@ -690,7 +743,7 @@ h3 {
   height: 1rem;
   border: 2px solid #f2f2f2;
 }
-/* line 598, estilo-base.scss */
+/* line 645, estilo-base.scss */
 .checkbox:checked:before {
   -moz-transform: rotate(-45deg);
   -ms-transform: rotate(-45deg);
@@ -701,7 +754,7 @@ h3 {
   border-top-style: none;
   border-right-style: none;
 }
-/* line 609, estilo-base.scss */
+/* line 656, estilo-base.scss */
 .checkbox:after {
   content: "";
   position: absolute;
@@ -713,7 +766,7 @@ h3 {
   cursor: pointer;
 }
 
-/* line 625, estilo-base.scss */
+/* line 672, estilo-base.scss */
 .button--round {
   -moz-transition: background 0.3s ease-in-out;
   -o-transition: background 0.3s ease-in-out;
@@ -728,18 +781,18 @@ h3 {
   text-decoration: none;
   text-align: center;
 }
-/* line 640, estilo-base.scss */
+/* line 687, estilo-base.scss */
 .button--round i {
   font-size: 1rem;
   line-height: 220%;
   vertical-align: middle;
 }
-/* line 646, estilo-base.scss */
+/* line 693, estilo-base.scss */
 .button--round:hover {
   background: #3b50ce;
 }
 
-/* line 651, estilo-base.scss */
+/* line 698, estilo-base.scss */
 .button--sticky {
   position: fixed;
   right: 2rem;
@@ -766,7 +819,7 @@ h3 {
     transform: translateY(0);
   }
 }
-/* line 692, estilo-base.scss */
+/* line 739, estilo-base.scss */
 ac-angular-login-client {
   height: 30px;
   width: 30px;

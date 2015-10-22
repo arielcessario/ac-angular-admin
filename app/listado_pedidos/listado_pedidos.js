@@ -1,7 +1,7 @@
 (function(){
     'use strict';
 
-    angular.module('nombreapp.stock.listadoPedidos', ['ngRoute', 'appname.stock.pedidos'])
+    angular.module('nombreapp.stock.listadoPedidos', ['ngRoute'])
 
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/listado_pedidos', {
@@ -13,8 +13,8 @@
         .controller('ListadoPedidosController', ListadoPedidosController);
 
 
-    ListadoPedidosController.$inject = ['PedidosService', '$location'];
-    function ListadoPedidosController(PedidosService, $location) {
+    ListadoPedidosController.$inject = ['PedidoService', '$location', 'PedidoVars'];
+    function ListadoPedidosController(PedidoService, $location, PedidoVars) {
 
         var vm = this;
 
@@ -33,19 +33,18 @@
 
         function loadPedidos(){
             if(vm.soloActivos){
-
-                PedidosService.getPedidosActivos(-1,
+                PedidoVars.all = false;
+                PedidoService.get(
                     function (data){
-                        //console.log(data);
                         vm.pedidos = data;
                         //console.log(vm.pedidos);
                     }
                 );
             }else{
 
-                PedidosService.getPedidos(
+                PedidoVars.all = true;
+                PedidoService.get(
                     function (data){
-                        //console.log(data);
                         vm.pedidos = data;
                         //console.log(vm.pedidos);
                     }

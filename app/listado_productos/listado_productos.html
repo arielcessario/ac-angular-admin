@@ -21,7 +21,7 @@
         </thead>
         <tbody>
 
-        <tr ng-repeat="row in listadoProductosCtrl.productos | filter:listadoProductosCtrl.filtro | limitTo:listadoProductosCtrl.limit:listadoProductosCtrl.start"
+        <tr ng-repeat="row in listadoProductosCtrl.productos | filter:listadoProductosCtrl.filtro | limitTo:listadoProductosCtrl.end:listadoProductosCtrl.start"
             ac-last-list-item>
 
             <td class="">{{row.nombre}}</td>
@@ -33,7 +33,7 @@
             </td>
             <td class="">{{row.categoria}}</td>
             <td class="">
-                <img src="{{row.fotos[0].path + row.fotos[0].nombre}}"
+                <img ng-src="'/img' + {{row.fotos[0].nombre}}"
                      alt="{{row.fotos[0].nombre}}"
                      height="100" width="100" style="background-color: #dddddd;">
             </td>
@@ -61,7 +61,7 @@
         <div style="flex: 5;"></div>
         <div style="height: 40px; width: 40px;text-align: center;line-height:40px;"
              class="btn btn-empty btn-small relieve-1"
-             ng-click="listadoProductosCtrl.retroceder();">Ant.
+             ng-click="listadoProductosCtrl.prev();">Ant.
         </div>
         <!--<div style="max-width: 100%;display: flex; overflow-x: auto; scrollbar-face-color: #000000;">-->
 
@@ -69,14 +69,16 @@
         <!--class="btn btn-empty btn-small" ng-repeat="numero in listadoProductosCtrl.paginas"-->
         <!--ng-click="listadoProductosCtrl.irAPagina($index);">{{$index + 1}}</div>-->
         <!--</div>-->
-        <div style="margin-top: 10px;"><span>Página {{listadoProductosCtrl.pagina}} de {{listadoProductosCtrl.paginas}}</span></div>
-        <div style="margin-top: 10px;">Ir a <input style="width: 40px;" type="number" ng-model="listadoProductosCtrl.pagina"
-                         ng-change="listadoProductosCtrl.irAPagina();"
-                         ng-keyup="listadoProductosCtrl.irAPagina();"></div>
+        <div style="margin-top: 10px;">
+            <span>Página {{listadoProductosCtrl.pagina}} de {{listadoProductosCtrl.paginas}}</span></div>
+        <div style="margin-top: 10px;">Ir a <input style="width: 40px;" type="number"
+                                                   ng-model="listadoProductosCtrl.pagina"
+                                                   ng-change="listadoProductosCtrl.goToPagina();"
+                                                   ng-keyup="listadoProductosCtrl.goToPagina();"></div>
 
         <div style="height: 40px; width: 40px;text-align: center;line-height:40px;"
              class="btn btn-empty btn-small relieve-1"
-             ng-click="listadoProductosCtrl.avanzar();">Sig.
+             ng-click="listadoProductosCtrl.next();">Sig.
         </div>
         <div style="flex: 5;"></div>
     </div>

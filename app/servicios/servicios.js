@@ -15,8 +15,8 @@
 
 
     ServiciosController.$inject = ['$routeParams', 'CajasService', 'toastr', '$location', '$window',
-        'ClientesService', 'MovimientosService', 'acAngularLoginClientService'];
-    function ServiciosController($routeParams, CajasService, toastr, $location, $window, ClientesService,
+        'UserService', 'MovimientosService', 'acAngularLoginClientService'];
+    function ServiciosController($routeParams, CajasService, toastr, $location, $window, UserService,
                                  MovimientosService, acAngularLoginClientService) {
 
         acAngularLoginClientService.checkCookie();
@@ -24,7 +24,7 @@
         var vm = this;
         vm.isUpdate = false;
         vm.tipo_precio = 0;
-        vm.fn_clientes = ClientesService.getClienteByName;
+        vm.fn_clientes = UserService.getClienteByName;
         vm.cliente = {};
         vm.detalle = {};
         vm.detalles = [];

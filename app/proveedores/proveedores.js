@@ -15,8 +15,8 @@
         .controller('ProveedoresController', ProveedoresController)
         .service('ProveedoresService', ProveedoresService);
 
-    ProveedoresController.$inject = ["$http", "$scope", "$routeParams", "ProveedoresService", "$location", "toastr", "AcUtilsService"];
-    function ProveedoresController($http, $scope, $routeParams, ProveedoresService, $location, toastr, AcUtilsService) {
+    ProveedoresController.$inject = ["$http", "$scope", "$routeParams", "ProveedoresService", "$location", "toastr", "AcUtils"];
+    function ProveedoresController($http, $scope, $routeParams, ProveedoresService, $location, toastr, AcUtils) {
         var vm = this;
         vm.isUpdate = false;
         vm.status = 1;
@@ -59,7 +59,7 @@
         function save() {
 
 
-            if(!AcUtilsService.validateEmail(vm.proveedor.mail)) {
+            if(!AcUtils.validateEmail(vm.proveedor.mail)) {
                 toastr.error('El mail es incorrecto');
                 return;
             }

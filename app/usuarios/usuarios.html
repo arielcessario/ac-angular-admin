@@ -1,0 +1,133 @@
+<div class="title">
+    <div class="btn ">
+        <input type="submit" class="btn-back btn-medium no-margin"
+               onclick="window.location='#/listado_usuarios';"
+               value="">
+        <label>Volver</label>
+    </div>
+    <h1>Administrar Usuarios</h1></div>
+<div class="v-spacer"></div>
+<form ng-controller="UsuariosController  as usuariosCtrl"
+      name="usuariosForm" novalidate>
+    <div class="responsive-container">
+        <div class="input-container">
+            <input type="text" id="nombre" name="nombre" ng-model="usuariosCtrl.usuario.nombre" ng-maxlength="100"
+                   required>
+            <label for="nombre">Nombre</label>
+
+        </div>
+        <div class="input-container">
+            <input type="text" id="apellido" name="apellido" ng-model="usuariosCtrl.usuario.apellido" ng-maxlength="100"
+                   required>
+            <label for="apellido">Apellido</label>
+
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="mail" name="mail" ng-model="usuariosCtrl.usuario.mail" ng-maxlength="100"
+                   required>
+            <label for="mail">Mail</label>
+
+        </div>
+
+
+        <div class="input-container">
+
+            <select name="nacionalidad" id="nacionalidad"
+                    ng-options="nacionalidad.country_name  for nacionalidad in usuariosCtrl.nacionalidades"
+                    ng-model="usuariosCtrl.nacionalidad"
+                    >
+
+            </select>
+            <label for="nacionalidad">Nacionalidad</label>
+
+        </div>
+
+        <div class="input-container">
+
+            <select name="tipo_doc" id="tipo_doc" ng-model="usuariosCtrl.usuario.tipo_doc">
+                <option value="0" selected>DNI</option>
+                <option value="1">CUIT</option>
+                <option value="2">PASS</option>
+                <option value="3">CI</option>
+                <option value="4">Otro</option>
+            </select>
+            <label for="tipo_doc">Tipo Doc.</label>
+
+        </div>
+
+
+        <div class="input-container">
+            <input type="text" id="nro_doc" name="nro_doc" ng-model="usuariosCtrl.usuario.nro_doc" ng-maxlength="100"
+                   required>
+            <label for="nro_doc">Nro. Doc.</label>
+
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="comentarios" name="comentarios" ng-model="usuariosCtrl.usuario.comentarios"
+                   ng-maxlength="100"
+                   required>
+            <label for="comentarios">Comentarios</label>
+
+        </div>
+
+        <div class="input-container">
+            <select name="marcado" id="marcado" ng-model="usuariosCtrl.usuario.marcado">
+                <option value="1">Si</option>
+                <option value="0" selected>No</option>
+            </select>
+            <label for="marcado">Marcado</label>
+        </div>
+
+        <div class="input-container">
+            <select name="news_letter" id="news_letter" ng-model="usuariosCtrl.usuario.news_letter">
+                <option value="1">Si</option>
+                <option value="0" selected>No</option>
+            </select>
+            <label for="news_letter">Recibe News Letter</label>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="fecha_nacimiento" name="fecha_nacimiento"
+                   ng-model="usuariosCtrl.usuario.fecha_nacimiento" ng-maxlength="100"
+                   required>
+            <label for="fecha_nacimiento">Fecha Nacimiento</label>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="password" name="fecha_nacimiento"
+                   ng-model="usuariosCtrl.usuario.password" ng-maxlength="100"
+                   required>
+            <label for="password">Password</label>
+        </div>
+
+        <div class="input-container">
+            <select name="perfil" id="perfil" ng-model="usuariosCtrl.usuario.rol_id">
+                <option value="0">Administrador</option>
+                <option value="1">Usuario</option>
+                <option value="2">Proveedor</option>
+                <option value="3">Cliente</option>
+            </select>
+            <label for="perfil">Perfil</label>
+        </div>
+
+    </div>
+    <br/>
+
+    <div>
+
+        <div class="btn"><input type="submit" ng-click="usuariosCtrl.save();"
+                                class="relieve-2 btn-ok btn-big" value="">
+            <label>Guardar Producto</label>
+        </div>
+
+        <div ng-if="usuariosCtrl.id != 0" class="btn">
+            <input type="submit" ng-click="usuariosCtrl.delete();"
+                   class="relieve-2 btn-delete btn-big" value="">
+            <label>Eliminar Usuario</label>
+        </div>
+    </div>
+
+</form>
+
