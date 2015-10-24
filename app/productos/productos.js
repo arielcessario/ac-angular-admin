@@ -110,7 +110,7 @@
                 vm.producto.categoria_id = data[0].categoria_id;
             });
 
-            UserService.getByParams('rol_id', '3', 'true', function (data) {
+            UserService.getByParams('rol_id', '2', 'true', function (data) {
                 //console.log(data);
                 vm.proveedores = data;
 
@@ -119,7 +119,7 @@
             vm.isUpdate = false;
         } else {
             vm.isUpdate = true;
-            UserService.getByParams('rol_id', '3', 'true', function (data) {
+            UserService.getByParams('rol_id', '2', 'true', function (data) {
                 vm.proveedores = data;
                 CategoriasService.getCategorias(function (data) {
                     vm.categorias = data;
@@ -255,7 +255,7 @@
                 //console.log("o." + prop + " = " + vm.listProveedores[prop]);
             }
 
-            //console.log(vm.producto);
+            console.log(vm.producto);
 
             if (vm.isUpdate) {
                 ProductService.update(vm.producto, function (data) {

@@ -85,7 +85,7 @@
             SucursalesService.getSucursales(function (data) {
                 vm.sucursales = data;
                 vm.pedido.sucursal_id = parseInt(data[0].sucursal_id);
-                UserService.getByParams('rol_id', '3', 'true', function (data) {
+                UserService.getByParams('rol_id', '2', 'true', function (data) {
                     vm.proveedores = data;
                     vm.pedido.proveedor_id = parseInt(vm.proveedores[0].proveedor_id);
                     //console.log(data[0].proveedor_id);
@@ -98,7 +98,7 @@
 
             SucursalesService.getSucursales(function (data) {
                 vm.sucursales = data;
-                UserService.getByParams('rol_id', '3', 'true', function (data) {
+                UserService.getByParams('rol_id', '2', 'true', function (data) {
                     vm.proveedores = data;
                     PedidoService.getByParams('pedido_id', '' + vm.id, 'true', function (data) {
 
@@ -221,7 +221,7 @@
                     function (data) {
 
                         if (data != -1) {
-                            toastr.success('Pedido modificado con éxito.');
+                            toastr.success('Pedido modificado con ï¿½xito.');
                             $location.path('/listado_pedidos');
 
                         } else {
@@ -236,7 +236,7 @@
                     function (data) {
 
                         if (data !== -1) {
-                            toastr.success('Pedido generado con éxito.');
+                            toastr.success('Pedido generado con ï¿½xito.');
                             $location.path('/listado_pedidos');
                         } else {
                             toastr.success('Error al generar el pedido.');
@@ -319,7 +319,7 @@
                 PedidoService.create(vm.nuevoPedido, function (data) {
                     //console.log(data);
                     PedidoService.update(vm.pedido, function (data) {
-                        toastr.success('Pedido creado con éxito');
+                        toastr.success('Pedido creado con ï¿½xito');
                         $location.path('/listado_pedidos');
                         //console.log(data);
                     })
@@ -337,7 +337,7 @@
 
                     PedidoService.update(data[0], function (data) {
                         PedidoService.update(vm.pedido, function (data) {
-                            toastr.success('Pedido modificado con éxito');
+                            toastr.success('Pedido modificado con ï¿½xito');
                             $location.path('/listado_pedidos');
                             //console.log(data);
                         })

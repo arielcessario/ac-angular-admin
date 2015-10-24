@@ -44,7 +44,8 @@
                 detalle = {};
                 detalle.producto_id = vm.pedido.pedidos_detalles[i].producto_id;
                 detalle.proveedor_id = vm.pedido.proveedor_id;
-                detalle.sucursal_id = vm.pedido.sucursal_id;
+                //detalle.sucursal_id = vm.pedido.sucursal_id;
+                detalle.sucursal_id = 1;
                 detalle.cant_inicial = vm.pedido.pedidos_detalles[i].cantidad;
                 detalle.cant_actual = vm.pedido.pedidos_detalles[i].cantidad;
                 detalle.precio_unidad = vm.pedido.pedidos_detalles[i].precio_unidad;

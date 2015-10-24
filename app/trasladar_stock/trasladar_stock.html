@@ -7,28 +7,31 @@
 
     <div class="">
         <select name="origen" id="origen" ng-model="trasladarStockCtrl.origen_id"
-        ng-options="sucursal.sucursal_id as sucursal.nombre for sucursal in trasladarStockCtrl.sucursales"
+                ng-options="sucursal.sucursal_id as sucursal.nombre for sucursal in trasladarStockCtrl.sucursales"
                 ng-click="trasladarStockCtrl.setSucursalOrigen();">
         </select>
         <label for="origen">Sucursal de Origen</label><br>
     </div>
     <fieldset
             ng-disabled="trasladarStockCtrl.origen_id == 0;"
-            style="display: flex;" >
-        <ac-search-panel
-                obj="trasladarStockCtrl.producto"
-                obj-name="trasladarStockCtrl.producto.nombre"
-                nombref="cajasForm"
-                nombre="02"
-                nombre-visible="Producto"
-                font-size="32"
-                width="200"
-                func="trasladarStockCtrl.fn_productos_sku"
-                extra-filter="s"
-                ng-keyup="trasladarStockCtrl.calc_disponible();">
-        </ac-search-panel>
+            style="display: flex;">
+        <input ac-search-panel
+               id="producto-search"
+               service="StockService"
+               exact-match="false"
+               visible="nombreProducto"
+               ng-model="trasladarStockCtrl.producto.nombreProducto"
+               objeto="trasladarStockCtrl.producto"
+               params="1"
+               type="text"
+               func="getDisponibles"
+               required>
+        <label for="producto-search">Producto</label>
+
+
     </fieldset>
-    <div style="white-space: nowrap;">Cant. Actual: <span style="width: 1%;" ng-bind="trasladarStockCtrl.cantidad_disponible"></span></div>
+    <div style="white-space: nowrap;">Cant. Actual: <span style="width: 1%;"
+                                                          ng-bind="trasladarStockCtrl.cantidad_disponible"></span></div>
     <div>
         <input type="number" id="cantidad" name="cantidad" ng-model="trasladarStockCtrl.cantidad" ng-maxlength="45"
                required ng-blur="trasladarStockCtrl.controlarCantidad();"><br>

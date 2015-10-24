@@ -15,12 +15,11 @@
         .controller('TrasladarStockController', TrasladarStockController)
         .factory('TrasladarStockService', TrasladarStockService);
 
-    TrasladarStockController.$inject = ["$scope", "$location", 'ProductosService', 'SucursalesService', 'TrasladarStockService', 'AcUtilsGlobals',
-        'toastr', 'ProductosServiceUtils'];
-    function TrasladarStockController($scope, $location, ProductosService, SucursalesService, TrasladarStockService, AcUtilsGlobals,
-                                      toastr, ProductosServiceUtils) {
+    TrasladarStockController.$inject = ["$rootScope", "$location", 'ProductService', 'SucursalesService', 'TrasladarStockService', 'AcUtilsGlobals',
+        'toastr', 'ProductVars', 'StockService'];
+    function TrasladarStockController($rootScope, $location, ProductService, SucursalesService, TrasladarStockService, AcUtilsGlobals,
+                                      toastr, ProductVars, StockService) {
         var vm = this;
-        vm.fn_productos_sku = ProductosService.getProductoByNameOrSKUAndSucursal;
         vm.producto = {};
         vm.sucursales = [];
         vm.origen_id = 0;
@@ -49,14 +48,17 @@
             console.log(AcUtilsGlobals.sucursal_auxiliar_id);
         }
 
+        AcUtilsGlobals.listenPanel(calc_disponible);
+
         function calc_disponible() {
-            if (vm.producto.stocks == undefined) {
+            console.log(vm.producto);
+            if (vm.producto.stock == undefined) {
                 return;
             }
             vm.cantidad_disponible = 0;
-            for (var i = 0; i < vm.producto.stocks.length; i++) {
-                if (vm.producto.stocks[i].sucursal_id == AcUtilsGlobals.sucursal_auxiliar_id) {
-                    vm.cantidad_disponible = vm.producto.stocks[i].cant_actual + vm.cantidad_disponible;
+            for (var i = 0; i < vm.producto.stock.length; i++) {
+                if (vm.producto.stock[i].sucursal_id == AcUtilsGlobals.sucursal_auxiliar_id) {
+                    vm.cantidad_disponible = vm.producto.stock[i].cant_actual + vm.cantidad_disponible;
                 }
 
             }
@@ -69,9 +71,11 @@
                 toastr.error('La sucursal de origen y destino no pueden ser las mismas');
                 return;
             }
-            TrasladarStockService.save(vm.origen_id, vm.destino_id, vm.producto.producto_id, vm.cantidad, function (data) {
-                ProductosServiceUtils.clearCache = true;
-                ProductosService.getProductos(function(data){});
+
+            StockService.trasladar(vm.origen_id, vm.destino_id, vm.producto.producto_id, vm.cantidad, function (data) {
+                console.log(data);
+                ProductVars.clearCache = true;
+                ProductService.get(function(data){});
                 //console.log(data);
                 //if (data == ' ') {
                 toastr.success('Traslado realizado con éxito');
@@ -84,7 +88,8 @@
                 $rootScope.$broadcast('IsWaiting');
                 //}
 
-            })
+            });
+            //TrasladarStockService.save()
         }
 
 
