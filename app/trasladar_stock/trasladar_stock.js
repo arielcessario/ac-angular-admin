@@ -45,13 +45,14 @@
 
         function setSucursalOrigen() {
             AcUtilsGlobals.sucursal_auxiliar_id = vm.origen_id;
-            console.log(AcUtilsGlobals.sucursal_auxiliar_id);
+            //console.log(AcUtilsGlobals.sucursal_auxiliar_id);
         }
 
+        // Esto es un listener de la directiva search-panel
         AcUtilsGlobals.listenPanel(calc_disponible);
 
         function calc_disponible() {
-            console.log(vm.producto);
+            //console.log(vm.producto);
             if (vm.producto.stock == undefined) {
                 return;
             }
@@ -73,7 +74,7 @@
             }
 
             StockService.trasladar(vm.origen_id, vm.destino_id, vm.producto.producto_id, vm.cantidad, function (data) {
-                console.log(data);
+                //console.log(data);
                 ProductVars.clearCache = true;
                 ProductService.get(function(data){});
                 //console.log(data);

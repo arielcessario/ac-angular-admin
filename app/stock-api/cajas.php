@@ -118,33 +118,159 @@ valor detalle
 
 function getCajaDiaria($sucursal_id)
 {
+
     $db = new MysqliDb();
     $lastCaja = getLastCaja($sucursal_id);
     $resultsDetalles = [];
 
-    $results = $db->rawQuery("select movimiento_id, asiento_id, fecha, cuenta_id, usuario_id, importe, 0 detalles
-from movimientos m where m.sucursal_id = " . $sucursal_id . " and (m.cuenta_id like '1.1.1.%' or m.cuenta_id = '1.1.2.01'
-or m.cuenta_id like '4.1.1.%' or m.cuenta_id like '1.1.7.%')
-    and asiento_id >= " . $lastCaja['asiento_inicio_id'] . " order by asiento_id, movimiento_id;");
 
+    $SQL = "SELECT
+    m.movimiento_id,
+    m.asiento_id,
+    m.fecha,
+    m.cuenta_id,
+    m.usuario_id,
+    (SELECT
+            CONCAT(nombre, ' ', apellido)
+        FROM
+            usuarios
+        WHERE
+            usuario_id = m.usuario_id) nombreUsuario,
+    m.importe,
+    m.sucursal_id,
+    d.detalle_movimiento_id,
+    d.detalle_tipo_id,
+    d.valor,
+    CASE
+        WHEN d.detalle_tipo_id IN (2 , 9, 10, 13) THEN d.valor
+        WHEN
+            d.detalle_tipo_id = 8
+        THEN
+            (SELECT
+                    CONCAT(nombre)
+                FROM
+                    productos
+                WHERE
+                    producto_id = d.valor)
+        WHEN
+            d.detalle_tipo_id IN (12)
+        THEN
+            (SELECT
+                    CONCAT(nombre)
+                FROM
+                    sucursales
+                WHERE
+                    sucursal_id = d.valor)
+        WHEN
+            d.detalle_tipo_id IN (14)
+        THEN
+            (SELECT
+                    CONCAT(nombre, ' ', apellido)
+                FROM
+                    usuarios
+                WHERE
+                    usuario_id = d.valor)
+    END AS texto
+FROM
+    movimientos m
+        INNER JOIN
+    detallesmovimientos d ON m.movimiento_id = d.movimiento_id
+WHERE m.sucursal_id = " . $sucursal_id . " and asiento_id >= " . $lastCaja['asiento_inicio_id'] . "
+GROUP BY m.movimiento_id , m.asiento_id , m.fecha , m.cuenta_id , m.usuario_id , m.importe , m.sucursal_id , d.detalle_movimiento_id , d.detalle_tipo_id , d.valor , texto
+ORDER BY m.movimiento_id, m.asiento_id, m.cuenta_id asc;";
+
+    $results = $db->rawQuery($SQL);
+    $final = array();
     foreach ($results as $row) {
-        $SQL = "select
-detalle_tipo_id,
-case when (detalle_tipo_id = 8) then (select concat(producto_id, ' - ', nombre) from productos where producto_id = valor)
-when (detalle_tipo_id = 3) then (select concat(nombre, ' ', apellido) from clientes where cliente_id = valor)
-else valor
-end detalle
 
- from detallesmovimientos
- where detalle_tipo_id in (2,3,8,9,10,13) and movimiento_id =  " . $row['movimiento_id'] . ";";
-        $detalles = $db->rawQuery($SQL);
+        if (!isset($final[$row["asiento_id"]])) {
+            $final[$row["asiento_id"]] = array(
+                'asiento_id' => $row["asiento_id"],
+                'fecha' => $row["fecha"],
+                'usuario_id' => $row["usuario_id"],
+                'usuario' => $row["nombreUsuario"],
+                'sucursal_id' => $row["sucursal_id"],
+                'movimientos' => array()
+            );
+        }
+        $have_mov = false;
+        if ($row["movimiento_id"] !== null) {
 
-        $row["detalles"] = $detalles;
-        array_push($resultsDetalles, $row);
+            if (sizeof($final[$row['asiento_id']]['movimientos']) > 0) {
+                foreach ($final[$row['asiento_id']]['movimientos'] as $key => $cat) {
+                    if ($cat['movimiento_id'] == $row["movimiento_id"]) {
+                        $have_mov = true;
+                        array_push($cat['detalles'], array(
+                                'detalle_movimiento_id' => $row['detalle_movimiento_id'],
+                                'detalle_tipo_id' => $row['detalle_tipo_id'],
+                                'valor' => $row['valor'],
+                                'texto' => $row['texto'],
+                            )
+                        );
+                        $final[$row['asiento_id']]['movimientos'][$key]['detalles'] = $cat['detalles'];
+                    }
+                }
+            } else {
 
+                $dets = array();
+                array_push($dets, array('detalle_movimiento_id' => $row['detalle_movimiento_id'],
+                    'detalle_tipo_id' => $row['detalle_tipo_id'],
+                    'valor' => $row['valor'],
+                    'texto' => $row['texto']));
+
+                $final[$row['asiento_id']]['movimientos'][] = array(
+                    'movimiento_id' => $row['movimiento_id'],
+                    'cuenta_id' => $row["cuenta_id"],
+                    'importe' => $row["importe"],
+                    'detalles' => $dets
+                );
+
+                $have_mov = true;
+            }
+
+            if (!$have_mov) {
+
+                $dets = array();
+                array_push($dets, array('detalle_movimiento_id' => $row['detalle_movimiento_id'],
+                    'detalle_tipo_id' => $row['detalle_tipo_id'],
+                    'valor' => $row['valor'],
+                    'texto' => $row['texto']));
+
+                array_push($final[$row['asiento_id']]['movimientos'], array(
+                    'movimiento_id' => $row['movimiento_id'],
+                    'cuenta_id' => $row["cuenta_id"],
+                    'importe' => $row["importe"],
+                    'detalles' => $dets
+                ));
+            }
+        }
     }
+    echo json_encode(array_values($final));
 
-    echo json_encode($resultsDetalles);
+//
+//    $results = $db->rawQuery("select movimiento_id, asiento_id, fecha, cuenta_id, usuario_id, importe, 0 detalles
+//from movimientos m where m.sucursal_id = " . $sucursal_id . " and (m.cuenta_id like '1.1.1.%' or m.cuenta_id = '1.1.2.01'
+//or m.cuenta_id like '4.1.1.%' or m.cuenta_id like '1.1.7.%')
+//    and asiento_id >= " . $lastCaja['asiento_inicio_id'] . " order by asiento_id, movimiento_id;");
+//
+//    foreach ($results as $row) {
+//        $SQL = "select
+//detalle_tipo_id,
+//case when (detalle_tipo_id = 8) then (select concat(producto_id, ' - ', nombre) from productos where producto_id = valor)
+//when (detalle_tipo_id = 3) then (select concat(nombre, ' ', apellido) from clientes where cliente_id = valor)
+//else valor
+//end detalle
+//
+// from detallesmovimientos
+// where detalle_tipo_id in (2,3,8,9,10,13) and movimiento_id =  " . $row['movimiento_id'] . ";";
+//        $detalles = $db->rawQuery($SQL);
+//
+//        $row["detalles"] = $detalles;
+//        array_push($resultsDetalles, $row);
+//
+//    }
+//
+//    echo json_encode($resultsDetalles);
 }
 
 function getCajaDiariaFromTo($sucursal_id, $asiento_id_inicio, $asiento_id_fin)
@@ -224,12 +350,12 @@ caja_id =" . $lastCaja["caja_id"] . ";");
 
 
 //    for ($i = 0; $i <= 3; $i++) {
-        $data = Array(
-            "moneda_id" => 1,
-            "valor_real" => $importe,
-            "valor_esperado" => $importe,
-            "caja_id" => $lastCaja["caja_id"]);
-        $db->insert("cajas_detalles", $data);
+    $data = Array(
+        "moneda_id" => 1,
+        "valor_real" => $importe,
+        "valor_esperado" => $importe,
+        "caja_id" => $lastCaja["caja_id"]);
+    $db->insert("cajas_detalles", $data);
 
 //    }
 
@@ -245,7 +371,6 @@ function getSaldoInicial($sucursal_id)
     echo json_encode($lastCaja["saldo_inicial"]);
 
 
-
 }
 
 function getSaldoFinalAnterior($sucursal_id)
@@ -256,7 +381,7 @@ function getSaldoFinalAnterior($sucursal_id)
 //    echo json_encode($lastCaja["saldo_inicial"]);
 
 
-    $results = $db->rawQuery("select valor_real from cajas_detalles where caja_id = (select max(caja_id) from cajas where sucursal_id = ".$sucursal_id.");");
+    $results = $db->rawQuery("select valor_real from cajas_detalles where caja_id = (select max(caja_id) from cajas where sucursal_id = " . $sucursal_id . ");");
 
     echo json_encode($results);
 
@@ -272,11 +397,11 @@ function getLastCaja($sucursal_id)
     $db = new MysqliDb();
     $results = $db->rawQuery("select * from cajas where caja_id = (select max(caja_id) from cajas) and sucursal_id=" . $sucursal_id . ";");
 
-    if($db->count > 0){
+    if ($db->count > 0) {
         return $results[0];
-    }else{
+    } else {
 
-        return array('asiento_inicio_id'=>9999999, 'asiento_cierre_id'=>9999999, 'saldo_inicial'=>0);
+        return array('asiento_inicio_id' => 9999999, 'asiento_cierre_id' => 9999999, 'saldo_inicial' => 0);
     }
 }
 
@@ -289,7 +414,7 @@ function abrirCaja($importe, $sucursal_id)
     $lastCaja = getLastCaja($sucursal_id);
 
 
-    if ($lastCaja['asiento_cierre_id'] === null ||$lastCaja['asiento_cierre_id'] === 0 ) {
+    if ($lastCaja['asiento_cierre_id'] === null || $lastCaja['asiento_cierre_id'] === 0) {
         echo 'abierta';
 //        echo 'La caja se encuentra abierta';
         return;
