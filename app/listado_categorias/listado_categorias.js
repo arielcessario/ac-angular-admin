@@ -13,8 +13,8 @@
         .controller('ListadoCategoriasController', ListadoCategoriasController);
 
 
-    ListadoCategoriasController.$inject = ['CategoriasService', '$location'];
-    function ListadoCategoriasController(CategoriasService, $location) {
+    ListadoCategoriasController.$inject = ['CategoryService', '$location'];
+    function ListadoCategoriasController(CategoryService, $location) {
 
         var vm = this;
 
@@ -34,11 +34,11 @@
         function loadCategorias() {
 
 
-            CategoriasService.getCategorias(
+            CategoryService.get(
                 function (data) {
-                    //console.log(data);
-                    vm.categorias = data;
-                    //console.log(vm.categorias);
+                    for(var i = 0; i < data.length; i++){
+                        vm.categorias.push(data[i]);
+                    }
                 }
             );
         }

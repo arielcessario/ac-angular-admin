@@ -22,10 +22,6 @@
             <input type="text" id="nombre" name="nombre" ng-model="categoriasCtrl.categoria.nombre" ng-maxlength="100"
                    required><br>
             <label for="nombre">Nombre</label>
-        <span style="color:red" ng-show="categoriasForm.nombre.$dirty && categoriasForm.nombre.$invalid">
-            <span ng-show="categoriasForm.nombre.$error.required">Debe ingresar un Nombre</span>
-            <span ng-show="categoriasForm.nombre.$error.maxlength">El Nombre es demasiado largo (Máximo 100)</span>
-        </span>
         </div>
 
         

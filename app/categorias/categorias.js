@@ -15,8 +15,8 @@
         .controller('CategoriasController', CategoriasController)
         .service('CategoriasService', CategoriasService);
 
-    CategoriasController.$inject = ["$scope", "$routeParams", "CategoriasService", "$location", "toastr"];
-    function CategoriasController($scope, $routeParams, CategoriasService, $location, toastr) {
+    CategoriasController.$inject = ["$scope", "$routeParams", "CategoryService", "$location", "toastr"];
+    function CategoriasController($scope, $routeParams, CategoryService, $location, toastr) {
         var vm = this;
         vm.isUpdate = false;
         
@@ -31,9 +31,8 @@
         };
 
 
-        CategoriasService.getCategoriasPadres(function(data){
+        CategoryService.get(function(data){
             vm.padres = data;
-            vm.padres.unshift({nombre: 'Sin Padre', parent_id: -1});
         });
 
 
@@ -42,10 +41,8 @@
         } else {
             vm.isUpdate = true;
 
-            CategoriasService.getCategoriaByID(vm.id, function (data) {
-
-
-                vm.categoria = data;
+            CategoryService.getByParams('categoria_id', '' + vm.id, 'true', function (data) {
+                vm.categoria = data[0];
             });
         }
 
@@ -54,7 +51,7 @@
             var r = confirm("Realmente desea eliminar la categoria? Esta operación no tiene deshacer.");
             if (r) {
 
-                CategoriasService.deleteCategoria(vm.id, function (data) {
+                CategoryService.remove(vm.id, function (data) {
                     toastr.success('Categoria eliminada');
                     $location.path('/listado_categorias');
                 });
@@ -63,17 +60,23 @@
 
         function save() {
             //console.log(vm.categoria);
+            if(vm.categoria.parent_id == undefined){
+                vm.categoria.parent_id = -1;
+            }
 
             if (vm.isUpdate) {
-                CategoriasService.saveCategoria(vm.categoria, 'update', function (data) {
+                CategoryService.update(vm.categoria, function (data) {
 
-                    toastr.success('Categoria salvada con exito');
-                    $location.path('/listado_categorias');
+                    if(data == 'true'){
+                        toastr.success('Categoria salvada con exito');
+                        $location.path('/listado_categorias');
+                    }else{
+                        toastr.error('Categoria no guardada');
+
+                    }
                 });
             } else {
-                CategoriasService.saveCategoria(vm.categoria, 'save', function (data) {
-
-
+                CategoryService.create(vm.categoria, function (data) {
                     toastr.success('Categoria salvada con exito');
                     $location.path('/listado_categorias');
                 });

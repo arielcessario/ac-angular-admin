@@ -11,23 +11,49 @@
     </div>
 
 
-    <div class="ac-grid ">
-        <div class="cabecera lista-flex">
-            <h3>Nombre</h3>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Padre</th>
+            <th>Detalles</th>
+        </tr>
+        </thead>
+        <tbody>
 
-            <h3></h3>
-        </div>
-        <div class="lista-flex"
-             ng-repeat="categoria in listadoCategoriasCtrl.categorias | filter:listadoCategoriasCtrl.filtro">
-            <span class="descr">{{categoria.nombre}}</span>
+        <tr ng-repeat="row in listadoCategoriasCtrl.categorias | filter:listadoCategoriasCtrl.filtro | limitTo:listadoCategoriasCtrl.end:listadoCategoriasCtrl.start"
+            ac-last-list-item>
 
-            <div class="btn">
-                <button ng-click="listadoCategoriasCtrl.detalle(categoria.categoria_id)"
-                        class="btn-medium btn-visibility"></button>
-                <label>Mostrar Detalle</label>
-            </div>
-        </div>
-    </div>
+            <td class="">{{row.nombre}}</td>
+            <td class="">{{row.nombrePadre}}</td>
+            <td class="">
+                <div class="btn">
+                    <button ng-click="listadoCategoriasCtrl.detalle(row.categoria_id)"
+                            class="btn-medium btn-visibility"></button>
+                    <label>Mostrar Detalle</label>
+                </div>
+            </td>
+
+        </tr>
+
+    </table>
+    <!--<div class="ac-grid ">-->
+        <!--<div class="cabecera lista-flex">-->
+            <!--<h3>Nombre</h3>-->
+
+            <!--<h3></h3>-->
+        <!--</div>-->
+        <!--<div class="lista-flex"-->
+             <!--ng-repeat="categoria in listadoCategoriasCtrl.categorias | filter:listadoCategoriasCtrl.filtro">-->
+            <!--<span class="descr">{{categoria.nombre}}</span>-->
+
+            <!--<div class="btn">-->
+                <!--<button ng-click="listadoCategoriasCtrl.detalle(categoria.categoria_id)"-->
+                        <!--class="btn-medium btn-visibility"></button>-->
+                <!--<label>Mostrar Detalle</label>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 
     <div class="btn">
 
