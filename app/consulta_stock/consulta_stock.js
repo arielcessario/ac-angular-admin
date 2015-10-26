@@ -15,11 +15,10 @@
         .service('ConsultaStockService', ConsultaStockService);
 
 
-    ConsultaStockController.$inject = ['$location', 'ConsultaStockService', 'toastr', 'SucursalesService'];
-    function ConsultaStockController($location, ConsultaStockService, toastr, SucursalesService) {
+    ConsultaStockController.$inject = ['StockVars', 'StockService', 'toastr', 'SucursalesService'];
+    function ConsultaStockController(StockVars, StockService, toastr, SucursalesService) {
 
         var vm = this;
-        vm.updateStock = updateStock;
 
         vm.stocks = [];
         vm.todos = [];
@@ -39,34 +38,29 @@
             vm.sucursales.push({sucursal_id: -1, nombre: "Todas", direccion: "", telefono: ""});
             vm.sucursal = vm.sucursales[vm.sucursales.length-1];
 
-            ConsultaStockService.getStock(function (data) {
-                vm.todos = data;
-                loadConStock();
+            StockVars.reducido = true;
+            StockVars.clearCache = true;
+            StockService.get(function (data) {
+                vm.stocks = data;
             });
 
         });
 
-        function updateStock(stock){
-            ConsultaStockService.updateStock(stock, function(data){
-                //console.log(data);
-                toastr.success('Stock modificado con exito.')
-
-
-            })
-        }
 
         function loadConStock(){
 
 
             if(vm.conStock){
-                ConsultaStockService.getConStock(function (data) {
-                    vm.todos = data;
-                    filtroSucursal();
+                StockVars.clearCache = true;
+                StockVars.reducido = true;
+                StockService.get(function (data) {
+                    vm.stocks = data;
                 });
             }else{
-                ConsultaStockService.getStock(function (data) {
-                    vm.todos = data;
-                    filtroSucursal();
+                StockVars.clearCache = true;
+                StockVars.reducido = false;
+                StockService.get(function (data) {
+                    vm.stocks = data;
                 });
             }
 

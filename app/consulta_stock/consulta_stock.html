@@ -38,9 +38,9 @@
 
         <tr ng-repeat="row in consultaStockCtrl.stocks | filter:consultaStockCtrl.filtro">
 
-            <td class="">{{row.producto}}</td>
-            <td class="">{{row.proveedor}}</td>
-            <td class="">{{row.sucursal}}</td>
+            <td class="">{{row.nombreProducto}}</td>
+            <td class="">{{row.nombre}} {{row.apellido}}</td>
+            <td class="">{{row.nombreSucursal}}</td>
             <td class="">{{row.cant_actual}}</td>
 
         </tr>
