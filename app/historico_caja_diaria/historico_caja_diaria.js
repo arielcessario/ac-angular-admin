@@ -35,7 +35,7 @@
             })
         }
 
-        SucursalesService.getSucursales(function (data) {
+        SucursalesService.get(function (data) {
             vm.sucursales = data;
             vm.sucursal = data[0];
             CajasService.getCajasBySucursal(vm.sucursal.sucursal_id, function (data) {

@@ -30,7 +30,7 @@
         vm.setSucursalOrigen = setSucursalOrigen;
         vm.controlarCantidad = controlarCantidad;
 
-        SucursalesService.getSucursales(function (data) {
+        SucursalesService.get(function (data) {
             vm.sucursales = data;
             //vm.sucursales_destino = data;
 

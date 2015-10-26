@@ -82,7 +82,7 @@
 
         if (vm.id == 0) {
             vm.isUpdate = false;
-            SucursalesService.getSucursales(function (data) {
+            SucursalesService.get(function (data) {
                 vm.sucursales = data;
                 vm.pedido.sucursal_id = parseInt(data[0].sucursal_id);
                 UserService.getByParams('rol_id', '2', 'true', function (data) {
@@ -96,7 +96,7 @@
         } else {
             vm.isUpdate = true;
 
-            SucursalesService.getSucursales(function (data) {
+            SucursalesService.get(function (data) {
                 vm.sucursales = data;
                 UserService.getByParams('rol_id', '2', 'true', function (data) {
                     vm.proveedores = data;

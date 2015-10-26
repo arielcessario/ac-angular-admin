@@ -30,7 +30,7 @@
 
 
 
-        SucursalesService.getSucursales(function(data){
+        SucursalesService.get(function(data){
             //console.log(data);
 
             vm.sucursales = data;
