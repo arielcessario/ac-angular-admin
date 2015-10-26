@@ -128,9 +128,9 @@
         }
 
         function deletePedido() {
-            PedidoService.deletePedido(vm.id,
+            PedidoService.remove(vm.id,
                 function (data) {
-                    if (data.status > 0) {
+                    if (data > 0) {
                         toastr.success('Pedido borrado con éxito.');
                         $location.path('/listado_pedidos');
                     } else {
@@ -236,7 +236,7 @@
                     function (data) {
 
                         if (data !== -1) {
-                            toastr.success('Pedido generado con �xito.');
+                            toastr.success('Pedido generado con éxito.');
                             $location.path('/listado_pedidos');
                         } else {
                             toastr.success('Error al generar el pedido.');
