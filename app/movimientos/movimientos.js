@@ -168,7 +168,7 @@
 
             //console.log('2015-' + vm.mes + '-01' + ' ' + '2015-' + vm.mes_hasta + '-01');
             CajasService.getMovimientos('2015-' + vm.mes + '-01', '2015-' + vm.mes_hasta + '-01', function (data) {
-                //console.log(data);
+                console.log(data);
                 var asiento = [];
                 for (var i = 0; i < data.length; i++) {
                     if (data[i].cuenta_id.indexOf('1.1.1.10') > -1) {
