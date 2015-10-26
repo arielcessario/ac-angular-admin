@@ -28,18 +28,23 @@
         function save() {
             console.log(vm.importe);
             //tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback
-            MovimientosService.armarMovimiento(vm.movimiento, vm.subtipo, 1, vm.forma_pago, '', vm.importe, '', vm.comentario, [], 0, 1, vm.comentario, function(data){
-                console.log(data);
-                vm.movimiento = '012';
-                vm.comentario = '';
-                vm.subtipo = '00';
-                vm.forma_pago = '01';
-            } );
+            MovimientosService.armarMovimiento(vm.movimiento, vm.subtipo, 1, vm.forma_pago, '', vm.importe, '', vm.comentario, [], 0, 1, vm.comentario, function (data) {
+                if (!isNaN(data)) {
+                    toastr.success('Gasto generado con éxito');
+                    vm.movimiento = '012';
+                    vm.comentario = '';
+                    vm.subtipo = '00';
+                    vm.forma_pago = '01';
+                }else{
+
+                    toastr.error('Error al guardar el gasto');
+                }
+                ;
+            });
         }
 
 
     }
-
 
 
     GastosService.$inject = ['$http'];
@@ -62,7 +67,7 @@
                 .success(function (data) {
                     callback(data);
                 })
-                .error(function(data){
+                .error(function (data) {
 
                 });
         }
@@ -100,7 +105,6 @@
         }
 
 
-
         function saveGasto(gasto, _function, callback) {
 
             return $http.post(url,
@@ -108,7 +112,8 @@
                 .success(function (data) {
                     callback(data);
                 })
-                .error(function(data){});
+                .error(function (data) {
+                });
         }
 
 
@@ -118,7 +123,8 @@
                 .success(function (data) {
                     callback(data);
                 })
-                .error(function(data){});
+                .error(function (data) {
+                });
         }
 
     }
