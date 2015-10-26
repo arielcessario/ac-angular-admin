@@ -1,15 +1,23 @@
 <div ng-controller="ResumenCajaDiariaController as resumenCajaDiariaCtrl">
     <div class="title"><h1>Resumen de Caja</h1></div>
     <div class="v-spacer"></div>
-    <div>
-        <select
-                ng-model="resumenCajaDiariaCtrl.sucursal"
-                ng-options="sucursal.nombre  for sucursal in resumenCajaDiariaCtrl.sucursales" name=""
-                ng-click="resumenCajaDiariaCtrl.filtroSucursal();">
+    <div class="responsive-container">
+        <div class="input-container">
+            <select
+                    ng-model="resumenCajaDiariaCtrl.sucursal"
+                    ng-options="sucursal.nombre  for sucursal in resumenCajaDiariaCtrl.sucursales" name=""
+                    ng-click="resumenCajaDiariaCtrl.filtroSucursal();">
 
-        </select>
-        <br><label for="status">Sucursal</label>
+            </select>
+            <label style="font-weight: bold;" for="status">Sucursal</label>
+
+        </div>
+        <div style="display: flex; justify-content: center; align-items: center; font-size: 26px;">
+            <label>Saldo Inicial: ${{resumenCajaDiariaCtrl.saldoInicial}}</label>
+        </div>
+
     </div>
+
     <div class="half-v-spacer"></div>
 
 
@@ -44,7 +52,7 @@
 
     <div class="full-width form-flex">
         <div></div>
-        <h2 style="font-weight: 700">Total en caja: {{resumenCajaDiariaCtrl.saldoInicial | currency}}</h2>
+        <h2 style="font-weight: 700">Total en caja: {{resumenCajaDiariaCtrl.saldoFinal | currency}}</h2>
     </div>
 
 
