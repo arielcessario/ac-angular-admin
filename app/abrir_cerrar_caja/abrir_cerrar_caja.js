@@ -23,6 +23,7 @@
         vm.saldoInicial = 0.0;
         vm.saldoFinal = 0.0;
         vm.saldoFinalReal = 0.0;
+        vm.detalles = '';
 
 
         vm.save = save;
@@ -47,13 +48,11 @@
 
         function save(){
             if(vm.isOpen){
-                CajasService.cerrarCaja(1, vm.saldoFinalReal, function(data){
-                    console.log(data);
+                CajasService.cerrarCaja(1, vm.saldoFinalReal, vm.detalles, function(data){
                     $location.path('/resumen_caja_diaria');
                 })
             }else{
                 CajasService.abrirCaja(1, vm.saldoInicial, function(data){
-                    console.log(data);
                     $location.path('/resumen_caja_diaria');
                 })
 

@@ -31,11 +31,15 @@
 
         <div class="line"><h2>Saldo Final</h2> <span class="descr">{{abrirCerrarCajaController.saldoFinal | currency}}</span><br/></div>
         <div class="v-spacer"></div>
-
+        <div class="input-container">
+            <input type="text" id="detalles" name="detalles" ng-model="abrirCerrarCajaController.detalles" ng-maxlength="1000"
+                   required>
+            <label for="detalles">Detalles</label>
+        </div>
         <div>
-            $<input type="number" step="0.01" ng-model="abrirCerrarCajaController.saldoFinalReal"
+            $<input type="number" id="saldoFinal" step="0.01" ng-model="abrirCerrarCajaController.saldoFinalReal"
                    required><br>
-            <label for="importe">Saldo Real</label>
+            <label for="saldoFinal">Saldo Real</label>
 
         </div>
     </div>

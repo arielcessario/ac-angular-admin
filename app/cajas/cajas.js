@@ -484,8 +484,8 @@
 
         }
 
-        function cerrarCaja(sucursal_id, importe, callback) {
-            return $http.post(url, {function: 'cerrarCaja', sucursal_id: sucursal_id, importe: importe})
+        function cerrarCaja(sucursal_id, importe, detalles, callback) {
+            return $http.post(url, {function: 'cerrarCaja', sucursal_id: sucursal_id, importe: importe, detalles: detalles})
                 .success(function (data) {
                     callback(data);
                 })

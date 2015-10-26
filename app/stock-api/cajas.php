@@ -9,7 +9,7 @@ if ($decoded != null) {
     if ($decoded->function == 'getCajaDiaria') {
         getCajaDiaria($decoded->sucursal_id);
     } else if ($decoded->function == 'cerrarCaja') {
-        cerrarCaja($decoded->importe, $decoded->sucursal_id);
+        cerrarCaja($decoded->importe, $decoded->sucursal_id, $decoded->detalles);
     } else if ($decoded->function == 'getSaldoFinal') {
         getSaldoFinal($decoded->sucursal_id);
     } else if ($decoded->function == 'abrirCaja') {
@@ -328,7 +328,7 @@ where
 
 }
 
-function cerrarCaja($importe, $sucursal_id)
+function cerrarCaja($importe, $sucursal_id, $detalles)
 {
     $db = new MysqliDb();
 //    $decoded = json_decode($params);
@@ -344,7 +344,7 @@ function cerrarCaja($importe, $sucursal_id)
         return;
     }
 
-    $db->rawQuery("update cajas set asiento_cierre_id = (Select max(asiento_id) from movimientos) where
+    $db->rawQuery("update cajas set detalles='" . $detalles . "', asiento_cierre_id = (Select max(asiento_id) from movimientos) where
 sucursal_id = " . $sucursal_id . " and
 caja_id =" . $lastCaja["caja_id"] . ";");
 
