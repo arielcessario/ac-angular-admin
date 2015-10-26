@@ -1,12 +1,12 @@
-<div ng-controller="ListadoCategoriasController as listadoCategoriasCtrl">
+<div ng-controller="ListadoSucursalesController as listadoSucursalesCtrl">
     <div class="title">
-        <h1>Listado de Categorias</h1>
+        <h1>Listado de Sucursales</h1>
     </div>
     <div class="v-spacer"></div>
 
     <div class="full-width">
 
-        <input type="text" ng-model="listadoCategoriasCtrl.filtro" class="full-width" required/>
+        <input type="text" ng-model="listadoSucursalesCtrl.filtro" class="full-width" required/>
         <label>Buscar...</label>
     </div>
 
@@ -15,20 +15,22 @@
         <thead>
         <tr>
             <th>Nombre</th>
-            <th>Padre</th>
-            <th>Detalles</th>
+            <th>Direccion</th>
+            <th>Telefono</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
 
-        <tr ng-repeat="row in listadoCategoriasCtrl.categorias | filter:listadoCategoriasCtrl.filtro | limitTo:listadoCategoriasCtrl.end:listadoCategoriasCtrl.start"
+        <tr ng-repeat="row in listadoSucursalesCtrl.sucursales | filter:listadoSucursalesCtrl.filtro | limitTo:listadoSucursalesCtrl.end:listadoSucursalesCtrl.start"
             ac-last-list-item>
 
             <td class="">{{row.nombre}}</td>
-            <td class="">{{row.nombrePadre}}</td>
+            <td class="">{{row.direccion}}</td>
+            <td class="">{{row.telefono}}</td>
             <td class="">
                 <div class="btn">
-                    <button ng-click="listadoCategoriasCtrl.detalle(row.categoria_id)"
+                    <button ng-click="listadoSucursalesCtrl.detalle(row.sucursal_id)"
                             class="btn-medium btn-visibility"></button>
                     <label>Mostrar Detalle</label>
                 </div>
@@ -37,28 +39,11 @@
         </tr>
 
     </table>
-    <!--<div class="ac-grid ">-->
-        <!--<div class="cabecera lista-flex">-->
-            <!--<h3>Nombre</h3>-->
-
-            <!--<h3></h3>-->
-        <!--</div>-->
-        <!--<div class="lista-flex"-->
-             <!--ng-repeat="categoria in listadoCategoriasCtrl.categorias | filter:listadoCategoriasCtrl.filtro">-->
-            <!--<span class="descr">{{categoria.nombre}}</span>-->
-
-            <!--<div class="btn">-->
-                <!--<button ng-click="listadoCategoriasCtrl.detalle(categoria.categoria_id)"-->
-                        <!--class="btn-medium btn-visibility"></button>-->
-                <!--<label>Mostrar Detalle</label>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
 
     <div class="btn">
 
         <input type="button" class="relieve-2 btn-add  btn-big" value=""
-               onclick="window.location='#/categorias/0';"/>
+               onclick="window.location='#/sucursales/0';"/>
 
         <label>Nuevo Pedido</label>
     </div>

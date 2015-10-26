@@ -1,43 +1,43 @@
 (function () {
     'use strict';
 
-    angular.module('nombreapp.stock.listadoCategorias', ['ngRoute', 'nombreapp.stock.categorias'])
+    angular.module('nombreapp.stock.listadoSucursales', ['ngRoute', 'nombreapp.stock.sucursales'])
 
         .config(['$routeProvider', function ($routeProvider) {
-            $routeProvider.when('/listado_categorias', {
-                templateUrl: './listado_categorias/listado_categorias.html',
-                controller: 'ListadoCategoriasController'
+            $routeProvider.when('/listado_sucursales', {
+                templateUrl: './listado_sucursales/listado_sucursales.html',
+                controller: 'ListadoSucursalesController'
             });
         }])
 
-        .controller('ListadoCategoriasController', ListadoCategoriasController);
+        .controller('ListadoSucursalesController', ListadoSucursalesController);
 
 
-    ListadoCategoriasController.$inject = ['CategoryService', '$location'];
-    function ListadoCategoriasController(CategoryService, $location) {
+    ListadoSucursalesController.$inject = ['SucursalesService', '$location'];
+    function ListadoSucursalesController(SucursalesService, $location) {
 
         var vm = this;
 
-        vm.categorias = [];
+        vm.sucursales = [];
         vm.detalle = detalle;
         vm.soloActivos = true;
-        vm.loadCategorias = loadCategorias;
+        vm.loadSucursales = loadSucursales;
 
-        loadCategorias();
+        loadSucursales();
 
 
         function detalle(id) {
-            $location.path('/categorias/' + id);
+            $location.path('/sucursales/' + id);
         }
 
 
-        function loadCategorias() {
+        function loadSucursales() {
 
 
-            CategoryService.get(
+            SucursalesService.get(
                 function (data) {
                     for(var i = 0; i < data.length; i++){
-                        vm.categorias.push(data[i]);
+                        vm.sucursales.push(data[i]);
                     }
                 }
             );

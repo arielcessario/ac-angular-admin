@@ -53,6 +53,8 @@ angular.module('myApp', [
     'nombreapp.stock.noticias',
     'nombreapp.stock.listadoNoticias',
     'nombreapp.stock.comentarios',
+    'nombreapp.stock.sucursales',
+    'nombreapp.stock.listadoSucursales',
     'nombreapp.nav'
     //'ac-search-panel'
 ]).
@@ -91,6 +93,7 @@ function MainCtrl(){
         {ref:'#/listado_productos',name:'Lista de Productos'},
         {ref:'#/listado_pedidos',name:'Lista de Pedidos'},
         {ref:'#/listado_categorias',name:'Lista de Categorias'},
+        {ref:'#/listado_sucursales',name:'Lista de Sucursales'},
         {ref:'#/listado_usuarios',name:'Lista de Usuarios'},
         {ref:'#/listado_deudores',name:'Lista de Deudores'},
         {ref:'#/listado_ventas_web',name:'Lista de Ventas Web'},
@@ -99,6 +102,7 @@ function MainCtrl(){
         {ref:'#/pedidos/0',name:'Nuevo Pedido'},
         {ref:'#/proveedores/0',name:'Nuevo Proveedor'},
         {ref:'#/categorias/0',name:'Nueva Categoria'},
+        {ref:'#/sucursal/0',name:'Nueva Sucursal'},
         {ref:'#/ofertas',name:'Ofertas'},
         {ref:'#/gastos/0',name:'Gastos'},
         {ref:'#/depositos/0',name:'Depositos'},
