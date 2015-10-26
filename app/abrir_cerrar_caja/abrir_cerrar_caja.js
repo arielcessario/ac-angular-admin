@@ -42,6 +42,7 @@
                 vm.isOpen = false;
                 CajasService.getSaldoFinalAnterior(1, function(data){
                     vm.saldoInicial = data[0].valor_real;
+                    vm.detalles = data[0].detalles;
                 });
             }
         });

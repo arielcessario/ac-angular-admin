@@ -381,7 +381,8 @@ function getSaldoFinalAnterior($sucursal_id)
 //    echo json_encode($lastCaja["saldo_inicial"]);
 
 
-    $results = $db->rawQuery("select valor_real from cajas_detalles where caja_id = (select max(caja_id) from cajas where sucursal_id = " . $sucursal_id . ");");
+//    $results = $db->rawQuery("select (select c.detalles from cajas c where c.caja_id = caja_id) detalles, valor_real from cajas_detalles where caja_id = (select max(caja_id) from cajas where sucursal_id = " . $sucursal_id . ");");
+    $results = $db->rawQuery("select (select c.detalles from cajas c where c.caja_id = (select max(caja_id) from cajas where sucursal_id =" . $sucursal_id . ")) detalles, valor_real from cajas_detalles where caja_id = (select max(caja_id) from cajas where sucursal_id =" . $sucursal_id . ");");
 
     echo json_encode($results);
 

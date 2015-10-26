@@ -519,6 +519,7 @@
         function getSaldoFinalAnterior(sucursal_id, callback) {
             return $http.get(url + '?function=getSaldoFinalAnterior&sucursal_id=' + sucursal_id)
                 .success(function (data) {
+                    console.log(data);
                     callback(data)
                 })
                 .error(function (data) {
