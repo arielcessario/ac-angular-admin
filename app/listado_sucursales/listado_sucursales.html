@@ -1,0 +1,65 @@
+<div ng-controller="ListadoCategoriasController as listadoCategoriasCtrl">
+    <div class="title">
+        <h1>Listado de Categorias</h1>
+    </div>
+    <div class="v-spacer"></div>
+
+    <div class="full-width">
+
+        <input type="text" ng-model="listadoCategoriasCtrl.filtro" class="full-width" required/>
+        <label>Buscar...</label>
+    </div>
+
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Padre</th>
+            <th>Detalles</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr ng-repeat="row in listadoCategoriasCtrl.categorias | filter:listadoCategoriasCtrl.filtro | limitTo:listadoCategoriasCtrl.end:listadoCategoriasCtrl.start"
+            ac-last-list-item>
+
+            <td class="">{{row.nombre}}</td>
+            <td class="">{{row.nombrePadre}}</td>
+            <td class="">
+                <div class="btn">
+                    <button ng-click="listadoCategoriasCtrl.detalle(row.categoria_id)"
+                            class="btn-medium btn-visibility"></button>
+                    <label>Mostrar Detalle</label>
+                </div>
+            </td>
+
+        </tr>
+
+    </table>
+    <!--<div class="ac-grid ">-->
+        <!--<div class="cabecera lista-flex">-->
+            <!--<h3>Nombre</h3>-->
+
+            <!--<h3></h3>-->
+        <!--</div>-->
+        <!--<div class="lista-flex"-->
+             <!--ng-repeat="categoria in listadoCategoriasCtrl.categorias | filter:listadoCategoriasCtrl.filtro">-->
+            <!--<span class="descr">{{categoria.nombre}}</span>-->
+
+            <!--<div class="btn">-->
+                <!--<button ng-click="listadoCategoriasCtrl.detalle(categoria.categoria_id)"-->
+                        <!--class="btn-medium btn-visibility"></button>-->
+                <!--<label>Mostrar Detalle</label>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <div class="btn">
+
+        <input type="button" class="relieve-2 btn-add  btn-big" value=""
+               onclick="window.location='#/categorias/0';"/>
+
+        <label>Nuevo Pedido</label>
+    </div>
+</div>

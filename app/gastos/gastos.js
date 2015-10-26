@@ -26,7 +26,6 @@
         vm.id = $routeParams.id;
 
         function save() {
-            console.log(vm.importe);
             //tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback
             MovimientosService.armarMovimiento(vm.movimiento, vm.subtipo, 1, vm.forma_pago, '', vm.importe, '', vm.comentario, [], 0, 1, vm.comentario, function (data) {
                 if (!isNaN(data)) {

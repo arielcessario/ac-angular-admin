@@ -1,64 +1,145 @@
 (function () {
+
     'use strict';
-    var scripts = document.getElementsByTagName("script")
-    var currentScriptPath = scripts[scripts.length - 1].src;
-    angular.module('nombreapp.stock.sucursales', ['ngRoute'])
+
+
+    angular.module('nombreapp.stock.categorias', ['ngRoute', 'toastr'])
+
         .config(['$routeProvider', function ($routeProvider) {
-            $routeProvider.when('/module', {
-                templateUrl: currentScriptPath.replace('.js', '.html'),
-                controller: 'SucursalesController'
+            $routeProvider.when('/categorias/:id', {
+                templateUrl: './categorias/categorias.html',
+                controller: 'CategoriasController'
             });
         }])
-        .controller('SucursalesController', sucursalesController)
-        .service('SucursalesService', sucursalesService);
 
+        .controller('CategoriasController', CategoriasController)
+        .service('CategoriasService', CategoriasService);
 
-    sucursalesController.$inject = [];
-    function sucursalesController() {
-
+    CategoriasController.$inject = ["$scope", "$routeParams", "CategoryService", "$location", "toastr"];
+    function CategoriasController($scope, $routeParams, CategoryService, $location, toastr) {
         var vm = this;
+        vm.isUpdate = false;
+        
+        vm.save = save;
+        vm.delete = deleteCategoria;
+        vm.id = $routeParams.id;
+        vm.parent_categories = -1;
+        vm.padres = [];
+        vm.categoria = {
+            nombre: '',
+            parent_id: -1
+        };
+
+
+        CategoryService.get(function(data){
+            vm.padres = data;
+        });
+
+
+        if (vm.id == 0) {
+            vm.isUpdate = false;
+        } else {
+            vm.isUpdate = true;
+
+            CategoryService.getByParams('categoria_id', '' + vm.id, 'true', function (data) {
+                vm.categoria = data[0];
+            });
+        }
+
+        function deleteCategoria() {
+
+            var r = confirm("Realmente desea eliminar la categoria? Esta operación no tiene deshacer.");
+            if (r) {
+
+                CategoryService.remove(vm.id, function (data) {
+                    toastr.success('Categoria eliminada');
+                    $location.path('/listado_categorias');
+                });
+            }
+        }
+
+        function save() {
+            //console.log(vm.categoria);
+            if(vm.categoria.parent_id == undefined){
+                vm.categoria.parent_id = -1;
+            }
+
+            if (vm.isUpdate) {
+                CategoryService.update(vm.categoria, function (data) {
+
+                    if(data == 'true'){
+                        toastr.success('Categoria salvada con exito');
+                        $location.path('/listado_categorias');
+                    }else{
+                        toastr.error('Categoria no guardada');
+
+                    }
+                });
+            } else {
+                CategoryService.create(vm.categoria, function (data) {
+                    toastr.success('Categoria salvada con exito');
+                    $location.path('/listado_categorias');
+                });
+            }
+        }
 
 
     }
 
-    sucursalesService.$inject = ['$http'];
-    function sucursalesService($http) {
-        var service = {};
-        var url = './stock-api/sucursales.php';
 
-        service.getSucursales = getSucursales;
-        service.getSucursalById = getSucursalById;
-        service.getSucursalesByName = getSucursalesByName;
+
+    CategoriasService.$inject = ['$http'];
+    function CategoriasService($http) {
+        var service = {};
+        var url = './stock-api/categorias.php';
+        service.getCategorias = getCategorias;
+        service.getCategoriasPadres = getCategoriasPadres;
+        service.getCategoriaByID = getCategoriaByID;
+        service.getCategoriaByName = getCategoriaByName;
+        service.saveCategoria = saveCategoria;
+        service.deleteCategoria = deleteCategoria;
+
 
         return service;
 
-        function getSucursales(callback) {
-            return $http.post(url, {function: 'getSucursales'},
+        function getCategorias(callback) {
+            return $http.post(url,
+                {function: 'getCategorias'},
                 {cache: true})
                 .success(function (data) {
                     callback(data);
                 })
-                .error(function (data) {
+                .error(function(data){
 
                 });
         }
 
-        function getSucursalById(id, callback) {
-           getSucursales(function (data) {
-                var result = data.filter(function(elem, index, array){
-                    return elem.sucursal_id == id;
-                })[0];
-
-               callback(result);
-
-            });
+        function getCategoriasPadres(callback) {
+            getCategorias(function (data) {
+                //console.log(data);
+                var response = data.filter(function (entry) {
+                    return entry.parent_id == -1;
+                });
+                callback(response);
+            })
 
         }
 
+        function getCategoriaByID(id, callback) {
+            getCategorias(function (data) {
+                //console.log(data);
+                var response = data.filter(function (entry) {
+                    return entry.categoria_id === parseInt(id);
+                })[0];
+                callback(response);
+            })
 
-        function getSucursalesByName(name, callback){
-           getSucursales(function(data){
-                var results = data.filter(function(elem, index, array){
+        }
+
+        function getCategoriaByName(name, callback) {
+            getCategorias(function (data) {
+                //console.log(data);
+                var response = data.filter(function (elem) {
                     var elemUpper = elem.nombre.toUpperCase();
 
                     var n = elemUpper.indexOf(name.toUpperCase());
@@ -70,11 +151,35 @@
                     if (n !== undefined && n > -1) {
                         return elem;
                     }
-               });
-               callback(results);
-            });
-
+                });
+                callback(response);
+            })
 
         }
+
+
+
+        function saveCategoria(categoria, _function, callback) {
+
+            return $http.post(url,
+                {function: _function, categoria: JSON.stringify(categoria)})
+                .success(function (data) {
+                    callback(data);
+                })
+                .error();
+        }
+
+
+        function deleteCategoria(id, callback) {
+            return $http.post(url,
+                {function: 'deleteCategoria', id: id})
+                .success(function (data) {
+                    callback(data);
+                })
+                .error();
+        }
+
     }
+
 })();
+

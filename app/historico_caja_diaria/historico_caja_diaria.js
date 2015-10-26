@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('nombreapp.stock.historicoCajaDiaria', ['ngRoute', 'nombreapp.stock.cajas', 'acMovimientos', 'nombreapp.stock.sucursales'])
+    angular.module('nombreapp.stock.historicoCajaDiaria', ['ngRoute', 'nombreapp.stock.cajas', 'acMovimientos'])
 
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/historico_caja_diaria', {

@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('nombreapp.stock.resumenCajaDiaria', ['ngRoute', 'nombreapp.stock.cajas', 'acMovimientos', 'nombreapp.stock.sucursales'])
+    angular.module('nombreapp.stock.resumenCajaDiaria', ['ngRoute', 'nombreapp.stock.cajas', 'acMovimientos'])
 
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/resumen_caja_diaria', {
@@ -56,6 +56,7 @@
         }
 
         SucursalesService.getSucursales(function (data) {
+            console.log(data);
             vm.sucursales = data;
             vm.sucursal = data[0];
             getDetalles();

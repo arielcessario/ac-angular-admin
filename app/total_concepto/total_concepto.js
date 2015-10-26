@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('nombreapp.stock.totalConcepto', ['ngRoute', 'nombreapp.stock.cajas', 'acMovimientos', 'nombreapp.stock.sucursales'])
+    angular.module('nombreapp.stock.totalConcepto', ['ngRoute', 'nombreapp.stock.cajas', 'acMovimientos'])
 
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/total_concepto', {

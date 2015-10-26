@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('nombreapp.stock.aReponer', ['ngRoute', 'toastr'
-        , 'nombreapp.stock.sucursales', 'nombreapp.stock.proveedores', 'appname.stock.pedidos'])
+        , 'nombreapp.stock.proveedores', 'appname.stock.pedidos'])
 
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/a_reponer', {

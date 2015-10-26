@@ -1,8 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('nombreapp.stock.consultaStock', ['ngRoute', 'toastr'
-    ,'nombreapp.stock.sucursales'])
+    angular.module('nombreapp.stock.consultaStock', ['ngRoute', 'toastr'])
 
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/consulta_stock', {

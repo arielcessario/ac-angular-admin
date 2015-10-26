@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('nombreapp.stock.movimientos', ['ngRoute', 'nombreapp.stock.cajas', 'acMovimientos', 'nombreapp.stock.sucursales', 'nombreapp.stock.resultados'])
+    angular.module('nombreapp.stock.movimientos', ['ngRoute', 'nombreapp.stock.cajas', 'acMovimientos','nombreapp.stock.resultados'])
 
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/movimientos', {

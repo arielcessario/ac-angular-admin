@@ -1,0 +1,48 @@
+<div class="title">
+    <div class="btn ">
+        <input type="submit" class="btn-back btn-medium no-margin"
+               onclick="window.location='#/listado_categorias';"
+               value="">
+        <label>Volver</label>
+    </div>
+    <h1>Administrar Categorias</h1></div>
+<div class="v-spacer"></div>
+<form ng-controller="CategoriasController  as categoriasCtrl"
+      name="categoriasForm" novalidate>
+    <div class="form-flex" style="justify-content:flex-start !important;">
+        <div>
+            <label class="title-mi-cuenta" style="margin-right: 10px">Categoria Principal</label>
+            <select ng-click=""
+                    ng-model="categoriasCtrl.categoria.parent_id"
+                    ng-options="categoria.categoria_id as categoria.nombre for categoria in categoriasCtrl.padres"
+                    class="">
+            </select>
+        </div>
+        <div>
+            <input type="text" id="nombre" name="nombre" ng-model="categoriasCtrl.categoria.nombre" ng-maxlength="100"
+                   required><br>
+            <label for="nombre">Nombre</label>
+        </div>
+
+        
+    </div>
+    <br/>
+
+    <div>
+        <!--<input type="submit"-->
+        <!--ng-disabled="categoriasForm.user.$dirty && categoriasForm.user.$invalid ||-->
+        <!--categoriasForm.email.$dirty && categoriasForm.email.$invalid">-->
+        <div class="btn"><input type="submit" ng-click="categoriasCtrl.save();"
+                                ng-disabled="categoriasForm.$invalid" class="relieve-2 btn-ok btn-big" value="">
+            <label>Guardar Producto</label>
+        </div>
+
+        <div ng-if="categoriasCtrl.id != 0" class="btn">
+            <input type="submit" ng-click="categoriasCtrl.delete();"
+                   class="relieve-2 btn-delete btn-big" value="">
+            <label>Eliminar Categoria</label>
+        </div>
+    </div>
+
+</form>
+
