@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('nombreapp.stock.movimientos', ['ngRoute', 'nombreapp.stock.cajas', 'acMovimientos','nombreapp.stock.resultados'])
+    angular.module('nombreapp.stock.movimientos', ['ngRoute', 'nombreapp.stock.cajas', 'acMovimientos', 'nombreapp.stock.sucursales', 'nombreapp.stock.resultados'])
 
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/movimientos', {
@@ -26,8 +26,9 @@
         vm.sucursales = [];
         vm.cajas = {};
         vm.caja = [];
-        vm.mes = '01';
+        vm.mes = (new Date()).getMonth() + 1 < 10 ? '0' + ((new Date()).getMonth() + 1) : '' + ((new Date()).getMonth() + 1);
         vm.mes_hasta = (parseInt(vm.mes) > 8) ? (parseInt(vm.mes) + 1) : '0' + (parseInt(vm.mes) + 1);
+        vm.anio = (new Date()).getFullYear();
         vm.resultados = [];
         vm.resultado_inicial = {};
         vm.resultado_inicial.ca = 0.0;
@@ -52,21 +53,22 @@
         vm.resultado_posterior.general = 0.0;
 
 
-
         getResultados();
 
 
         function getResultados() {
+
             ResultadosService.getResultados(function (data) {
                 var d = new Date();
-                var n = d.getMonth();
 
+
+                var n = d.getMonth();
                 //console.log(n);
 
                 vm.resultados = data;
                 for (var i = 0; i < data.length; i++) {
-                    var mes = parseInt(data[i].mes) ;
-                    if (mes == parseInt(vm.mes)-1) {
+                    var mes = parseInt(data[i].mes);
+                    if (mes == parseInt(vm.mes) - 1) {
                         if (data[i].cuenta_id == '1.1.1.20') {
                             vm.resultado_inicial.control = vm.resultado_actual.control = data[i].total;
                         }
@@ -88,7 +90,6 @@
 
                     }
                 }
-
 
 
                 for (var i = 0; i < data.length; i++) {
@@ -131,7 +132,6 @@
         }
 
 
-
         function clearDetalles() {
             vm.asientos = [];
             vm.saldoInicial = 0.0;
@@ -167,9 +167,9 @@
             //console.log(vm.mes_hasta);
 
             //console.log('2015-' + vm.mes + '-01' + ' ' + '2015-' + vm.mes_hasta + '-01');
-            CajasService.getMovimientos('2015-' + vm.mes + '-01', '2015-' + vm.mes_hasta + '-01', function (data) {
-                console.log(data);
-                var asiento = [];
+            CajasService.getMovimientos(vm.anio + '-' + vm.mes + '-01', vm.anio + '-' + vm.mes_hasta + '-01', function (data) {
+
+                //var asiento = [];
                 for (var i = 0; i < data.length; i++) {
                     if (data[i].cuenta_id.indexOf('1.1.1.10') > -1) {
                         vm.resultado_actual.general = data[i].general = vm.resultado_actual.general + parseFloat(data[i].importe);
@@ -179,11 +179,11 @@
                         vm.resultado_actual.control = data[i].control = vm.resultado_actual.control + parseFloat(data[i].importe);
                     }
 
-                    if (data[i].cuenta_id.indexOf('1.1.1.21') > -1) {
+                    if (data[i].cuenta_id.indexOf('1.1.1.22') > -1) {
                         vm.resultado_actual.ca = data[i].ca = vm.resultado_actual.ca + parseFloat(data[i].importe);
                     }
 
-                    if (data[i].cuenta_id.indexOf('1.1.1.22') > -1) {
+                    if (data[i].cuenta_id.indexOf('1.1.1.21') > -1) {
                         vm.resultado_actual.cc = data[i].cc = vm.resultado_actual.cc + parseFloat(data[i].importe);
                     }
 
@@ -197,23 +197,24 @@
                     }
 
 
-                    if (i > 0 && data[i - 1].asiento_id == data[i].asiento_id) {
-                        asiento.push(data[i]);
-                    } else {
-                        if (asiento.length > 0) {
-                            vm.asientos.push(asiento);
-                        }
-                        asiento = [];
-                        asiento.push(data[i]);
-
-                    }
+                    //if (i > 0 && data[i - 1].asiento_id == data[i].asiento_id) {
+                    //    asiento.push(data[i]);
+                    //} else {
+                    //    if (asiento.length > 0) {
+                    //        vm.asientos.push(asiento);
+                    //    }
+                    //    asiento = [];
+                    //    asiento.push(data[i]);
+                    //
+                    //}
                 }
+                //
+                //if (asiento.length > 0) {
+                //    vm.asientos.push(asiento);
+                //}
 
-                if (asiento.length > 0) {
-                    vm.asientos.push(asiento);
-                }
 
-                //console.log(vm.asientos);
+                vm.asientos = data;
             });
         }
 

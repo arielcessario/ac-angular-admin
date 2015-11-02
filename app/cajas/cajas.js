@@ -307,9 +307,9 @@
                 return;
             }
 
-            console.log(vm.producto.cant_actual);
+            //console.log(vm.producto.cant_actual);
 
-            if (vm.producto.cant_actual < vm.cantidad) {
+            if (vm.producto.producto_tipo == 0 && vm.producto.cant_actual < vm.cantidad) {
                 toastr.error('No hay stock suficiente. Solo quedan ' + stockSucursal + ' productos.');
                 return;
             }

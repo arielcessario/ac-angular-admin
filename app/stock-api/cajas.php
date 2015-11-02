@@ -45,10 +45,43 @@ function getMovimientos($fecha_desde, $fecha_hasta)
     $db = new MysqliDb();
     $resultsDetalles = [];
 
-    $SQL = "select movimiento_id, asiento_id, fecha, c.cuenta_id, c.descripcion, usuario_id, importe, 0 general, 0 control, 0 ca, 0 cc, 0 me,
-0 detalles
-from movimientos m inner join cuentas c on m.cuenta_id = c.cuenta_id where (m.cuenta_id like '1.1.1.2%' or m.cuenta_id = '1.1.1.10')
-and (fecha between '" . $fecha_desde . "' and '" . $fecha_hasta . "');";
+//    $SQL = "select movimiento_id, asiento_id, fecha, c.cuenta_id, c.descripcion, usuario_id, importe, 0 general, 0 control, 0 ca, 0 cc, 0 me,
+//0 detalles
+//from movimientos m inner join cuentas c on m.cuenta_id = c.cuenta_id where (m.cuenta_id like '1.1.1.2%' or m.cuenta_id = '1.1.1.10' or m.cuenta_id = '1.1.4.01')
+//and (fecha between '" . $fecha_desde . "' and '" . $fecha_hasta . "');";
+
+
+    $SQL="SELECT
+    movimiento_id,
+    asiento_id,
+    (SELECT
+            valor
+        FROM
+            detallesmovimientos d
+        WHERE
+            d.movimiento_id = m.movimiento_id
+                AND detalle_tipo_id = 2) detalle,
+    DATE_FORMAT(fecha,'%d-%m-%Y') fecha,
+    c.cuenta_id,
+    c.descripcion,
+    usuario_id,
+    importe,
+    CASE when m.cuenta_id = '1.1.1.10' then importe else 0 end general,
+    CASE when m.cuenta_id = '1.1.1.10' then importe else 0 end control,
+    CASE when m.cuenta_id = '1.1.1.22' then importe else 0 end ca,
+    CASE when m.cuenta_id = '1.1.1.21' then importe else 0 end cc,
+    CASE when m.cuenta_id = '1.1.1.10' then importe else 0 end me,
+    CASE when m.cuenta_id = '1.1.1.24' then importe else 0 end mp,
+    CASE when m.cuenta_id = '1.1.4.01' then importe else 0 end ta
+FROM
+    movimientos m
+        INNER JOIN
+    cuentas c ON m.cuenta_id = c.cuenta_id
+WHERE
+    (m.cuenta_id LIKE '1.1.1.2%'
+        OR m.cuenta_id = '1.1.1.10'
+        OR m.cuenta_id = '1.1.4.01')
+        AND (fecha BETWEEN '" . $fecha_desde . "' and '" . $fecha_hasta . "');";
 
 
 //or m.cuenta_id = '1.1.7.01'
@@ -69,21 +102,21 @@ and (fecha between '" . $fecha_desde . "' and '" . $fecha_hasta . "');";
 
     $results = $db->rawQuery($SQL);
 
-    foreach ($results as $row) {
-        $SQL = "select
-detalle_tipo_id,
-valor detalle
+//    foreach ($results as $row) {
+//        $SQL = "select
+//detalle_tipo_id,
+//valor detalle
+//
+// from detallesmovimientos
+// where detalle_tipo_id in (2) and movimiento_id =  " . $row['movimiento_id'] . ";";
+//        $detalles = $db->rawQuery($SQL);
+//
+//        $row["detalles"] = $detalles;
+//        array_push($resultsDetalles, $row);
+//
+//    }
 
- from detallesmovimientos
- where detalle_tipo_id in (2) and movimiento_id =  " . $row['movimiento_id'] . ";";
-        $detalles = $db->rawQuery($SQL);
-
-        $row["detalles"] = $detalles;
-        array_push($resultsDetalles, $row);
-
-    }
-
-    echo json_encode($resultsDetalles);
+    echo json_encode($results);
 }
 
 // Movimientos que modifican el estado de cuentas
