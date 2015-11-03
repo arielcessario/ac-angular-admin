@@ -64,9 +64,9 @@ angular.module('myApp', [
 
 
 //MainCtrl.$inject = ['acAngularLoginClientService', 'ProductosServiceUtils', 'ProductosService'];
-MainCtrl.$inject = [];
+MainCtrl.$inject = ['ResultadosService'];
 //function MainCtrl(acAngularLoginClientService, ProductosServiceUtils, ProductosService){
-function MainCtrl(){
+function MainCtrl(ResultadosService){
     var vm = this;
 
     vm.logout = logout;
@@ -74,6 +74,11 @@ function MainCtrl(){
     function logout(){
         //acAngularLoginClientService.logout();
     }
+
+
+    ResultadosService.saveResultados(function(data){
+        console.log(data);
+    });
 
 
     //ProductosServiceUtils.clearCache = true;

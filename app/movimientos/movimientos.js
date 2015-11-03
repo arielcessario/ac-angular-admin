@@ -72,10 +72,10 @@
                         if (data[i].cuenta_id == '1.1.1.20') {
                             vm.resultado_inicial.control = vm.resultado_actual.control = data[i].total;
                         }
-                        if (data[i].cuenta_id == '1.1.1.21') {
+                        if (data[i].cuenta_id == '1.1.1.22') {
                             vm.resultado_inicial.ca = vm.resultado_actual.ca = data[i].total;
                         }
-                        if (data[i].cuenta_id == '1.1.1.22') {
+                        if (data[i].cuenta_id == '1.1.1.21') {
                             vm.resultado_inicial.cc = vm.resultado_actual.cc = data[i].total;
                         }
                         if (data[i].cuenta_id == '1.1.1.23') {
@@ -98,10 +98,10 @@
                         if (data[i].cuenta_id == '1.1.1.20') {
                             vm.resultado_posterior.control = data[i].total;
                         }
-                        if (data[i].cuenta_id == '1.1.1.21') {
+                        if (data[i].cuenta_id == '1.1.1.22') {
                             vm.resultado_posterior.ca = data[i].total;
                         }
-                        if (data[i].cuenta_id == '1.1.1.22') {
+                        if (data[i].cuenta_id == '1.1.1.21') {
                             vm.resultado_posterior.cc = data[i].total;
                         }
                         if (data[i].cuenta_id == '1.1.1.23') {

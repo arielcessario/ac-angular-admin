@@ -22,18 +22,31 @@
     }
 
     ResultadosService.$inject = ['$http'];
-    function ResultadosService($http){
-        var service ={};
+    function ResultadosService($http) {
+        var service = {};
         var url = './stock-api/resultados.php';
         service.getResultados = getResultados;
+        service.saveResultados = saveResultados;
         return service;
 
-        function getResultados(callback){
-            return $http.get(url + '?function=getResultados')
-                .success(function(data){
+        function saveResultados(callback) {
+            return $http.post(url, {function: 'save'})
+                .success(function (data) {
+
                     callback(data);
                 })
-                .error(function(data){
+                .error(function (data) {
+
+                });
+        }
+
+
+        function getResultados(callback) {
+            return $http.get(url + '?function=getResultados')
+                .success(function (data) {
+                    callback(data);
+                })
+                .error(function (data) {
                     callback(data);
                 })
         }
