@@ -17,14 +17,14 @@ function getVentasWeb()
 {
     $db = new MysqliDb();
 
-    $results = $db->rawQuery('select carrito_id, status, total, fecha, cliente_id, 0 cliente, 0 detalle from carritos;');
+    $results = $db->rawQuery('select carrito_id, status, total, fecha, usuario_id, 0 cliente, 0 detalle from carritos;');
     $ventas_web = array();
     $clientes = array();
 
     foreach ($results as $row) {
-        $db->where('cliente_id', $row["cliente_id"]);
-        $results_clientes = $db->get('clientes');
-        $row["cliente"] = $results_clientes;
+        $db->where('usuario_id', $row["usuario_id"]);
+        $results_clientes = $db->get('usuarios');
+        $row["usuario"] = $results_clientes;
         array_push($clientes, $row);
     }
 
@@ -33,13 +33,9 @@ function getVentasWeb()
 carrito_detalle_id,
 carrito_id,
 cantidad,
-oferta_id,
 producto_id,
-case
-when producto_id != -1 then (select nombre from productos where producto_id = cd.producto_id)
-when oferta_id != -1 then (select descripcion from ofertas where oferta_id = cd.oferta_id)
-end nombre,
-precio
+(select nombre from productos where producto_id = cd.producto_id) nombre,
+precio_unitario
 from carrito_detalles cd
 where cd.carrito_id = ' . $row["carrito_id"] . ';');
         $row["detalle"] = $results_venta;

@@ -43,6 +43,13 @@ function saveResultados()
 
     $results = $db->rawQuery('select anio, mes from resultados where resultado_id = (select max(resultado_id) from resultados);');
 
+    if($db->count == 0){
+        $results[0]["anio"] = $anio_ant;
+        $results[0]["mes"] = $mes_ant;
+    }
+
+
+
     if (($anio > $results[0]["anio"]) || ($anio == $results[0]["anio"] && $mes > $results[0]["mes"] + 1)) {
 
         $SQL = "SELECT

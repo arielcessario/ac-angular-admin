@@ -34,7 +34,7 @@
 
 
         VentasWebService.getVentasSinConfirmar(function (data) {
-            console.log(data);
+            //console.log(data);
         });
 
         function detalle(id) {
@@ -49,6 +49,7 @@
                 //vm.clientes = data;
 
                 vm.ventas_web = data;
+                console.log(vm.ventas_web);
                 //console.log(vm.clientes);
             }
         );

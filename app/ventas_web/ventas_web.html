@@ -10,8 +10,8 @@
 <form ng-controller="VentasWebController  as ventasWebCtrl"
       name="ventasWebForm" novalidate>
     <div>
-        <div class="line"><h2>Nombre y Apellido</h2> <span class="descr">{{ventasWebCtrl.ventaWeb.cliente[0].nombre}} {{ventasWebCtrl.ventaWeb.cliente[0].apellido}}</span><br/></div>
-        <div class="line"><h2>Mail</h2> <span class="descr">{{ventasWebCtrl.ventaWeb.cliente[0].mail}}</span><br/></div>
+        <div class="line"><h2>Nombre y Apellido</h2> <span class="descr">{{ventasWebCtrl.ventaWeb.usuario[0].nombre}} {{ventasWebCtrl.ventaWeb.cliente[0].apellido}}</span><br/></div>
+        <div class="line"><h2>Mail</h2> <span class="descr">{{ventasWebCtrl.ventaWeb.usuario[0].mail}}</span><br/></div>
         <div class="line"><h2>Fecha de Pedido</h2> <span class="descr" ng-if="ventasWebCtrl.ventaWeb.fecha !== '0000-00-00 00:00:00'">{{ventasWebCtrl.ventaWeb.fecha}}</span><br/></div>
         <div class="line"><h2>Total del Pedido</h2> <span class="descr">{{ventasWebCtrl.ventaWeb.total | currency}}</span><br/></div>
         <div class="line"><h2>Estado</h2> <span class="descr">{{(ventasWebCtrl.ventaWeb.status == 3)?'Confirmada':'Sin Confirmar'}}</span><br/></div>
@@ -30,8 +30,8 @@
         <tr ng-repeat="row in ventasWebCtrl.ventaWeb.detalle">
             <td>{{row.nombre}}</td>
             <td>{{row.cantidad}}</td>
-            <td>{{row.precio | currency}}</td>
-            <td>{{row.precio * row.cantidad | currency}} </td>
+            <td>{{row.precio_unitario | currency}}</td>
+            <td>{{row.precio_unitario * row.cantidad | currency}} </td>
         </tr>
         </tbody>
     </table>
