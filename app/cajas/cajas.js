@@ -17,10 +17,12 @@
 
     CajasController.$inject = ['$routeParams', 'ProductService', 'CajasService', 'toastr',
         'UserService', 'MovimientosService', 'MovimientoStockFinal', 'ConsultaStockService',
-        'AcUtils', 'AcUtilsGlobals', '$rootScope', 'ProductVars', 'StockService', 'StockVars', '$scope'];
+        'AcUtils', 'AcUtilsGlobals', '$rootScope', 'ProductVars', 'StockService', 'StockVars', '$scope',
+        '$document'];
     function CajasController($routeParams, ProductService, CajasService, toastr,
                              UserService, MovimientosService, MovimientoStockFinal, ConsultaStockService,
-                             AcUtils, AcUtilsGlobals, $rootScope, ProductVars, StockService, StockVars, $scope) {
+                             AcUtils, AcUtilsGlobals, $rootScope, ProductVars, StockService, StockVars, $scope,
+                             $document) {
 
 
         var vm = this;
@@ -57,13 +59,35 @@
 
         //vm.sucursal_id = 1;
 
+        $scope.$on('$locationChangeStart', function(){
+
+            $document.unbind('keydown');
+            $document.unbind('keyup');
+        });
+
+
+        var map = {17: false, 18: false, 80: false};
+        $document.bind('keydown', function (e) {
+            if (e.keyCode in map) {
+                map[e.keyCode] = true;
+                if (map[17] && map[18] && map[80]) {
+                    save();
+                }
+            }
+        });
+        $document.bind('keyup', function (e) {
+            if (e.keyCode in map) {
+                map[e.keyCode] = false;
+            }
+        });
+
+
 
         /**
          * @description Depende de la tecla presionada en el input de búsqueda o la lista, realiza una acción
          * @param event
          */
         function moveInProductSearch(event) {
-
 
 
             if (event.target.type == 'text') {
@@ -85,7 +109,7 @@
 
                 }
 
-                if (event.keyCode == 40 ) {
+                if (event.keyCode == 40) {
                     oldIndex = vm.listaProductos.indexOf(vm.producto);
                 }
 
@@ -111,7 +135,7 @@
                 } else {
                     selecciona = false;
                 }
-            }else{
+            } else {
                 vm.listaProductos = [];
             }
 
@@ -192,14 +216,14 @@
         }
 
         function save() {
-            AcUtilsGlobals.isWaiting = true;
-            $rootScope.$broadcast('IsWaiting');
-
 
             if (vm.detalles.length < 1) {
                 toastr.error('No hay productos seleccionados');
                 return;
             }
+
+            AcUtilsGlobals.isWaiting = true;
+            $rootScope.$broadcast('IsWaiting');
             //var cliente_id = -1;
             if (vm.cliente !== undefined && vm.cliente.cliente_id !== undefined) {
                 vm.cliente_id = vm.cliente.cliente_id;
