@@ -62,6 +62,7 @@ function saveResultados()
 (select IFNULL(sum(importe),0) + IFNULL((select total from resultados where anio= '" . $results[0]["anio"] . "' and mes = '" . $results[0]["mes"] . "' and cuenta_id= '1.1.4.01'),0) from movimientos where (fecha BETWEEN '" . $anio_ant . "-" . $mes_ant . "-01' AND '" . $anio . "-" . $mes . "-01') and cuenta_id = '1.1.4.01') ta
 FROM dual;";
 
+        
         $results = $db->rawQuery($SQL);
 
         // general
