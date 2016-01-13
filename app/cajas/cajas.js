@@ -64,6 +64,8 @@
          */
         function moveInProductSearch(event) {
 
+
+
             if (event.target.type == 'text') {
                 // Flecha para abajo
                 if (event.keyCode == 40) {
@@ -83,11 +85,11 @@
 
                 }
 
-                if (event.keyCode == 40) {
+                if (event.keyCode == 40 ) {
                     oldIndex = vm.listaProductos.indexOf(vm.producto);
                 }
 
-                if (event.keyCode == 13) {
+                if (event.keyCode == 13 || event.type == 'click') {
                     selecciona = true;
                     vm.searchProductText = vm.producto.nombreProducto;
                     var elem = angular.element(document.querySelector('#cantidad'));
