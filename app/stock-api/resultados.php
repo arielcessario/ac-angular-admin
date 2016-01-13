@@ -65,20 +65,20 @@ FROM dual;";
         
         $results = $db->rawQuery($SQL);
 
-        // general
-        $db->insert('resultados', array('anio' => $anio_ant, 'mes' => $mes_ant, 'cuenta_id' =>'1.1.1.10', 'total' => $results[0]['general']));
-        // control
-        $db->insert('resultados', array('anio' => $anio_ant, 'mes' => $mes_ant, 'cuenta_id' =>'1.1.1.10', 'total' => $results[0]['control']));
-        // ca
-        $db->insert('resultados', array('anio' => $anio_ant, 'mes' => $mes_ant, 'cuenta_id' =>'1.1.1.22', 'total' => $results[0]['ca']));
-        // cc
-        $db->insert('resultados', array('anio' => $anio_ant, 'mes' => $mes_ant, 'cuenta_id' =>'1.1.1.21', 'total' => $results[0]['cc']));
-        // me
-        $db->insert('resultados', array('anio' => $anio_ant, 'mes' => $mes_ant, 'cuenta_id' =>'1.1.1.10', 'total' => $results[0]['me']));
-        // mp
-        $db->insert('resultados', array('anio' => $anio_ant, 'mes' => $mes_ant, 'cuenta_id' =>'1.1.1.24', 'total' => $results[0]['mp']));
-        // ta
-        $db->insert('resultados', array('anio' => $anio_ant, 'mes' => $mes_ant, 'cuenta_id' =>'1.1.4.01', 'total' => $results[0]['ta']));
+//        // general
+//        $db->insert('resultados', array('anio' => $anio_ant, 'mes' => $mes_ant, 'cuenta_id' =>'1.1.1.10', 'total' => $results[0]['general']));
+//        // control
+//        $db->insert('resultados', array('anio' => $anio_ant, 'mes' => $mes_ant, 'cuenta_id' =>'1.1.1.11', 'total' => $results[0]['control']));
+//        // ca
+//        $db->insert('resultados', array('anio' => $anio_ant, 'mes' => $mes_ant, 'cuenta_id' =>'1.1.1.22', 'total' => $results[0]['ca']));
+//        // cc
+//        $db->insert('resultados', array('anio' => $anio_ant, 'mes' => $mes_ant, 'cuenta_id' =>'1.1.1.21', 'total' => $results[0]['cc']));
+//        // me
+//        $db->insert('resultados', array('anio' => $anio_ant, 'mes' => $mes_ant, 'cuenta_id' =>'1.1.1.12', 'total' => $results[0]['me']));
+//        // mp
+//        $db->insert('resultados', array('anio' => $anio_ant, 'mes' => $mes_ant, 'cuenta_id' =>'1.1.1.24', 'total' => $results[0]['mp']));
+//        // ta
+//        $db->insert('resultados', array('anio' => $anio_ant, 'mes' => $mes_ant, 'cuenta_id' =>'1.1.4.01', 'total' => $results[0]['ta']));
 
     }
 

@@ -17,10 +17,10 @@
 
     CajasController.$inject = ['$routeParams', 'ProductService', 'CajasService', 'toastr',
         'UserService', 'MovimientosService', 'MovimientoStockFinal', 'ConsultaStockService',
-        'AcUtils', 'AcUtilsGlobals', '$rootScope', 'ProductVars', 'StockService', 'StockVars'];
+        'AcUtils', 'AcUtilsGlobals', '$rootScope', 'ProductVars', 'StockService', 'StockVars', '$scope'];
     function CajasController($routeParams, ProductService, CajasService, toastr,
                              UserService, MovimientosService, MovimientoStockFinal, ConsultaStockService,
-                             AcUtils, AcUtilsGlobals, $rootScope, ProductVars, StockService, StockVars) {
+                             AcUtils, AcUtilsGlobals, $rootScope, ProductVars, StockService, StockVars, $scope) {
 
 
         var vm = this;
@@ -40,6 +40,8 @@
         vm.vuelto = 0;
         vm.id = $routeParams.id;
         vm.cliente_id = -1;
+        vm.searchProductText = '';
+        vm.listaProductos = [];
 
         StockVars.reducido = true;
 
@@ -49,8 +51,69 @@
         vm.save = save;
         vm.aCuenta = aCuenta;
         vm.calcularTotal = calcularTotal;
+        vm.moveInProductSearch = moveInProductSearch;
+        var oldIndex = 0;
+        var selecciona = false;
+
         //vm.sucursal_id = 1;
 
+
+        /**
+         * @description Depende de la tecla presionada en el input de búsqueda o la lista, realiza una acción
+         * @param event
+         */
+        function moveInProductSearch(event) {
+
+            if (event.target.type == 'text') {
+                // Flecha para abajo
+                if (event.keyCode == 40) {
+                    var elem = angular.element(document.querySelector('#resultsSearchProducts'));
+                    elem[0].focus();
+                }
+
+                oldIndex = vm.listaProductos.indexOf(vm.producto);
+            } else {
+                // Flecha para arriba
+                if (event.keyCode == 38) {
+                    if (vm.listaProductos.indexOf(vm.producto) == 0 && oldIndex == 0) {
+                        var elem = angular.element(document.querySelector('#txtSearchId'));
+                        elem[0].focus();
+                    }
+                    oldIndex = vm.listaProductos.indexOf(vm.producto);
+
+                }
+
+                if (event.keyCode == 40) {
+                    oldIndex = vm.listaProductos.indexOf(vm.producto);
+                }
+
+                if (event.keyCode == 13) {
+                    selecciona = true;
+                    vm.searchProductText = vm.producto.nombreProducto;
+                    var elem = angular.element(document.querySelector('#cantidad'));
+                    elem[0].focus();
+
+                }
+            }
+
+        }
+
+        $scope.$watch('cajasCtrl.searchProductText', function () {
+
+            if (vm.searchProductText.replace(' ', '').length > 0) {
+
+                if (!selecciona) {
+                    StockService.getDisponibles(1, vm.searchProductText, function (data) {
+                        vm.listaProductos = data;
+                    })
+                } else {
+                    selecciona = false;
+                }
+            }else{
+                vm.listaProductos = [];
+            }
+
+        });
         //
         if (vm.id != 0) {
             CajasService.getAsientoCajaById(vm.id, vm.sucursal_id, function (data) {
@@ -229,6 +292,7 @@
             vm.vuelto = (vm.paga_con > 0 && vm.paga_con !== null) ? vm.a_cobrar - vm.paga_con : 0;
 
         }
+
         //
         //function quitarMP(index) {
         //    var indice = -1;
@@ -301,7 +365,6 @@
             }
 
 
-
             if (vm.producto.cant_actual == 0) {
                 toastr.error('No hay stock suficiente.');
                 return;
@@ -356,8 +419,12 @@
             vm.producto = {};
             vm.cantidad = undefined;
             calcularTotal();
-            var elem = document.getElementById('producto-search');
-            elem.focus();
+            var elem = angular.element(document.querySelector('#txtSearchId'));
+            elem[0].focus();
+            vm.searchProductText = '';
+            vm.listaProductos = [];
+            //var elem = document.getElementById('producto-search');
+            //elem.focus();
             elem.value = '';
         }
 
@@ -485,7 +552,12 @@
         }
 
         function cerrarCaja(sucursal_id, importe, detalles, callback) {
-            return $http.post(url, {function: 'cerrarCaja', sucursal_id: sucursal_id, importe: importe, detalles: detalles})
+            return $http.post(url, {
+                    function: 'cerrarCaja',
+                    sucursal_id: sucursal_id,
+                    importe: importe,
+                    detalles: detalles
+                })
                 .success(function (data) {
                     callback(data);
                 })

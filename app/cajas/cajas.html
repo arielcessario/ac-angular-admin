@@ -60,32 +60,37 @@
         <div class="v-spacer"></div>
         <div class="responsive-container">
 
-            <div class="input-container">
-                <input ac-search-panel
-                       id="producto-search"
-                       service="StockService"
-                       exact-match="false"
-                       visible="nombreProducto"
-                       ng-model="cajasCtrl.producto.nombreProducto"
-                       objeto="cajasCtrl.producto"
-                       params="1"
-                       type="text"
-                       func="getDisponibles"
-                       required>
+            <div class="input-container" style="position: relative; min-height: 100px;">
+                <input id="txtSearchId" type="text" ng-keyup="cajasCtrl.moveInProductSearch($event)" ng-model="cajasCtrl.searchProductText">
+                <!--<input ac-search-panel-->
+                <!--id="producto-search"-->
+                <!--service="StockService"-->
+                <!--exact-match="false"-->
+                <!--visible="nombreProducto"-->
+                <!--ng-model="cajasCtrl.producto.nombreProducto"-->
+                <!--objeto="cajasCtrl.producto"-->
+                <!--params="1"-->
+                <!--type="text"-->
+                <!--func="getDisponibles"-->
+                <!--required>-->
                 <label for="tipo_precio">Producto</label>
+                <select style="position: absolute" ng-keyup="cajasCtrl.moveInProductSearch($event)" ng-model="cajasCtrl.producto" name="" id="resultsSearchProducts" size="5" ng-options="producto.nombreProducto + ': $' + producto.precios[0].precio + ' $' + producto.precios[1].precio + ' $' + producto.precios[2].precio  for producto in cajasCtrl.listaProductos">
+
+                </select>
             </div>
+
 
             <!-- -->
             <!--<ac-search-panel-->
-                    <!--obj="cajasCtrl.producto"-->
-                    <!--obj-name="cajasCtrl.producto.nombre"-->
-                    <!--nombref="cajasForm"-->
-                    <!--nombre="02"-->
-                    <!--nombre-visible="Producto"-->
-                    <!--font-size="32"-->
-                    <!--width="200"-->
-                    <!--func="cajasCtrl.fn_productos_sku"-->
-                    <!--extra-filter="s">-->
+            <!--obj="cajasCtrl.producto"-->
+            <!--obj-name="cajasCtrl.producto.nombre"-->
+            <!--nombref="cajasForm"-->
+            <!--nombre="02"-->
+            <!--nombre-visible="Producto"-->
+            <!--font-size="32"-->
+            <!--width="200"-->
+            <!--func="cajasCtrl.fn_productos_sku"-->
+            <!--extra-filter="s">-->
             <!--</ac-search-panel>-->
 
             <!--<ac-search-panel-->
@@ -102,7 +107,7 @@
 
             <div class="input-container">
                 <input type="number" id="cantidad" name="cantidad" ng-model="cajasCtrl.cantidad" ng-maxlength="45"
-                       required>
+                       required ng-keyup="($event.keyCode ==13)?cajasCtrl.agregarDetalle():''">
                 <label for="cantidad">Cantidad</label>
             </div>
 
@@ -170,7 +175,7 @@
                     <button ng-click="cajasCtrl.removeDetalle($index)"
                             ng-disabled="!(cajasCtrl.caja.fecha_entrega == null || cajasCtrl.caja.fecha_entrega == '')"
                             class="btn-delete-black btn-small"
-                            ></button>
+                    ></button>
                     <label>Eliminar de la venta</label>
                 </div>
             </td>
@@ -196,13 +201,13 @@
                 $<input type="number" style="width: 60px; margin: 0; text-align: right; float: right;"
                         ng-model="cajasCtrl.desc_cant"
                         ng-change="cajasCtrl.calc_a_cobrar('cant')"
-                    />
+            />
             </td>
             <td class="table-row">
                 %<input type="number" style="width: 50px;margin: 0; text-align: right; float: right;"
                         ng-model="cajasCtrl.desc_porc"
                         ng-change="cajasCtrl.calc_a_cobrar('porc')"
-                    />
+            />
             </td>
         </tr>
         <tr>
@@ -214,7 +219,7 @@
                 $<input type="number" style="width: 60px;margin: 0; text-align: right; float: right;"
                         ng-model="cajasCtrl.paga_con"
                         ng-change="cajasCtrl.vuelto = (cajasCtrl.paga_con>0 && cajasCtrl.paga_con !== null)?cajasCtrl.a_cobrar - cajasCtrl.paga_con:0;"
-                    />
+            />
             </td>
         </tr>
         <tr>
