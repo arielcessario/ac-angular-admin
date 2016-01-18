@@ -48,6 +48,14 @@ tbody {
   vertical-align: middle;
   border-color: inherit;
 }
+tbody {
+  tr:hover{
+    color: white;
+    td{
+      background-color: #009688 !important;
+    }
+  }
+}
 
 tr {
   display: table-row;

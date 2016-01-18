@@ -7,26 +7,59 @@
         <input type="text" ng-model="listadoUsuariosCtrl.filtro" class="full-width" required/>
         <label>Buscar...</label>
     </div>
-    <div class="lista-flex" ng-repeat="usuario in listadoUsuariosCtrl.usuarios | filter:listadoUsuariosCtrl.filtro">
+    <!--<div class="lista-flex" ng-repeat="usuario in listadoUsuariosCtrl.usuarios | filter:listadoUsuariosCtrl.filtro">-->
 
-        <span>{{usuario.nombre}}</span>
-        <span>{{usuario.apellido}}</span>
+    <!--<span>{{usuario.nombre}}</span>-->
+    <!--<span>{{usuario.apellido}}</span>-->
 
 
-        <div>
-            <div class="btn" ng-if="usuario.marcado == 1">
-                <button class="btn-medium btn-close"></button>
-                <label>No alojar</label>
-            </div>
-            <div class="btn">
-                <button ng-click="listadoUsuariosCtrl.detalle(usuario.usuario_id)"
-                        class="btn-medium btn-visibility"></button>
-                <label>Mostrar Detalle</label>
-            </div>
+    <!--<div>-->
+    <!--<div class="btn" ng-if="usuario.marcado == 1">-->
+    <!--<button class="btn-medium btn-close"></button>-->
+    <!--<label>No alojar</label>-->
+    <!--</div>-->
+    <!--<div class="btn">-->
+    <!--<button ng-click="listadoUsuariosCtrl.detalle(usuario.usuario_id)"-->
+    <!--class="btn-medium btn-visibility"></button>-->
+    <!--<label>Mostrar Detalle</label>-->
+    <!--</div>-->
 
-        </div>
+    <!--</div>-->
 
-    </div>
+    <!--</div>-->
+
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Rol</th>
+            <th>Mail</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr
+                ng-click="listadoUsuariosCtrl.detalle(row.usuario_id)"
+                ng-repeat="row in listadoUsuariosCtrl.usuarios | filter:listadoUsuariosCtrl.filtro | limitTo:listadoUsuariosCtrl.end:listadoUsuariosCtrl.start"
+                ac-last-list-item>
+
+            <td class="">{{row.nombre}}</td>
+            <td class="">{{row.apellido}}</td>
+            <td class="">{{row.rol_texto}}</td>
+            <td class="">{{row.mail}}</td>
+
+        </tr>
+        <!--</tbody>-->
+        <!--<tfoot>-->
+        <!--<tr>-->
+        <!--<td colspan="5" class="text-center" style="display: flex;">-->
+        <!-- -->
+        <!--</td>-->
+        <!--</tr>-->
+        <!--</tfoot>-->
+    </table>
 
     <div class="btn">
 
