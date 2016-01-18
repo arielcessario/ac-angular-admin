@@ -104,9 +104,12 @@
         </div>
 
 
-        <div class="input-container"><h3>Proveedores</h3><br/>
-
-            <div ng-repeat="proveedor in productosCtrl.proveedores">
+        <div class="input-container" style="max-height: 150px;overflow-y: auto; position: relative;">
+            <div style="display: flex; flex-direction: column;">
+                <h3>Proveedores</h3><br/>
+                <input style="margin-top: -20px;" placeholder="Buscar proveedor..." type="text" ng-model="productosCtrl.filter">
+            </div>
+            <div ng-repeat="proveedor in productosCtrl.proveedores | filter:productosCtrl.filter">
 
                 <label class="label--checkbox">
                     <input type="checkbox"
