@@ -174,7 +174,7 @@
 
             var r = confirm("Realmente desea eliminar el producto? Esta operación no tiene deshacer. Si solo desea ocultarlo, cambie el estado a 'Inactivo'");
             if (r) {
-                ProductosService.deleteProducto(vm.id, function (data) {
+                ProductService.remove(vm.id, function (data) {
                     toastr.success('Producto eliminado');
                     $location.path('/listado_productos');
                 });

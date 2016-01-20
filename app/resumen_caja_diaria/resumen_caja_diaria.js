@@ -126,7 +126,7 @@
 
                                     //asiento.valor = data[i].movimientos[x].importe;
                                     if (data[i].movimientos[x].detalles[y].detalle_tipo_id == '13') {
-                                        asiento.valor = data[i].movimientos[x].detalles[y].texto + ' x ' + (data[i].movimientos[x].importe / parseInt(data[i].movimientos[x].detalles[y].valor));
+                                        asiento.valor = data[i].movimientos[x].detalles[y].texto + ' x ' + (data[i].movimientos[x].importe / parseInt(data[i].movimientos[x].detalles[y].valor)) + ' = ' + data[i].movimientos[x].importe;
                                     }
 
                                 }
