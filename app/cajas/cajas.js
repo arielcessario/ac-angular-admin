@@ -12,7 +12,8 @@
             });
         }])
         .controller('CajasController', CajasController)
-        .service('CajasService', CajasService);
+        .factory('CajasService', CajasService)
+        .service('CajasVars', CajasVars);
 
 
     CajasController.$inject = ['$routeParams', 'ProductService', 'CajasService', 'toastr',
@@ -467,8 +468,8 @@
 
     }
 
-    CajasService.$inject = ['$http'];
-    function CajasService($http) {
+    CajasService.$inject = ['$http', '$cacheFactory', 'CajasVars'];
+    function CajasService($http, $cacheFactory, CajasVars) {
         var service = {};
         var url = './stock-api/cajas.php';
         // Cajas diarias siempre por sucursal
@@ -486,7 +487,45 @@
         service.cerrarCaja = cerrarCaja;
         service.abrirCaja = abrirCaja;
         service.getAsientoCajaById = getAsientoCajaById;
+        service.getTotalByCuenta = getTotalByCuenta;
+        service.getDetalleByCuenta = getDetalleByCuenta;
         return service;
+
+        function getTotalByCuenta(cuenta, callback){
+            var urlGet = url + '?function=getTotalByCuenta&cuenta_id='+cuenta;
+            var $httpDefaultCache = $cacheFactory.get('$http');
+            var cachedData = [];
+
+
+            // Verifica si existe el cache de productos
+            if ($httpDefaultCache.get(urlGet) != undefined) {
+                if (CajasVars.clearCache) {
+                    $httpDefaultCache.remove(urlGet);
+                }
+                else {
+                    cachedData = $httpDefaultCache.get(urlGet);
+                    callback(cachedData);
+                    return;
+                }
+            }
+
+
+            return $http.get(urlGet, {cache: true})
+                .success(function (data) {
+                    $httpDefaultCache.put(urlGet, data);
+                    CajasVars.getTotalByCuenta.clearCache = false;
+                    callback(data);
+                })
+                .error(function (data) {
+                    callback(data);
+                    CajasVars.getTotalByCuenta.clearCache = false;
+                })
+
+        }
+        function getDetalleByCuenta(cuenta){
+
+        }
+
 
         function totalConcepto(where, fecha_desde, fecha_hasta, callback) {
             return $http.get(url + '?function=totalConcepto&where=' + where + '&fecha_desde=' + fecha_desde + '&fecha_hasta=' + fecha_hasta)
@@ -635,5 +674,14 @@
                 });
         }
 
+    }
+
+
+    CajasVars.$inject = [];
+    function CajasVars(){
+
+        // Solo para la funcionalidad de getTotalByCuenta, limpio o no el caché
+        this.getTotalByCuenta = {};
+        this.getTotalByCuenta.clearCache = true;
     }
 })();

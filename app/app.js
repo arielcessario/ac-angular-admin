@@ -64,16 +64,21 @@ angular.module('myApp', [
 
 
 //MainCtrl.$inject = ['acAngularLoginClientService', 'ProductosServiceUtils', 'ProductosService'];
-MainCtrl.$inject = ['ResultadosService'];
+MainCtrl.$inject = ['ResultadosService', 'CajasService'];
 //function MainCtrl(acAngularLoginClientService, ProductosServiceUtils, ProductosService){
-function MainCtrl(ResultadosService){
+function MainCtrl(ResultadosService, CajasService){
     var vm = this;
 
+    vm.sucursal_id = '1';
     vm.logout = logout;
 
     function logout(){
         //acAngularLoginClientService.logout();
     }
+
+    CajasService.getTotalByCuenta('1.1.1.3' + vm.sucursal_id, function(data){
+        console.log(data);
+    });
 
 
     ResultadosService.saveResultados(function(data){

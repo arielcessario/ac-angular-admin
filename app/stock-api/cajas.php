@@ -34,9 +34,32 @@ if ($decoded != null) {
         checkEstado($_GET["sucursal_id"]);
     } else if ($function == 'getSaldoFinalAnterior') {
         getSaldoFinalAnterior($_GET["sucursal_id"]);
+    } else if ($function == 'getTotalByCuenta') {
+        getTotalByCuenta($_GET["cuenta_id"]);
     }
+}
 
+/**
+ * @description Obtiene el total por cuenta, sin detalle
+ * @param $cuenta_id
+ */
+function getTotalByCuenta($cuenta_id)
+{
+    $db = new MysqliDb();
+    $results = $db->rawQuery('SELECT
+        SUM(m.importe) importe,
+            (SELECT
+                    c.descripcion
+                FROM
+                    cuentas c
+                WHERE
+                    m.cuenta_id = c.cuenta_id) nombre
+    FROM
+        movimientos m
+    WHERE
+        m.cuenta_id = "' . $cuenta_id . '";');
 
+    echo json_encode($results);
 }
 
 // Movimientos que modifican el estado de cuentas
@@ -51,7 +74,7 @@ function getMovimientos($fecha_desde, $fecha_hasta)
 //and (fecha between '" . $fecha_desde . "' and '" . $fecha_hasta . "');";
 
 
-    $SQL="SELECT
+    $SQL = "SELECT
     movimiento_id,
     asiento_id,
     (SELECT

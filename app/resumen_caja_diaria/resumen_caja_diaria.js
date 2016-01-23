@@ -28,7 +28,19 @@
         vm.sucursal = {};
         vm.sucursales = [];
         vm.sucursal_id = 1;
+        vm.cajaGeneralSucursal = 0.0;
 
+
+        /**
+         * Obtengo el total del ahorro del local
+         */
+        $timeout(func, 1000);
+        function func() {
+            CajasService.getTotalByCuenta('1.1.1.3' + vm.sucursal_id, function (data) {
+                console.log(data);
+                vm.cajaGeneralSucursal = data[0].importe;
+            });
+        }
 
         function modificarAsiento(asiento_id) {
             $location.path('/cajas/' + asiento_id);
@@ -139,7 +151,7 @@
                         }
 
                         if (detalles.length > 0) {
-                            for(var index = 0; index < detalles.length; index ++){
+                            for (var index = 0; index < detalles.length; index++) {
 
                                 asientos.push(detalles[index]);
                             }
