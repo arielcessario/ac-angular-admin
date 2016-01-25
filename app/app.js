@@ -77,12 +77,12 @@ function MainCtrl(ResultadosService, CajasService){
     }
 
     CajasService.getTotalByCuenta('1.1.1.3' + vm.sucursal_id, function(data){
-        console.log(data);
+        //console.log(data);
     });
 
 
     ResultadosService.saveResultados(function(data){
-        console.log(data);
+        //console.log(data);
     });
 
 

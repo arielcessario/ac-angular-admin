@@ -16,13 +16,13 @@
             <th>Destacado</th>
             <th>Categoria</th>
             <th>Imagen</th>
-            <th>Detalle</th>
+            <!--<th>Detalle</th>-->
         </tr>
         </thead>
         <tbody>
 
         <tr ng-repeat="row in listadoProductosCtrl.productos | filter:listadoProductosCtrl.filtro | limitTo:listadoProductosCtrl.end:listadoProductosCtrl.start"
-            ac-last-list-item>
+            ac-last-list-item ng-click="listadoProductosCtrl.detalle(row.producto_id)">
 
             <td class="">{{row.nombre}}</td>
             <td class="">
@@ -38,13 +38,13 @@
                      height="100" width="100" style="background-color: #dddddd;">
             </td>
             <!--<td class="">{{row.descripcion}}</td>-->
-            <td class="">
-                <div class="btn">
-                    <button ng-click="listadoProductosCtrl.detalle(row.producto_id)"
-                            class="btn-medium btn-visibility"></button>
-                    <label>Mostrar Detalle</label>
-                </div>
-            </td>
+            <!--<td class="">-->
+                <!--<div class="btn">-->
+                    <!--<button ng-click="listadoProductosCtrl.detalle(row.producto_id)"-->
+                            <!--class="btn-medium btn-visibility"></button>-->
+                    <!--<label>Mostrar Detalle</label>-->
+                <!--</div>-->
+            <!--</td>-->
 
         </tr>
         <!--</tbody>-->

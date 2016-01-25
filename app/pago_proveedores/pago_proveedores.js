@@ -23,23 +23,36 @@
         var vm = this;
         vm.comentario = '';
         vm.subtipo = '00';
-        vm.forma_pago = '01';
+        vm.forma_pago_01 = '01';
+        vm.forma_pago_02 = '01';
+        vm.forma_pago_03 = '01';
+        vm.parcial_01 = 0.0;
+        vm.parcial_02 = 0.0;
+        vm.parcial_03 = 0.0;
+        vm.proveedores = 0.0;
         vm.save = save;
         vm.id = $routeParams.id;
         vm.pedido = PagoProveedoresPedidoService.pedido;
         vm.pedido.total = parseFloat(vm.pedido.total);
 
 
-        PedidoService.getByParams('pedido_id', vm.id, 'true', function (data) {
+        PedidoService.getByParams('pedido_id', '' + vm.id, 'true', function (data) {
 
             vm.pedido = data[0];
-            vm.pedido.total = parseFloat(vm.pedido.total);
+            vm.parcial_01 = parseFloat(vm.pedido.total);
         });
 
 
         function save() {
             var detalles = [];
             var detalle = {};
+
+            if (vm.pedido.total != vm.parcial_01 + vm.parcial_02 + vm.parcial_03 + vm.proveedores) {
+                toastr.error('El monto ingresado debe ser igual al total a pagar');
+                return;
+            }
+
+
             for (var i = 0; i < vm.pedido.pedidos_detalles.length; i++) {
                 detalle = {};
                 detalle.producto_id = vm.pedido.pedidos_detalles[i].producto_id;
@@ -53,12 +66,24 @@
                 detalles.push(detalle);
             }
 
+            vm.forma_pago = [
+                {forma_pago: vm.forma_pago_01, importe: vm.parcial_01},
+                {forma_pago: vm.forma_pago_02, importe: vm.parcial_02},
+                {forma_pago: vm.forma_pago_03, importe: vm.parcial_03},
+                {forma_pago: '12', importe: vm.proveedores}
+            ];
+
+
 
             PedidoService.confirmarPedido(vm.pedido,
                 function (data) {
+                    console.log(data);
                     if (data > 0) {
-                        //(sucursal_id, costo, comentario, producto_id, cantidad, proveedor_id, usuario_id)
-                        MovimientosService.armarMovimiento('002', vm.subtipo, 1, vm.forma_pago, '', vm.pedido.total, '', vm.comentario, vm.pedido, 0, 1, vm.comentario, function (data) {
+                        //(tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback)
+                        MovimientosService.armarMovimiento('002', vm.subtipo, 1, vm.forma_pago, '', vm.pedido.total, '', vm.comentario, vm.pedido, vm.pedido.proveedor_id, 1, vm.comentario, function (data) {
+
+
+                            console.log(data);
                             vm.comentario = '';
                             vm.subtipo = '00';
                             vm.forma_pago = '01';
