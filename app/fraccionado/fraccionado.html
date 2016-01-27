@@ -1,0 +1,90 @@
+<div class="title">
+    <h1>Administrar Fraccionado</h1></div>
+<div class="v-spacer"></div>
+<div ng-controller="FraccionadoController  as fraccionadoCtrl"
+      name="fraccionadoForm" novalidate>
+
+    <div class="responsive-container">
+        <div class="input-container" style="position: relative; min-height: 100px;">
+            <input id="txtSearchIdAFraccionar" type="text" ng-keyup="fraccionadoCtrl.moveInProductSearchAFraccionar($event)"
+                   ng-model="fraccionadoCtrl.searchProductTextAFraccionar">
+            <!--<input ac-search-panel-->
+            <!--id="producto-search"-->
+            <!--service="StockService"-->
+            <!--exact-match="false"-->
+            <!--visible="nombreProducto"-->
+            <!--ng-model="cajasCtrl.producto.nombreProducto"-->
+            <!--objeto="cajasCtrl.producto"-->
+            <!--params="1"-->
+            <!--type="text"-->
+            <!--func="getDisponibles"-->
+            <!--required>-->
+            <label for="tipo_precio">Producto A Fraccionar</label>
+            <select style="position: absolute; top: 30px; width: 100%;"
+                    ng-keyup="fraccionadoCtrl.moveInProductSearchAFraccionar($event)"
+                    ng-click="fraccionadoCtrl.moveInProductSearchAFraccionar($event)"
+                    ng-model="fraccionadoCtrl.producto_a_fraccionar" name="" id="resultsSearchProductsAFraccionar" size="5"
+                    ng-options="producto.nombreProducto for producto in fraccionadoCtrl.productos_a_fraccionar">
+
+            </select>
+        </div>
+        <div class="input-container" style="position: relative; min-height: 100px;">
+            <input id="txtSearchId" type="text" ng-keyup="fraccionadoCtrl.moveInProductSearch($event)"
+                   ng-model="fraccionadoCtrl.searchProductText">
+            <!--<input ac-search-panel-->
+            <!--id="producto-search"-->
+            <!--service="StockService"-->
+            <!--exact-match="false"-->
+            <!--visible="nombreProducto"-->
+            <!--ng-model="cajasCtrl.producto.nombreProducto"-->
+            <!--objeto="cajasCtrl.producto"-->
+            <!--params="1"-->
+            <!--type="text"-->
+            <!--func="getDisponibles"-->
+            <!--required>-->
+            <label for="tipo_precio">Producto Fraccionado</label>
+            <select style="position: absolute; top: 30px; width: 100%;"
+                    ng-keyup="fraccionadoCtrl.moveInProductSearch($event)"
+                    ng-click="fraccionadoCtrl.moveInProductSearch($event)"
+                    ng-model="fraccionadoCtrl.producto" name="" id="resultsSearchProducts" size="5"
+                    ng-options="producto.nombre for producto in fraccionadoCtrl.productos">
+
+            </select>
+        </div>
+
+        <div class="input-container">
+            <div>
+                <input style="min-width: 100%;" type="number" ng-model="fraccionadoCtrl.cant_esperada" id="cant_esperada">
+                <label style="min-width: 100%;" for="tipo_precio">Cantidad Esperada</label>
+            </div>
+            <div>
+                <input style="min-width: 100%;" type="number" ng-model="fraccionadoCtrl.cant_obtenida">
+                <label style="min-width: 100%;" for="tipo_precio">Cantidad Obtenida</label>
+            </div>
+            <span style="min-width: 100%;">Desperdicio</span>
+            <span style="min-width: 100%;">{{fraccionadoCtrl.cant_esperada - fraccionadoCtrl.cant_obtenida}}</span>
+
+            <br>
+            <br>
+            <br>
+            <div>
+                <input style="min-width: 100%;" type="number" ng-value="(fraccionadoCtrl.producto_a_fraccionar.costo_uni * fraccionadoCtrl.producto_a_fraccionar.cant_inicial) / fraccionadoCtrl.cant_esperada" ng-model="fraccionadoCtrl.costo_uni">
+                <label style="min-width: 100%;" for="tipo_precio">Costo Unitario</label>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <!--<input type="submit"-->
+        <!--ng-disabled="fraccionadoForm.user.$dirty && fraccionadoForm.user.$invalid ||-->
+        <!--fraccionadoForm.email.$dirty && fraccionadoForm.email.$invalid">-->
+        <div class="btn"><input type="submit" ng-click="fraccionadoCtrl.save();"
+                                class="relieve-2 btn-ok btn-big" value="">
+            <label>Guardar Producto</label>
+        </div>
+
+    </div>
+
+
+</div>
+

@@ -55,6 +55,7 @@ angular.module('myApp', [
     'nombreapp.stock.comentarios',
     'nombreapp.stock.sucursales',
     'nombreapp.stock.listadoSucursales',
+    'nombreapp.stock.fraccionado',
     'nombreapp.nav'
     //'ac-search-panel'
 ]).
@@ -118,6 +119,7 @@ function MainCtrl(ResultadosService, CajasService){
         {ref:'#/depositos/0',name:'Depositos'},
         {ref:'#/a_reponer',name:'A Reponer'},
         {ref:'#/trasladar_stock',name:'Mover Mercadería'},
+        {ref:'#/fraccionado',name:'Fraccionado'},
         {ref:'#/consulta_stock',name:'Consulta de Stock'}
     ];
 }
