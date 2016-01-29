@@ -60,7 +60,31 @@
         <!--</tr>-->
         <!--</tfoot>-->
     </table>
+    <div style="display: flex; width: 100%; align-content: space-around;">
+        <div style="flex: 5;"></div>
+        <div style="height: 40px; width: 40px;text-align: center;line-height:40px;"
+             class="btn btn-empty btn-small relieve-1"
+             ng-click="listadoUsuariosCtrl.prev();">Ant.
+        </div>
+        <!--<div style="max-width: 100%;display: flex; overflow-x: auto; scrollbar-face-color: #000000;">-->
 
+        <!--<div style="text-align: center;line-height:25px;margin: 5px; min-width: 25px; height: 25px; cursor: pointer;"-->
+        <!--class="btn btn-empty btn-small" ng-repeat="numero in listadoUsuariosCtrl.paginas"-->
+        <!--ng-click="listadoUsuariosCtrl.irAPagina($index);">{{$index + 1}}</div>-->
+        <!--</div>-->
+        <div style="margin-top: 10px;">
+            <span>Página {{listadoUsuariosCtrl.pagina}} de {{listadoUsuariosCtrl.paginas}}</span></div>
+        <div style="margin-top: 10px;">Ir a <input style="width: 40px;" type="number"
+                                                   ng-model="listadoUsuariosCtrl.pagina"
+                                                   ng-change="listadoUsuariosCtrl.goToPagina();"
+                                                   ng-keyup="listadoUsuariosCtrl.goToPagina();"></div>
+
+        <div style="height: 40px; width: 40px;text-align: center;line-height:40px;"
+             class="btn btn-empty btn-small relieve-1"
+             ng-click="listadoUsuariosCtrl.next();">Sig.
+        </div>
+        <div style="flex: 5;"></div>
+    </div>
     <div class="btn">
 
         <input type="button" class="relieve-2 btn-add  btn-big" value=""
