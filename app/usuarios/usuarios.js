@@ -79,10 +79,10 @@
                 toastr.error('El nombre es obligatorio');
                 return;
             }
-            if (vm.usuario.apellido == '') {
-                toastr.error('El apellido es obligatorio');
-                return;
-            }
+            //if (vm.usuario.apellido == '') {
+            //    toastr.error('El apellido es obligatorio');
+            //    return;
+            //}
             if (!AcUtils.validateEmail(vm.usuario.mail)) {
                 toastr.error('El mail debe tener un formato válido.');
                 return;
