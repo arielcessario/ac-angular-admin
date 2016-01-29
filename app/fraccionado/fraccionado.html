@@ -2,11 +2,12 @@
     <h1>Administrar Fraccionado</h1></div>
 <div class="v-spacer"></div>
 <div ng-controller="FraccionadoController  as fraccionadoCtrl"
-      name="fraccionadoForm" novalidate>
+     name="fraccionadoForm" novalidate>
 
     <div class="responsive-container">
         <div class="input-container" style="position: relative; min-height: 100px;">
-            <input id="txtSearchIdAFraccionar" type="text" ng-keyup="fraccionadoCtrl.moveInProductSearchAFraccionar($event)"
+            <input id="txtSearchIdAFraccionar" type="text"
+                   ng-keyup="fraccionadoCtrl.moveInProductSearchAFraccionar($event)"
                    ng-model="fraccionadoCtrl.searchProductTextAFraccionar">
             <!--<input ac-search-panel-->
             <!--id="producto-search"-->
@@ -23,10 +24,12 @@
             <select style="position: absolute; top: 30px; width: 100%;"
                     ng-keyup="fraccionadoCtrl.moveInProductSearchAFraccionar($event)"
                     ng-click="fraccionadoCtrl.moveInProductSearchAFraccionar($event)"
-                    ng-model="fraccionadoCtrl.producto_a_fraccionar" name="" id="resultsSearchProductsAFraccionar" size="5"
+                    ng-model="fraccionadoCtrl.producto_a_fraccionar" name="" id="resultsSearchProductsAFraccionar"
+                    size="5"
                     ng-options="producto.nombreProducto for producto in fraccionadoCtrl.productos_a_fraccionar">
 
             </select>
+
         </div>
         <div class="input-container" style="position: relative; min-height: 100px;">
             <input id="txtSearchId" type="text" ng-keyup="fraccionadoCtrl.moveInProductSearch($event)"
@@ -54,7 +57,8 @@
 
         <div class="input-container">
             <div>
-                <input style="min-width: 100%;" type="number" ng-model="fraccionadoCtrl.cant_esperada" id="cant_esperada">
+                <input style="min-width: 100%;" type="number" ng-model="fraccionadoCtrl.cant_esperada"
+                       id="cant_esperada">
                 <label style="min-width: 100%;" for="tipo_precio">Cantidad Esperada</label>
             </div>
             <div>
@@ -68,9 +72,13 @@
             <br>
             <br>
             <div>
-                <input style="min-width: 100%;" type="number" ng-value="(fraccionadoCtrl.producto_a_fraccionar.costo_uni * fraccionadoCtrl.producto_a_fraccionar.cant_inicial) / fraccionadoCtrl.cant_esperada" ng-model="fraccionadoCtrl.costo_uni">
+                <input style="min-width: 100%;" type="number"
+                       ng-value="(fraccionadoCtrl.producto_a_fraccionar.costo_uni * fraccionadoCtrl.producto_a_fraccionar.cant_inicial) / fraccionadoCtrl.cant_esperada"
+                       ng-model="fraccionadoCtrl.costo_uni">
                 <label style="min-width: 100%;" for="tipo_precio">Costo Unitario</label>
             </div>
+            <br>
+            <label for=""><input type="checkbox" ng-model="fraccionadoCtrl.completo">Completo</label>
         </div>
     </div>
 

@@ -30,6 +30,7 @@
         vm.searchProductTextAFraccionar = '';
         vm.cant_esperada = 0;
         vm.cant_obtenida = 0;
+        vm.completo = false;
         vm.costo_uni = (vm.producto_a_fraccionar.costo_uni * vm.producto_a_fraccionar.cant_inicial) / vm.cant_esperada;
         var oldIndex = 0;
         var selecciona = false;
@@ -186,7 +187,7 @@
             var detalles = [];
             var detalle = {};
 
-            if(vm.producto.producto_id == undefined || vm.producto_a_fraccionar.producto_id == undefined){
+            if (vm.producto.producto_id == undefined || vm.producto_a_fraccionar.producto_id == undefined) {
                 return
             }
 
@@ -240,13 +241,27 @@
                 console.log(data);
                 StockService.create(detalles, function (data) {
                     console.log(data);
-                    StockService.update({stock_id:vm.producto_a_fraccionar.stock_id, cant_actual:0}, function(data){
-                        console.log(data);
+
+                    if (!vm.completo) {
                         StockVars.clearCache = true;
-                        StockService.get(function(data){});
+                        StockService.get(function (data) {
+                        });
                         toastr.success('Fraccionado realizado');
                         $location.path('/cajas/0');
-                    });
+                    } else {
+
+                        StockService.update({
+                            stock_id: vm.producto_a_fraccionar.stock_id,
+                            cant_actual: 0
+                        }, function (data) {
+                            console.log(data);
+                            StockVars.clearCache = true;
+                            StockService.get(function (data) {
+                            });
+                            toastr.success('Fraccionado realizado');
+                            $location.path('/cajas/0');
+                        });
+                    }
                 });
             });
         }
