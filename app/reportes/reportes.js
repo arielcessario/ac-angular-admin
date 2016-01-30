@@ -45,6 +45,7 @@
         }
 
         function generar() {
+            vm.datos = [];
             switch (vm.reporte) {
                 case 'reportes/lstMargenes.html':
                     google.charts.setOnLoadCallback(drawMargenes);
