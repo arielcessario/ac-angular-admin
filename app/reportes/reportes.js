@@ -48,7 +48,8 @@
             vm.datos = [];
             switch (vm.reporte) {
                 case 'reportes/lstMargenes.html':
-                    google.charts.setOnLoadCallback(drawMargenes);
+                    //google.charts.setOnLoadCallback(drawMargenes);
+                    drawMargenes();
                     break;
                 case 'reportes/lstCantVendidos.html':
                     //google.charts.setOnLoadCallback(drawMargenes);
@@ -62,7 +63,7 @@
 
                 var res = {'producto': '', 'cantidad': 0, 'costo': 0, 'vendido': 0, 'margen': 0};
                 for (var i = 0; i < data.length; i = i + 2) {
-                    res = {'producto': '', 'cantidad': 0, 'costo': 0, 'vendido': 0, 'margen': 0}
+                    res = {'producto': '', 'cantidad': 0, 'costo': 0, 'vendido': 0, 'margen': 0};
 
                     res.producto = data[i].producto;
                     res.cantidad = data[i].cantidad;
@@ -91,7 +92,7 @@
                 });
 
                 var values = [];
-                for(var i = 0; i < vm.datos.length; i++){
+                for (var i = 0; i < vm.datos.length; i++) {
                     values.push([vm.datos[i].producto, vm.datos[i].margen]);
                 }
 
@@ -102,7 +103,13 @@
                 data.addRows(values);
 
                 // Instantiate and draw the chart.
-                var chart = new google.charts.Bar(document.getElementById('graphMargenes'));
+                //var chart = new google.charts.Bar(document.getElementById('graphMargenes'));
+                var chart = new google.visualization.BarChart(document.getElementById('graphMargenes'));
+                //var chart = new google.visualization.PieChart(document.getElementById('graphMargenes'));
+
+
+                //angular.element(document).ready(chart.draw(data, null));
+                //$timeout(chart.draw(data, null), 100);
                 chart.draw(data, null);
 
 
