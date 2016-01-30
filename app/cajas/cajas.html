@@ -75,7 +75,7 @@
                 <!--func="getDisponibles"-->
                 <!--required>-->
                 <label for="tipo_precio">Producto</label>
-                <select style="position: absolute" ng-keyup="cajasCtrl.moveInProductSearch($event)"
+                <select style="position: absolute; width: 100%;" ng-keyup="cajasCtrl.moveInProductSearch($event)"
                         ng-click="cajasCtrl.moveInProductSearch($event)"
                         ng-model="cajasCtrl.producto" name="" id="resultsSearchProducts" size="5"
                         ng-options="producto.nombreProducto + ': $' + producto.precios[0].precio + ' $' + producto.precios[1].precio + ' $' + producto.precios[2].precio  for producto in cajasCtrl.listaProductos">

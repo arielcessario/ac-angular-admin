@@ -280,6 +280,11 @@
                         ProductService.get(function (data) {
                         });
 
+                        StockVars.clearCache = true;
+                        StockService.get(function(data){
+
+                        });
+
                         AcUtilsGlobals.isWaiting = false;
                         $rootScope.$broadcast('IsWaiting');
                     });

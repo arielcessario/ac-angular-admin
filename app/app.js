@@ -56,6 +56,7 @@ angular.module('myApp', [
     'nombreapp.stock.sucursales',
     'nombreapp.stock.listadoSucursales',
     'nombreapp.stock.fraccionado',
+    'nombreapp.stock.reportes',
     'nombreapp.nav'
     //'ac-search-panel'
 ]).
@@ -69,6 +70,9 @@ MainCtrl.$inject = ['ResultadosService', 'CajasService'];
 //function MainCtrl(acAngularLoginClientService, ProductosServiceUtils, ProductosService){
 function MainCtrl(ResultadosService, CajasService){
     var vm = this;
+
+    // Inicializo el motor para gráficos
+    google.charts.load('current', {packages: ['corechart', 'bar']});
 
     vm.sucursal_id = '1';
     vm.logout = logout;
@@ -120,6 +124,7 @@ function MainCtrl(ResultadosService, CajasService){
         {ref:'#/a_reponer',name:'A Reponer'},
         {ref:'#/trasladar_stock',name:'Mover Mercadería'},
         {ref:'#/fraccionado',name:'Fraccionado'},
-        {ref:'#/consulta_stock',name:'Consulta de Stock'}
+        {ref:'#/consulta_stock',name:'Consulta de Stock'},
+        {ref:'#/reportes/0',name:'Reportes'}
     ];
 }
