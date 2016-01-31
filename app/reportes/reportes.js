@@ -103,8 +103,8 @@
                 data.addRows(values);
 
                 // Instantiate and draw the chart.
-                //var chart = new google.charts.Bar(document.getElementById('graphMargenes'));
-                var chart = new google.visualization.BarChart(document.getElementById('graphMargenes'));
+                var chart = new google.charts.Bar(document.getElementById('graphMargenes'));
+                //var chart = new google.visualization.BarChart(document.getElementById('graphMargenes'));
                 //var chart = new google.visualization.PieChart(document.getElementById('graphMargenes'));
 
 

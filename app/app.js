@@ -66,9 +66,9 @@ angular.module('myApp', [
 
 
 //MainCtrl.$inject = ['acAngularLoginClientService', 'ProductosServiceUtils', 'ProductosService'];
-MainCtrl.$inject = ['ResultadosService', 'CajasService'];
+MainCtrl.$inject = ['ResultadosService', 'CajasService', '$document', '$scope', '$location'];
 //function MainCtrl(acAngularLoginClientService, ProductosServiceUtils, ProductosService){
-function MainCtrl(ResultadosService, CajasService){
+function MainCtrl(ResultadosService, CajasService, $document, $scope, $location){
     var vm = this;
 
     // Inicializo el motor para gráficos
@@ -76,6 +76,78 @@ function MainCtrl(ResultadosService, CajasService){
 
     vm.sucursal_id = '1';
     vm.logout = logout;
+    vm.showSearchPanel = false;
+    vm.oldIndexScreen = 0;
+    vm.generalSearchTerm = '';
+
+
+    vm.goToScreenList = goToScreenList;
+    vm.selectScreen = selectScreen;
+    vm.moveInScreenList = moveInScreenList;
+
+
+    // TODO: Agregar scape para que lo oculte
+    var map = {17: false, 18: false, 66: false};
+    $document.bind('keydown', function (e) {
+        if (e.keyCode in map) {
+            map[e.keyCode] = true;
+            if (map[17] && map[18] && map[66]) {
+                //save();
+                generalSearchPanel();
+            }
+        }
+    });
+    $document.bind('keyup', function (e) {
+        if (e.keyCode in map) {
+            map[e.keyCode] = false;
+        }
+    });
+
+    function generalSearchPanel(){
+        vm.showSearchPanel = !vm.showSearchPanel;
+        $scope.$apply();
+        if(vm.showSearchPanel){
+            var elem = document.getElementById('inputSearchPanel');
+            elem.focus();
+        }
+
+
+    }
+
+    function goToScreenList(event){
+        var elem = document.getElementById('resultSearchScreen');
+        if(event.keyCode == 40){
+            elem.focus();
+        }
+
+    }
+
+    function moveInScreenList(event){
+        var elem = document.getElementById('resultSearchScreen');
+        vm.oldIndexScreen = elem.selectedIndex;
+
+
+        if(event.keyCode == 38 && elem.selectedIndex == 0 && vm.oldIndexScreen == 0){
+            var inputElem = document.getElementById('inputSearchPanel');
+            inputElem.focus();
+        }
+
+        if(event.keyCode == 13){
+            vm.showSearchPanel = false;
+            vm.generalSearchTerm = '';
+            $location.path(elem.options[elem.selectedIndex].value.replace("#","").replace("%23",""));
+        }
+
+    }
+
+
+    function selectScreen(screen){
+        vm.showSearchPanel = false;
+        vm.generalSearchTerm = '';
+        $location.path(screen.replace("#","").replace("%23",""));
+    }
+
+
 
     function logout(){
         //acAngularLoginClientService.logout();
@@ -118,7 +190,6 @@ function MainCtrl(ResultadosService, CajasService){
         {ref:'#/proveedores/0',name:'Nuevo Proveedor'},
         {ref:'#/categorias/0',name:'Nueva Categoria'},
         {ref:'#/sucursal/0',name:'Nueva Sucursal'},
-        {ref:'#/ofertas',name:'Ofertas'},
         {ref:'#/gastos/0',name:'Gastos'},
         {ref:'#/depositos/0',name:'Depositos'},
         {ref:'#/a_reponer',name:'A Reponer'},

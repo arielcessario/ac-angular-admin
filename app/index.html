@@ -38,6 +38,28 @@
 <div ng-view class="ac-main"></div>
 <ac-angular-login-client ng-click="mainCtrl.logout();" class="relieve-2"></ac-angular-login-client>
 
+<div id="general-search" ng-if="mainCtrl.showSearchPanel"
+     style="position: fixed; height: 100%; width: 100%; top:0; left: 0; background-color: rgba(0,0,0,0.8);z-index: 10000;">
+    <input id="inputSearchPanel" ng-model="mainCtrl.generalSearchTerm" type="text"
+           ng-keydown="mainCtrl.searchTo();mainCtrl.goToScreenList($event);"
+           style="color:white !important; width:360px; position: absolute; top: 45%; left: calc(50% - 180px);">
+
+    <div ng-if="mainCtrl.generalSearchTerm.length > 0"
+         style="width:360px; position: absolute; top: 55%; left: calc(50% - 180px); display: flex; flex-direction: column;">
+
+        <select style="color:white; width: 360px; margin: 10px; overflow: hidden" name="" id="resultSearchScreen"
+                size="10" ng-keydown="mainCtrl.moveInScreenList($event)">
+            <option value="{{link.ref}}" ng-click="mainCtrl.selectScreen(link.ref)"
+                    ng-repeat="link in mainCtrl.data | filter:mainCtrl.generalSearchTerm">{{link.name}}
+            </option>
+        </select>
+        <!--<div ng-repeat="link in mainCtrl.data | filter:mainCtrl.generalSearchTerm"-->
+        <!--style="color:white; width: 360px; margin: 10px;"><a-->
+        <!--ng-click="mainCtrl.showSearchPanel = false; mainCtrl.generalSearchTerm='';"-->
+        <!--style="color:white; width: 360px; text-decoration: none;" href="{{link.ref}}">{{link.name}}</a></div>-->
+    </div>
+</div>
+
 <!-- In production use:
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
 -->

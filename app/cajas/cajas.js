@@ -60,15 +60,17 @@
 
         //vm.sucursal_id = 1;
 
-        $scope.$on('$locationChangeStart', function(){
+        var elemCaja = angular.element(document.querySelector('#screen-caja'));
 
-            $document.unbind('keydown');
-            $document.unbind('keyup');
+        $scope.$on('$locationChangeStart', function () {
+
+            elemCaja.unbind('keydown');
+            elemCaja.unbind('keyup');
         });
 
 
         var map = {17: false, 18: false, 80: false};
-        $document.bind('keydown', function (e) {
+        elemCaja.bind('keydown', function (e) {
             if (e.keyCode in map) {
                 map[e.keyCode] = true;
                 if (map[17] && map[18] && map[80]) {
@@ -76,12 +78,11 @@
                 }
             }
         });
-        $document.bind('keyup', function (e) {
+        elemCaja.bind('keyup', function (e) {
             if (e.keyCode in map) {
                 map[e.keyCode] = false;
             }
         });
-
 
 
         /**
@@ -281,7 +282,7 @@
                         });
 
                         StockVars.clearCache = true;
-                        StockService.get(function(data){
+                        StockService.get(function (data) {
 
                         });
 
@@ -496,8 +497,8 @@
         service.getDetalleByCuenta = getDetalleByCuenta;
         return service;
 
-        function getTotalByCuenta(cuenta, callback){
-            var urlGet = url + '?function=getTotalByCuenta&cuenta_id='+cuenta;
+        function getTotalByCuenta(cuenta, callback) {
+            var urlGet = url + '?function=getTotalByCuenta&cuenta_id=' + cuenta;
             var $httpDefaultCache = $cacheFactory.get('$http');
             var cachedData = [];
 
@@ -527,7 +528,8 @@
                 })
 
         }
-        function getDetalleByCuenta(cuenta){
+
+        function getDetalleByCuenta(cuenta) {
 
         }
 
@@ -683,7 +685,7 @@
 
 
     CajasVars.$inject = [];
-    function CajasVars(){
+    function CajasVars() {
 
         // Solo para la funcionalidad de getTotalByCuenta, limpio o no el caché
         this.getTotalByCuenta = {};
