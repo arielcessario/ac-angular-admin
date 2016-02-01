@@ -9,7 +9,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/comentarios/:id', {
                 templateUrl: './comentarios/comentarios.html',
-                controller: 'ComentariosController'
+                controller: 'ComentariosController',
+                data: {requiresLogin: true}
             });
         }])
 

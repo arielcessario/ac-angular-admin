@@ -8,7 +8,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/servicios', {
                 templateUrl: currentScriptPath.replace('.js', '.html'),
-                controller: 'ServiciosController'
+                controller: 'ServiciosController',
+                data: {requiresLogin: true}
             });
         }])
         .controller('ServiciosController', ServiciosController);

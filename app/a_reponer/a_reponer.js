@@ -7,7 +7,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/a_reponer', {
                 templateUrl: './a_reponer/a_reponer.html',
-                controller: 'AReponerController'
+                controller: 'AReponerController',
+                data: {requiresLogin: true}
             });
         }])
 

@@ -6,7 +6,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/listado_productos', {
                 templateUrl: './listado_productos/listado_productos.html',
-                controller: 'ListadoProductosController'
+                controller: 'ListadoProductosController',
+                data: {requiresLogin: true}
             });
         }])
 
@@ -25,7 +26,7 @@
         vm.detalle = detalle;
 
 
-        // Implementación de la paginación
+        // Implementaciï¿½n de la paginaciï¿½n
         vm.start = 0;
         vm.end = ProductVars.paginacion;
         vm.pagina = ProductVars.pagina;

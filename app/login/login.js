@@ -14,20 +14,22 @@
         .controller('LoginController', LoginController);
 
 
-    LoginController.$inject = ['UserService', '$location'];
-    function LoginController(UserService, $location) {
+    LoginController.$inject = ['UserService', '$location', 'SucursalesService'];
+    function LoginController(UserService, $location, SucursalesService) {
         var vm = this;
         vm.mail = '';
         vm.password = '';
         vm.sucursal = -1;
+        vm.sucursales = [];
 
-        vm.login = function(){
-            UserService.login(vm.mail, vm.password, vm.sucursal, function (data) {
-                if (data != -1) {
-                    $location.path('/');
-                }
-            });
-        };
+        SucursalesService.get(function (data) {
+            vm.sucursales = data;
+            vm.sucursal = vm.sucursales[0];
+        });
+
+
+
+
 
 
     }

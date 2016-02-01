@@ -8,7 +8,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/depositos/:id', {
                 templateUrl: './depositos/depositos.html',
-                controller: 'DepositosController'
+                controller: 'DepositosController',
+                data: {requiresLogin: true}
             });
         }])
 

@@ -1,11 +1,18 @@
 <?php
 
+
 // JWT Secret Key
-$secret = 'bayres';
+//$secret = base64_encode('asdfwearsadfasdareasdfaeasdfaefawasadf');
+$secret = 'bayrelkjasdfoe82ksldiw929393';
+// JWT Secret Key Social
+$secret_social = 'LUc_cGQHgmKZyFd5ozKJHnujpam1JKb06FWnjjtnWH9htNKDEQFGNMHYUvX_6PgR';
 // JWT AUD
 $serverName = 'serverName';
 // false local / true production
-$jwt_enabled = false;
+$jwt_enabled = true;
+// Carpeta de imágenes
+$image_path = "../../images/";
+
 
 /* @name: checkSecurity
  * @param
@@ -13,6 +20,9 @@ $jwt_enabled = false;
  */
 function checkSecurity()
 {
+
+    require_once 'jwt_helper.php';
+
     $requestHeaders = apache_request_headers();
     $authorizationHeader = $requestHeaders['Authorization'];
 //    echo print_r(apache_request_headers());
@@ -30,7 +40,8 @@ function checkSecurity()
     global $secret;
     global $decoded_token;
     try {
-        $decoded_token = JWT::decode($token, base64_decode(strtr($secret, '-_', '+/')), false);
+//        $decoded_token = JWT::decode($token, base64_decode(strtr($secret, '-_', '+/')), true);
+        $decoded_token = JWT::decode($token, $secret, true);
     } catch (UnexpectedValueException $ex) {
         header('HTTP/1.0 401 Unauthorized');
         echo "Invalid token";
@@ -46,5 +57,47 @@ function checkSecurity()
         echo "Invalid token";
         exit();
     }
+
+}
+
+/**
+ * @description Valida que el rol del usuario sea el correcto
+ * @param $requerido
+ */
+function validateRol($requerido)
+{
+
+    require_once 'jwt_helper.php';
+
+    global $jwt_enabled;
+    if ($jwt_enabled == false) {
+        return;
+    }
+
+    $requestHeaders = apache_request_headers();
+    $authorizationHeader = $requestHeaders['Authorization'];
+//    echo print_r(apache_request_headers());
+
+
+    if ($authorizationHeader == null) {
+        header('HTTP/1.0 401 Unauthorized');
+        echo "No authorization header sent";
+        exit();
+    }
+
+    // // validate the token
+    $pre_token = str_replace('Bearer ', '', $authorizationHeader);
+    $token = str_replace('"', '', $pre_token);
+    global $secret;
+    global $decoded_token;
+    $decoded_token = JWT::decode($token, $secret, true);
+
+    $rol = $decoded_token->data->rol;
+    if ($rol > $requerido) {
+        header('HTTP/1.0 401 Unauthorized');
+        echo "No authorization header sent";
+        exit();
+    }
+
 
 }

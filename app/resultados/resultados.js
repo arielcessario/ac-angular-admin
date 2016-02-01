@@ -6,7 +6,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/resultados', {
                 templateUrl: './resultados/resultados.html',
-                controller: 'ResultadosController'
+                controller: 'ResultadosController',
+                data: {requiresLogin: true}
             });
         }])
 

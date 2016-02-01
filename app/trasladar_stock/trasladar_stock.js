@@ -8,7 +8,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/trasladar_stock', {
                 templateUrl: './trasladar_stock/trasladar_stock.html',
-                controller: 'TrasladarStockController'
+                controller: 'TrasladarStockController',
+                data: {requiresLogin: true}
             });
         }])
 

@@ -9,7 +9,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/ventas_web/:id', {
                 templateUrl: './ventas_web/ventas_web.html',
-                controller: 'VentasWebController'
+                controller: 'VentasWebController',
+                data: {requiresLogin: true}
             });
         }])
 

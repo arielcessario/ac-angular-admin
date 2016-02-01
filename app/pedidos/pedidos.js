@@ -8,7 +8,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/pedidos/:id', {
                 templateUrl: currentScriptPath.replace('.js', '.html'),
-                controller: 'PedidosController'
+                controller: 'PedidosController',
+                data: {requiresLogin: true}
             });
         }])
         .controller('PedidosController', PedidosController);

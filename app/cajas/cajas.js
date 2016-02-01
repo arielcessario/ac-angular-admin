@@ -8,7 +8,7 @@
             $routeProvider.when('/cajas/:id', {
                 templateUrl: currentScriptPath.replace('.js', '.html'),
                 controller: 'CajasController',
-                data: {requiresLogin: false}
+                data: {requiresLogin: true}
             });
         }])
         .controller('CajasController', CajasController)

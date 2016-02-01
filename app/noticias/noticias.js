@@ -8,7 +8,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/noticias/:id', {
                 templateUrl: './noticias/noticias.html',
-                controller: 'NoticiasController'
+                controller: 'NoticiasController',
+                data: {requiresLogin: true}
             });
         }])
 

@@ -7,7 +7,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/listado_ventas_web', {
                 templateUrl: './listado_ventas_web/listado_ventas_web.html',
-                controller: 'ListadoVentasWebController'
+                controller: 'ListadoVentasWebController',
+                data: {requiresLogin: true}
             });
         }])
 

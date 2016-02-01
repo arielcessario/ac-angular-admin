@@ -8,7 +8,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/reportes/:id', {
                 templateUrl: './reportes/reportes.html',
-                controller: 'ReportesController'
+                controller: 'ReportesController',
+                data: {requiresLogin: true}
             });
         }])
 

@@ -8,7 +8,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/pago_proveedores/:id', {
                 templateUrl: './pago_proveedores/pago_proveedores.html',
-                controller: 'PagoProveedoresController'
+                controller: 'PagoProveedoresController',
+                data: {requiresLogin: true}
             });
         }])
 

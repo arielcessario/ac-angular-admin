@@ -8,7 +8,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/gastos/:id', {
                 templateUrl: './gastos/gastos.html',
-                controller: 'GastosController'
+                controller: 'GastosController',
+                data: {requiresLogin: true}
             });
         }])
 

@@ -22,7 +22,14 @@
     <link rel="stylesheet" href="estilos/estilo-base.css">
     <link rel="stylesheet" href="estilos/table-style.css">
     <link rel="stylesheet" href="app.css">
-    <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
+    <script>
+
+        // Cargo las configuraciones para la app
+        window.appName = 'bayresAdmin';
+        window.installPath = 'bower_components';
+        window.mailAdmin = 'arielcessario@gmail.com';
+        window.mailAdmins = [{mail: 'arielcessario@gmail.com'}, {mail: 'mmaneff@gmail.com'}];
+    </script>
 </head>
 <body ng-controller="MainCtrl as mainCtrl">
 <div style="position: fixed; top: 0; left: 0; right: 0; height: 200px; background-color: #B0BEC5;"></div>
@@ -81,6 +88,8 @@
 <script src="bower_components/ac-angular-login-client/app/verify-login.js"></script>
 <script src="bower_components/angular-smart-table/dist/smart-table.min.js"></script>
 <script src="ac-angular-waiting/ac-angular-waiting.js"></script>
+<script src="//cdn.auth0.com/js/lock-7.9.js"></script>
+<script src="//cdn.auth0.com/w2/auth0-angular-4.js"></script>
 <script src="bower_components/a0-angular-storage/dist/angular-storage.min.js"></script>
 <script src="bower_components/angular-jwt/dist/angular-jwt.min.js"></script>
 <script src="bower_components/ac-angular-utils/ac-utils.js"></script>

@@ -6,7 +6,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/listado_sucursales', {
                 templateUrl: './listado_sucursales/listado_sucursales.html',
-                controller: 'ListadoSucursalesController'
+                controller: 'ListadoSucursalesController',
+                data: {requiresLogin: true}
             });
         }])
 

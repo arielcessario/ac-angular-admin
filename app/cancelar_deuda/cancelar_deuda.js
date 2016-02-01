@@ -8,7 +8,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/cancelar_deuda/:id', {
                 templateUrl: './cancelar_deuda/cancelar_deuda.html',
-                controller: 'CancelaDeudaController'
+                controller: 'CancelaDeudaController',
+                data: {requiresLogin: true}
             });
         }])
 

@@ -12,6 +12,7 @@ angular.module('myApp', [
     'acAngularWaiting',
     'angular-storage',
     'angular-jwt',
+    'auth0',
     'acUtils',
     'acUsuarios',
     'acProductos',
@@ -59,16 +60,15 @@ angular.module('myApp', [
     'nombreapp.stock.reportes',
     'nombreapp.nav'
     //'ac-search-panel'
-]).
-    config(['$routeProvider', function ($routeProvider) {
-        //$routeProvider.otherwise({redirectTo: '/'});
-    }]).controller('MainCtrl', MainCtrl);
+]).config(['$routeProvider', function ($routeProvider) {
+    //$routeProvider.otherwise({redirectTo: '/'});
+}]).controller('MainCtrl', MainCtrl);
 
 
 //MainCtrl.$inject = ['acAngularLoginClientService', 'ProductosServiceUtils', 'ProductosService'];
-MainCtrl.$inject = ['ResultadosService', 'CajasService', '$document', '$scope', '$location'];
+MainCtrl.$inject = ['ResultadosService', 'CajasService', '$document', '$scope', '$location', 'UserVars', 'UserService'];
 //function MainCtrl(acAngularLoginClientService, ProductosServiceUtils, ProductosService){
-function MainCtrl(ResultadosService, CajasService, $document, $scope, $location){
+function MainCtrl(ResultadosService, CajasService, $document, $scope, $location, UserVars, UserService) {
     var vm = this;
 
     // Inicializo el motor para gráficos
@@ -79,6 +79,8 @@ function MainCtrl(ResultadosService, CajasService, $document, $scope, $location)
     vm.showSearchPanel = false;
     vm.oldIndexScreen = 0;
     vm.generalSearchTerm = '';
+    vm.user = UserService.getFromToken();
+    UserVars.loginPath = '/login';
 
 
     vm.goToScreenList = goToScreenList;
@@ -103,10 +105,10 @@ function MainCtrl(ResultadosService, CajasService, $document, $scope, $location)
         }
     });
 
-    function generalSearchPanel(){
+    function generalSearchPanel() {
         vm.showSearchPanel = !vm.showSearchPanel;
         $scope.$apply();
-        if(vm.showSearchPanel){
+        if (vm.showSearchPanel) {
             var elem = document.getElementById('inputSearchPanel');
             elem.focus();
         }
@@ -114,51 +116,51 @@ function MainCtrl(ResultadosService, CajasService, $document, $scope, $location)
 
     }
 
-    function goToScreenList(event){
+    function goToScreenList(event) {
         var elem = document.getElementById('resultSearchScreen');
-        if(event.keyCode == 40){
+        if (event.keyCode == 40) {
             elem.focus();
         }
 
     }
 
-    function moveInScreenList(event){
+    function moveInScreenList(event) {
         var elem = document.getElementById('resultSearchScreen');
         vm.oldIndexScreen = elem.selectedIndex;
 
 
-        if(event.keyCode == 38 && elem.selectedIndex == 0 && vm.oldIndexScreen == 0){
+        if (event.keyCode == 38 && elem.selectedIndex == 0 && vm.oldIndexScreen == 0) {
             var inputElem = document.getElementById('inputSearchPanel');
             inputElem.focus();
         }
 
-        if(event.keyCode == 13){
+        if (event.keyCode == 13) {
             vm.showSearchPanel = false;
             vm.generalSearchTerm = '';
-            $location.path(elem.options[elem.selectedIndex].value.replace("#","").replace("%23",""));
+            $location.path(elem.options[elem.selectedIndex].value.replace("#", "").replace("%23", ""));
         }
 
     }
 
 
-    function selectScreen(screen){
+    function selectScreen(screen) {
         vm.showSearchPanel = false;
         vm.generalSearchTerm = '';
-        $location.path(screen.replace("#","").replace("%23",""));
+        $location.path(screen.replace("#", "").replace("%23", ""));
     }
 
 
-
-    function logout(){
-        //acAngularLoginClientService.logout();
+    function logout() {
+        UserService.logout();
+        $location.path('/login');
     }
 
-    CajasService.getTotalByCuenta('1.1.1.3' + vm.sucursal_id, function(data){
+    CajasService.getTotalByCuenta('1.1.1.3' + vm.sucursal_id, function (data) {
         //console.log(data);
     });
 
 
-    ResultadosService.saveResultados(function(data){
+    ResultadosService.saveResultados(function (data) {
         //console.log(data);
     });
 
@@ -167,35 +169,70 @@ function MainCtrl(ResultadosService, CajasService, $document, $scope, $location)
     //ProductosService.getProductos(function(data){});
 
 
+    if (UserService.getFromToken() == false) {
+        vm.data = [];
+    } else {
+        generateMenu();
+    }
 
-    vm.data = [
-        {ref:'#/cajas/0',name:'Caja'},
-        //{ref:'#/servicios',name:'Servicios'},
-        {ref:'#/abrir_cerrar_caja',name:'Apertura/Cierre de Caja'},
-        {ref:'#/resumen_caja_diaria',name:'Resumen de Caja Diaria'},
-        {ref:'#/historico_caja_diaria',name:'Histórico de Cajas Diarias'},
-        {ref:'#/movimientos',name:'Movimientos'},
-        {ref:'#/total_concepto',name:'Total por Concepto'},
-        {ref:'#/margenes',name:'Margenes'},
-        {ref:'#/listado_productos',name:'Lista de Productos'},
-        {ref:'#/listado_pedidos',name:'Lista de Pedidos'},
-        {ref:'#/listado_categorias',name:'Lista de Categorias'},
-        {ref:'#/listado_sucursales',name:'Lista de Sucursales'},
-        {ref:'#/listado_usuarios',name:'Lista de Usuarios'},
-        {ref:'#/listado_deudores',name:'Lista de Deudores'},
-        {ref:'#/listado_ventas_web',name:'Lista de Ventas Web'},
-        {ref:'#/usuarios/0',name:'Nuevo Usuario'},
-        {ref:'#/productos/0',name:'Nuevo Producto'},
-        {ref:'#/pedidos/0',name:'Nuevo Pedido'},
-        {ref:'#/proveedores/0',name:'Nuevo Proveedor'},
-        {ref:'#/categorias/0',name:'Nueva Categoria'},
-        {ref:'#/sucursal/0',name:'Nueva Sucursal'},
-        {ref:'#/gastos/0',name:'Gastos'},
-        {ref:'#/depositos/0',name:'Depositos'},
-        {ref:'#/a_reponer',name:'A Reponer'},
-        {ref:'#/trasladar_stock',name:'Mover Mercadería'},
-        {ref:'#/fraccionado',name:'Fraccionado'},
-        {ref:'#/consulta_stock',name:'Consulta de Stock'},
-        {ref:'#/reportes/0',name:'Reportes'}
-    ];
+    vm.login = function (mail, password, sucursal) {
+        UserService.login(mail, password, sucursal.sucursal_id, function (data) {
+
+            if (data instanceof Object) {
+                $location.path('/');
+                vm.user = UserService.getFromToken();
+                generateMenu();
+            }else {
+                $location.path('/login');
+                vm.data = [];
+            }
+        });
+    };
+
+
+    function generateMenu() {
+        var menu = [
+            {ref: '#/cajas/0', name: 'Caja', rol: 1},
+            //{ref:'#/servicios',name:'Servicios'},
+            {ref: '#/abrir_cerrar_caja', name: 'Apertura/Cierre de Caja', rol: 0},
+            {ref: '#/resumen_caja_diaria', name: 'Resumen de Caja Diaria', rol: 0},
+            {ref: '#/historico_caja_diaria', name: 'Histórico de Cajas Diarias', rol: 0},
+            {ref: '#/movimientos', name: 'Movimientos', rol: 0},
+            {ref: '#/total_concepto', name: 'Total por Concepto', rol: 0},
+            {ref: '#/margenes', name: 'Margenes', rol: 0},
+            {ref: '#/listado_productos', name: 'Lista de Productos', rol: 0},
+            {ref: '#/listado_pedidos', name: 'Lista de Pedidos', rol: 0},
+            {ref: '#/listado_categorias', name: 'Lista de Categorias', rol: 0},
+            {ref: '#/listado_sucursales', name: 'Lista de Sucursales', rol: 0},
+            {ref: '#/listado_usuarios', name: 'Lista de Usuarios', rol: 0},
+            {ref: '#/listado_deudores', name: 'Lista de Deudores', rol: 0},
+            {ref: '#/listado_ventas_web', name: 'Lista de Ventas Web', rol: 0},
+            {ref: '#/usuarios/0', name: 'Nuevo Usuario', rol: 0},
+            {ref: '#/productos/0', name: 'Nuevo Producto', rol: 0},
+            {ref: '#/pedidos/0', name: 'Nuevo Pedido', rol: 0},
+            {ref: '#/proveedores/0', name: 'Nuevo Proveedor', rol: 0},
+            {ref: '#/categorias/0', name: 'Nueva Categoria', rol: 0},
+            {ref: '#/sucursal/0', name: 'Nueva Sucursal', rol: 0},
+            {ref: '#/gastos/0', name: 'Gastos', rol: 0},
+            {ref: '#/depositos/0', name: 'Depositos', rol: 0},
+            {ref: '#/a_reponer', name: 'A Reponer', rol: 0},
+            {ref: '#/trasladar_stock', name: 'Mover Mercadería', rol: 0},
+            {ref: '#/fraccionado', name: 'Fraccionado', rol: 0},
+            {ref: '#/consulta_stock', name: 'Consulta de Stock', rol: 0},
+            {ref: '#/reportes/0', name: 'Reportes', rol: 0}
+        ];
+
+        var rol = parseInt(vm.user.data.rol);
+        var filtrados = [];
+
+        for (var i = 0; i < menu.length; i++) {
+            if (menu[i].rol >= rol) {
+                filtrados.push(menu[i]);
+            }
+        }
+        vm.data = filtrados;
+
+    }
+
+
 }

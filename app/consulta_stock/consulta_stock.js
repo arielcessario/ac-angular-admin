@@ -6,7 +6,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/consulta_stock', {
                 templateUrl: './consulta_stock/consulta_stock.html',
-                controller: 'ConsultaStockController'
+                controller: 'ConsultaStockController',
+                data: {requiresLogin: true}
             });
         }])
 
@@ -21,21 +22,19 @@
 
         vm.stocks = [];
         vm.todos = [];
-        vm.sucursales= [];
+        vm.sucursales = [];
         vm.sucursal = {};
         vm.conStock = true;
         vm.filtroSucursal = filtroSucursal;
         vm.loadConStock = loadConStock;
 
 
+        SucursalesService.get(function (data) {
 
-
-        SucursalesService.get(function(data){
-            //console.log(data);
 
             vm.sucursales = data;
             vm.sucursales.push({sucursal_id: -1, nombre: "Todas", direccion: "", telefono: ""});
-            vm.sucursal = vm.sucursales[vm.sucursales.length-1];
+            vm.sucursal = vm.sucursales[vm.sucursales.length - 1];
 
             StockVars.reducido = true;
             StockVars.clearCache = true;
@@ -46,16 +45,16 @@
         });
 
 
-        function loadConStock(){
+        function loadConStock() {
 
 
-            if(vm.conStock){
+            if (vm.conStock) {
                 StockVars.clearCache = true;
                 StockVars.reducido = true;
                 StockService.get(function (data) {
                     vm.stocks = data;
                 });
-            }else{
+            } else {
                 StockVars.clearCache = true;
                 StockVars.reducido = false;
                 StockService.get(function (data) {
@@ -66,15 +65,15 @@
 
         }
 
-        function filtroSucursal(){
+        function filtroSucursal() {
 
-            if(vm.sucursal.sucursal_id !== -1){
-                var results = vm.todos.filter(function(elem, index, array){
+            if (vm.sucursal.sucursal_id !== -1) {
+                var results = vm.todos.filter(function (elem, index, array) {
                     return elem.sucursal_id == vm.sucursal.sucursal_id;
                 });
 
                 vm.stocks = results;
-            }else{
+            } else {
                 vm.stocks = vm.todos;
             }
 
@@ -99,23 +98,24 @@
                 .success(function (data) {
                     callback(data);
                 })
-                .error(function(data){});
+                .error(function (data) {
+                });
         }
 
-        function getConStock(callback){
-            getStock(function(data){
-               var response = data.filter(function(elem, index, array){
+        function getConStock(callback) {
+            getStock(function (data) {
+                var response = data.filter(function (elem, index, array) {
 
-                   //console.log(elem.cant_actual > 0);
-                   return elem.cant_actual > 0;
+                    //console.log(elem.cant_actual > 0);
+                    return elem.cant_actual > 0;
 
-               }) ;
+                });
 
                 callback(response);
             });
         }
 
-        function updateStock(stock, callback){
+        function updateStock(stock, callback) {
             //console.log(stock);
             $http.post(url,
                 {function: 'updateStock', stock: JSON.stringify(stock)},
@@ -123,7 +123,8 @@
                 .success(function (data) {
                     callback(data);
                 })
-                .error(function(data){});
+                .error(function (data) {
+                });
         }
 
     }

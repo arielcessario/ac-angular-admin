@@ -8,7 +8,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/fraccionado', {
                 templateUrl: './fraccionado/fraccionado.html',
-                controller: 'FraccionadoController'
+                controller: 'FraccionadoController',
+                data: {requiresLogin: true}
             });
         }])
 

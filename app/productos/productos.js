@@ -9,7 +9,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/productos/:id', {
                 templateUrl: './productos/productos.html',
-                controller: 'ProductosController'
+                controller: 'ProductosController',
+                data: {requiresLogin: true}
             });
         }])
 

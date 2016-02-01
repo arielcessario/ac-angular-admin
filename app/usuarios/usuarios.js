@@ -8,7 +8,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/usuarios/:id', {
                 templateUrl: './usuarios/usuarios.html',
-                controller: 'UsuariosController'
+                controller: 'UsuariosController',
+                data: {requiresLogin: true}
             });
         }])
 
@@ -101,6 +102,7 @@
             if (!vm.isUpdate) {
                 UserService.create(vm.usuario, function (data) {
 
+                    console.log(data);
                     if (!isNaN(data) && data > -1){
                         toastr.success('Usuario salvado con exito');
                         $location.path('/listado_usuarios');
@@ -110,6 +112,8 @@
                 });
             } else {
                 UserService.update(vm.usuario, function (data) {
+
+                    console.log(data);
                     if (!isNaN(data) && data > -1){
                         toastr.success('Usuario salvado con exito');
                         $location.path('/listado_usuarios');

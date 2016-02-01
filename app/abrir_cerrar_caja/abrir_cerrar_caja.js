@@ -9,7 +9,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/abrir_cerrar_caja', {
                 templateUrl: currentScriptPath.replace('.js', '.html'),
-                controller: 'AbrirCerrarCajaController'
+                controller: 'AbrirCerrarCajaController',
+                data: {requiresLogin: true}
             });
         }])
         .controller('AbrirCerrarCajaController', AbrirCerrarCajaController);

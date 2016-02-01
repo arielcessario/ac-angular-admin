@@ -6,7 +6,8 @@
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/detalle_deudores/:id', {
                 templateUrl: './detalle_deudores/detalle_deudores.html',
-                controller: 'DetalleDeudoresController'
+                controller: 'DetalleDeudoresController',
+                data: {requiresLogin: true}
             });
         }])
 

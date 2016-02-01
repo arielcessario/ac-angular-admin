@@ -6,7 +6,8 @@
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/listado_pedidos', {
                 templateUrl: './listado_pedidos/listado_pedidos.html',
-                controller: 'ListadoPedidosController'
+                controller: 'ListadoPedidosController',
+                data: {requiresLogin: true}
             });
         }])
 

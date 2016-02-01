@@ -6,7 +6,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/historico_caja_diaria', {
                 templateUrl: './historico_caja_diaria/historico_caja_diaria.html',
-                controller: 'HistoricoCajaDiariaController'
+                controller: 'HistoricoCajaDiariaController',
+                data: {requiresLogin: true}
             });
         }])
 

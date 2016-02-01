@@ -6,7 +6,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/total_concepto', {
                 templateUrl: './total_concepto/total_concepto.html',
-                controller: 'TotalConceptoController'
+                controller: 'TotalConceptoController',
+                data: {requiresLogin: true}
             });
         }])
 

@@ -6,7 +6,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/resumen_caja_diaria', {
                 templateUrl: './resumen_caja_diaria/resumen_caja_diaria.html',
-                controller: 'ResumenCajaDiariaController'
+                controller: 'ResumenCajaDiariaController',
+                data: {requiresLogin: true}
             });
         }])
 
@@ -85,6 +86,7 @@
                 vm.saldoFinal = vm.saldoInicial;
 
                 CajasService.getCajaDiaria(vm.sucursal.sucursal_id, function (data) {
+
 
                     var asientos = [];
                     var detalles = [];

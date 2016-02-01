@@ -2,24 +2,24 @@
     <div class="title"><h1>Login</h1></div>
     <div class="v-spacer"></div>
 
-    <div class="responsive-container" style="flex-direction: column; justify-content: center; margin-left: 30%; margin-right: 30%;">
-        <div class="input-container">
+    <div class="responsive-container"
+         style="flex-direction: column; justify-content: center; margin-left: 30%; margin-right: 30%;">
+        <div class="input-container" style="min-width: 100%">
             <input type="text" ng-model="loginCtrl.mail" required/>
             <label>Mail</label>
         </div>
 
-        <div class="input-container">
+        <div class="input-container" style="min-width: 100%">
             <input type="password" ng-model="loginCtrl.password" required/>
             <label>Password</label>
         </div>
-        <div class="input-container">
-            <select name="sucursales" id="sucursales">
-                <option value="0">Almagro</option>
-                <option value="1">Once</option>
-                <option value="2">Flores</option>
+        <div class="input-container"  style="min-width: 100%">
+            <select name="sucursales" id="sucursales"
+                    ng-model="loginCtrl.sucursal"
+                    ng-options="sucursal.nombre  for sucursal in loginCtrl.sucursales">
             </select>
         </div>
-        <div class="btn"><input type="submit" ng-click="loginCtrl.login();"
+        <div class="btn"><input type="submit" ng-click="mainCtrl.login(loginCtrl.mail, loginCtrl.password, loginCtrl.sucursal);"
                                 class="relieve-2 btn-ok btn-big" value="">
             <label>Ingresar</label>
         </div>
