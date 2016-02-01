@@ -38,7 +38,6 @@
         $timeout(func, 1000);
         function func() {
             CajasService.getTotalByCuenta('1.1.1.3' + vm.sucursal_id, function (data) {
-                console.log(data);
                 vm.cajaGeneralSucursal = data[0].importe;
             });
         }
@@ -87,6 +86,8 @@
 
                 CajasService.getCajaDiaria(vm.sucursal.sucursal_id, function (data) {
 
+                    console.log(data);
+
 
                     var asientos = [];
                     var detalles = [];
@@ -101,6 +102,7 @@
                             if (data[i].movimientos[x].cuenta_id.indexOf('1.1.1.0') > -1 || // Caja chica
                                 data[i].movimientos[x].cuenta_id.indexOf('1.1.2.0') > -1 || // Deudores
                                 data[i].movimientos[x].cuenta_id.indexOf('1.1.4.0') > -1 || // Tarjeta
+                                data[i].movimientos[x].cuenta_id.indexOf('2.1.1.0') > -1 || // Tarjeta
                                 data[i].movimientos[x].cuenta_id.indexOf('1.1.1.2') > -1    // CC CA MP ML
                             ) {
 
