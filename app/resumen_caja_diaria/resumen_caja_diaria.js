@@ -86,7 +86,6 @@
 
                 CajasService.getCajaDiaria(vm.sucursal.sucursal_id, function (data) {
 
-                    console.log(data);
 
 
                     var asientos = [];
@@ -97,12 +96,12 @@
 
                         for (var x = 0; x < data[i].movimientos.length; x++) {
 
-                            //agrego el movimiento de caja
+                            //agrego el movimiento de caja - Estos son los totales que aparecen al final del movimiento
 
                             if (data[i].movimientos[x].cuenta_id.indexOf('1.1.1.0') > -1 || // Caja chica
                                 data[i].movimientos[x].cuenta_id.indexOf('1.1.2.0') > -1 || // Deudores
                                 data[i].movimientos[x].cuenta_id.indexOf('1.1.4.0') > -1 || // Tarjeta
-                                data[i].movimientos[x].cuenta_id.indexOf('2.1.1.0') > -1 || // Tarjeta
+                                data[i].movimientos[x].cuenta_id.indexOf('2.1.1.0') > -1 || // Proveedores a deuda
                                 data[i].movimientos[x].cuenta_id.indexOf('1.1.1.2') > -1    // CC CA MP ML
                             ) {
 
