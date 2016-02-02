@@ -17,24 +17,18 @@
             <th>Nombre</th>
             <th>Direccion</th>
             <th>Telefono</th>
-            <th></th>
+            <th>POS</th>
         </tr>
         </thead>
         <tbody>
 
         <tr ng-repeat="row in listadoSucursalesCtrl.sucursales | filter:listadoSucursalesCtrl.filtro | limitTo:listadoSucursalesCtrl.end:listadoSucursalesCtrl.start"
-            ac-last-list-item>
+            ac-last-list-item ng-click="listadoSucursalesCtrl.detalle(row.sucursal_id)">
 
             <td class="">{{row.nombre}}</td>
             <td class="">{{row.direccion}}</td>
             <td class="">{{row.telefono}}</td>
-            <td class="">
-                <div class="btn">
-                    <button ng-click="listadoSucursalesCtrl.detalle(row.sucursal_id)"
-                            class="btn-medium btn-visibility"></button>
-                    <label>Mostrar Detalle</label>
-                </div>
-            </td>
+            <td class="">{{row.pos_cantidad}}</td>
 
         </tr>
 

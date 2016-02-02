@@ -28,7 +28,8 @@
         vm.sucursal = {
             nombre: '',
             direccion: '',
-            telefono: ''
+            telefono: '',
+            pos_cantidad: 1
         };
 
 
@@ -56,15 +57,10 @@
         }
 
         function save() {
-            //console.log(vm.sucursal);
-            if(vm.sucursal.parent_id == undefined){
-                vm.sucursal.parent_id = -1;
-            }
+
 
             if (vm.isUpdate) {
                 SucursalesService.update(vm.sucursal, function (data) {
-                    console.log(data);
-
                     if(data == 'true'){
                         toastr.success('Sucursal salvada con exito');
                         $location.path('/listado_sucursales');
