@@ -18,9 +18,9 @@
         .service('PagoProveedoresPedidoService', PagoProveedoresPedidoService);
 
     PagoProveedoresController.$inject = ["$scope", "$routeParams", "PagoProveedoresService", "$location", "toastr", "MovimientosService",
-        'PagoProveedoresPedidoService', 'PedidoService', 'StockService'];
+        'PagoProveedoresPedidoService', 'PedidoService', 'StockService', 'AcUtilsGlobals'];
     function PagoProveedoresController($scope, $routeParams, PagoProveedoresService, $location, toastr, MovimientosService,
-                                       PagoProveedoresPedidoService, PedidoService, StockService) {
+                                       PagoProveedoresPedidoService, PedidoService, StockService, AcUtilsGlobals) {
         var vm = this;
         vm.comentario = '';
         vm.subtipo = '00';
@@ -81,10 +81,9 @@
                     console.log(data);
                     if (data > 0) {
                         //(tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback)
-                        MovimientosService.armarMovimiento('002', vm.subtipo, 1, vm.forma_pago, '', vm.pedido.total, '', vm.comentario, vm.pedido, vm.pedido.proveedor_id, 1, vm.comentario, function (data) {
+                        MovimientosService.armarMovimiento('002', vm.subtipo, AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, vm.forma_pago, '', vm.pedido.total, '', vm.comentario, vm.pedido, vm.pedido.proveedor_id, 1, vm.comentario, function (data) {
 
 
-                            console.log(data);
                             vm.comentario = '';
                             vm.subtipo = '00';
                             vm.forma_pago = '01';

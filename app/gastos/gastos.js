@@ -28,7 +28,7 @@
 
         function save() {
             //tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback
-            MovimientosService.armarMovimiento(vm.movimiento, vm.subtipo, 1, vm.forma_pago, '', vm.importe, '', vm.comentario, [], 0, 1, vm.comentario, function (data) {
+            MovimientosService.armarMovimiento(vm.movimiento, vm.subtipo,  AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, vm.forma_pago, '', vm.importe, '', vm.comentario, [], 0, 1, vm.comentario, function (data) {
                 if (!isNaN(data)) {
                     toastr.success('Gasto generado con éxito');
                     vm.movimiento = '012';

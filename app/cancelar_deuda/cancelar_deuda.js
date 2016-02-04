@@ -42,10 +42,9 @@
             //(tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback)
             vm.comentario = "Cancelación de deuda " + vm.comentario;
 
-            MovimientosService.armarMovimiento('015', vm.subtipo, 1, vm.forma_pago, '', vm.cliente.saldo, '', vm.comentario, '', vm.id, 1, vm.comentario, function (data) {
+            MovimientosService.armarMovimiento('015', vm.subtipo, AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, vm.forma_pago, '', vm.cliente.saldo, '', vm.comentario, '', vm.id, 1, vm.comentario, function (data) {
 
                 UserService.actualizarSaldo(vm.cliente.cliente_id, parseFloat(vm.cliente.saldo), function(data){
-                    console.log(data);
                     if(data){
                         vm.comentario = '';
                         vm.subtipo = '00';

@@ -59,7 +59,7 @@
             }
 
             //(tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback)
-            MovimientosService.armarMovimiento('004', '00', 1, '07', '00', vm.total, vm.desc_cant, 'Venta Productos - Ingreso a Deudores', vm.detalles, vm.cliente.cliente_id, 1, '',
+            MovimientosService.armarMovimiento('004', '00',  AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, '07', '00', vm.total, vm.desc_cant, 'Venta Productos - Ingreso a Deudores', vm.detalles, vm.cliente.cliente_id, 1, '',
                 function (data) {
                     toastr.success('Venta realizada con éxito.');
 
@@ -78,7 +78,7 @@
                 cliente_id = vm.cliente.cliente_id;
             }
             //(tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback)
-            MovimientosService.armarMovimiento('004', '00', 1, vm.forma_pago, '00', vm.total, vm.desc_cant, 'Venta de Servicio', vm.detalles, cliente_id, 1, '',
+            MovimientosService.armarMovimiento('004', '00',  AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, vm.forma_pago, '00', vm.total, vm.desc_cant, 'Venta de Servicio', vm.detalles, cliente_id, 1, '',
                 function (data) {
                     toastr.success('Venta realizada con éxito.');
 

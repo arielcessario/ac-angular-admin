@@ -28,7 +28,7 @@
         vm.saldoFinal = 0.0;
         vm.sucursal = {};
         vm.sucursales = [];
-        vm.sucursal_id = 1;
+        vm.sucursal_id = AcUtilsGlobals.sucursal_id;
         vm.cajaGeneralSucursal = 0.0;
 
 
@@ -79,13 +79,12 @@
             $rootScope.$broadcast('IsWaiting');
 
 
-            CajasService.getSaldoInicial(vm.sucursal.sucursal_id, function (data) {
+            CajasService.getSaldoInicial(vm.sucursal.sucursal_id, AcUtilsGlobals.pos_id, function (data) {
 
                 vm.saldoInicial = parseFloat(data.replace('"', ''));
                 vm.saldoFinal = vm.saldoInicial;
 
-                CajasService.getCajaDiaria(vm.sucursal.sucursal_id, function (data) {
-
+                CajasService.getCajaDiaria(vm.sucursal.sucursal_id, AcUtilsGlobals.pos_id, function (data) {
 
 
                     var asientos = [];

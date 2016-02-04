@@ -13,13 +13,23 @@
             <input type="password" ng-model="loginCtrl.password" required/>
             <label>Password</label>
         </div>
-        <div class="input-container"  style="min-width: 100%">
+        <div class="input-container" style="min-width: 100%">
             <select name="sucursales" id="sucursales"
                     ng-model="loginCtrl.sucursal"
+                    ng-change="loginCtrl.generarPos()"
                     ng-options="sucursal.nombre  for sucursal in loginCtrl.sucursales">
             </select>
         </div>
-        <div class="btn"><input type="submit" ng-click="mainCtrl.login(loginCtrl.mail, loginCtrl.password, loginCtrl.sucursal);"
+
+        <div class="input-container" style="min-width: 100%">
+            <select name="cajas" id="cajas"
+                    ng-model="loginCtrl.pos_selected"
+                    ng-options="pos.nombre for pos in loginCtrl.pos">
+            </select>
+            <label>POS</label>
+        </div>
+        <div class="btn"><input type="submit"
+                                ng-click="mainCtrl.login(loginCtrl.mail, loginCtrl.password, loginCtrl.sucursal, loginCtrl.pos_selected);"
                                 class="relieve-2 btn-ok btn-big" value="">
             <label>Ingresar</label>
         </div>

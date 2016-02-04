@@ -1,4 +1,4 @@
-(function(){
+(function () {
 
     'use strict';
     window.conProductos = true;
@@ -68,9 +68,11 @@
 
 
 //MainCtrl.$inject = ['acAngularLoginClientService', 'ProductosServiceUtils', 'ProductosService'];
-    MainCtrl.$inject = ['ResultadosService', 'CajasService', '$document', '$scope', '$location', 'UserVars', 'UserService'];
+    MainCtrl.$inject = ['ResultadosService', 'CajasService', '$document', '$scope', '$location', 'UserVars', 'UserService',
+        '$cookieStore', 'AcUtilsGlobals'];
 //function MainCtrl(acAngularLoginClientService, ProductosServiceUtils, ProductosService){
-    function MainCtrl(ResultadosService, CajasService, $document, $scope, $location, UserVars, UserService) {
+    function MainCtrl(ResultadosService, CajasService, $document, $scope, $location, UserVars, UserService,
+                      $cookieStore, AcUtilsGlobals) {
         var vm = this;
 
         // Inicializo el motor para gráficos
@@ -153,6 +155,7 @@
 
 
         function logout() {
+            $cookieStore.remove('pos');
             UserService.logout();
             $location.path('/login');
         }
@@ -177,14 +180,16 @@
             generateMenu();
         }
 
-        vm.login = function (mail, password, sucursal) {
+        vm.login = function (mail, password, sucursal, pos) {
             UserService.login(mail, password, sucursal.sucursal_id, function (data) {
 
                 if (data instanceof Object) {
                     $location.path('/');
                     vm.user = UserService.getFromToken();
+                    $cookieStore.put('pos', pos);
+                    $cookieStore.put('sucursal', sucursal);
                     generateMenu();
-                }else {
+                } else {
                     $location.path('/login');
                     vm.data = [];
                 }
@@ -233,6 +238,12 @@
                 }
             }
             vm.data = filtrados;
+
+            AcUtilsGlobals.sucursal_id = ($cookieStore.get('sucursal')).sucursal_id;
+            AcUtilsGlobals.pos_id = ($cookieStore.get('pos')).id;
+            AcUtilsGlobals.user_id = vm.user.data.id;
+            AcUtilsGlobals.rol_id = vm.user.data.rol;
+
 
         }
 
