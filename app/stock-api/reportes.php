@@ -49,6 +49,8 @@ if ($decoded != null) {
     $function = $_GET["function"];
     if ($function == 'getMargenes') {
         getMargenes($_GET["desde"], $_GET["hasta"]);
+    }elseif ($function == 'getTotalesPorCuenta') {
+        getTotalesPorCuenta($_GET["desde"], $_GET["hasta"]);
     }
 }
 
@@ -95,6 +97,38 @@ ORDER BY m.asiento_id, m.movimiento_id;
 
 
     $results = $db->rawQuery($SQL);
+
+    echo json_encode($results);
+}
+
+
+function getTotalesPorCuenta($desde, $hasta)
+{
+    $db = new MysqliDb();
+
+
+    $SQL = '(select
+c.descripcion,
+sum(m.importe) importe,
+m.cuenta_id
+from movimientos m left join cuentas c on c.cuenta_id = m.cuenta_id
+where
+m.fecha BETWEEN "' . $desde . '" AND "' . $hasta . '"
+and importe <0
+group by c.descripcion, m.cuenta_id)
+union
+(select
+c.descripcion,
+sum(m.importe) importe,
+m.cuenta_id
+from movimientos m left join cuentas c on c.cuenta_id = m.cuenta_id
+where
+m.fecha BETWEEN "' . $desde . '" AND "' . $hasta . '"
+and importe > 0
+group by c.descripcion, m.cuenta_id)';
+
+
+    $results = $db->rawQuery($SQL, '', false);
 
     echo json_encode($results);
 }

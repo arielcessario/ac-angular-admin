@@ -86,13 +86,11 @@
 
                 CajasService.getCajaDiaria(vm.sucursal.sucursal_id, AcUtilsGlobals.pos_id, function (data) {
 
-
                     var asientos = [];
                     var detalles = [];
                     var asiento = {};
 
                     for (var i = 0; i < data.length; i++) {
-
                         for (var x = 0; x < data[i].movimientos.length; x++) {
 
                             //agrego el movimiento de caja - Estos son los totales que aparecen al final del movimiento
@@ -122,28 +120,65 @@
                                 asiento = {};
                             }
 
+
                             // Agrego el detalle de los movimientos
 
                             if ((data[i].movimientos[x].cuenta_id.indexOf('1.1.7.0') > -1 && data[i].movimientos[x].importe > 0) || // Compra de mercaderías
                                 data[i].movimientos[x].cuenta_id.indexOf('4.1.1.0') > -1) {  // Venta de Productos y/o Servicios
+                                var texto = '';
+                                var importe_uni = 0;
+                                var importe_total = 0;
+                                var cantidad = 0;
+
+                                var iva = 0;
                                 for (var y = 0; y < data[i].movimientos[x].detalles.length; y++) {
 
+
+
+                                    // Detalle de la operación
                                     if (data[i].movimientos[x].detalles[y].detalle_tipo_id == '2') {
                                         var cat = (asiento.detalle != undefined) ? asiento.detalle : '';
                                         asiento.detalle = data[i].movimientos[x].detalles[y].texto + ' ' + cat;
                                     }
 
+                                    // Código de producto
                                     if (data[i].movimientos[x].detalles[y].detalle_tipo_id == '8') {
                                         var cat = (asiento.detalle != undefined) ? asiento.detalle : '';
                                         asiento.detalle = cat + ' ' + data[i].movimientos[x].detalles[y].texto;
+
+
+                                        for (var o = 0; o < data[i].movimientos.length; o++) {
+                                            if (data[i].movimientos[o].cuenta_id.indexOf("2.1.4.09") > -1)// IVA VENTAS
+                                            {
+                                                var prod_id = 0;
+                                                for (var r = 0; r < data[i].movimientos[o].detalles.length; r++) {
+                                                    if (data[i].movimientos[o].detalles[r].detalle_tipo_id == '8') {
+                                                        prod_id = data[i].movimientos[o].detalles[r].valor;
+                                                    }
+                                                }
+
+                                                if (data[i].movimientos[x].detalles[y].valor == prod_id) {
+                                                    iva = data[i].movimientos[o].importe;
+                                                }
+                                            }
+                                        }
+
+
                                     }
 
                                     //asiento.valor = data[i].movimientos[x].importe;
+
+                                    // Calculo el total del producto, le agrego también su iva
                                     if (data[i].movimientos[x].detalles[y].detalle_tipo_id == '13') {
-                                        asiento.valor = data[i].movimientos[x].detalles[y].texto + ' x ' + (data[i].movimientos[x].importe / parseInt(data[i].movimientos[x].detalles[y].valor)) + ' = ' + data[i].movimientos[x].importe;
+                                        texto = data[i].movimientos[x].detalles[y].texto;
+                                        cantidad = parseInt(data[i].movimientos[x].detalles[y].valor);
+                                        importe_total = parseFloat(data[i].movimientos[x].importe);
+                                        //asiento.valor = data[i].movimientos[x].detalles[y].texto + ' x ' + ((data[i].movimientos[x].importe / parseInt(data[i].movimientos[x].detalles[y].valor)) + (parseFloat(iva) / parseInt(data[i].movimientos[x].detalles[y].valor))) + ' = ' + (parseFloat(data[i].movimientos[x].importe) + parseFloat(iva));
                                     }
 
                                 }
+
+                                asiento.valor = texto + ' x ' + ((importe_total / cantidad) + (parseFloat(iva) / cantidad)) + ' = ' + (importe_total + parseFloat(iva));
                                 detalles.unshift(asiento);
                                 asiento = {};
 

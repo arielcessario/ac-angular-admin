@@ -29,11 +29,7 @@
         vm._datos = [];
 
 
-        vm.values = [
-            ['Nitrogen', 0.78],
-            ['Oxygen', 0.21],
-            ['Other', 0.01]
-        ];
+        vm.values = [];
 
         // Funciones
         vm.verReporte = verReporte;
@@ -52,10 +48,60 @@
                     //google.charts.setOnLoadCallback(drawMargenes);
                     drawMargenes();
                     break;
-                case 'reportes/lstCantVendidos.html':
+                case 'reportes/lstTotalesPorCuenta.html':
                     //google.charts.setOnLoadCallback(drawMargenes);
+                    drawTotalesPorCuenta();
                     break;
             }
+        }
+
+        function drawTotalesPorCuenta() {
+            ReportesService.getTotalesPorCuenta(vm.desde, vm.hasta, function (data) {
+                var ordenado = [];
+                for (var i = 0; i < data.length; i++) {
+                    var index = {};
+
+                    index = ordenado.find(function (elem, idx, array) {
+
+                        if (data[i].cuenta_id == elem.cuenta_id) {
+                            return elem;
+                        }
+                    });
+
+
+                    if (ordenado.indexOf(index) > -1) {
+                        if (data[i].importe > 0) {
+                            ordenado[ordenado.indexOf(index)].haber = data[i].importe;
+                        } else {
+                            ordenado[ordenado.indexOf(index)].debe = data[i].importe;
+                        }
+                    } else {
+                        if (data[i].importe > 0) {
+                            ordenado.push({
+                                descr: data[i].descripcion,
+                                cuenta_id: data[i].cuenta_id,
+                                debe: 0,
+                                haber: data[i].importe,
+                                total: 0
+                            });
+                        } else {
+                            ordenado.push({
+                                descr: data[i].descripcion,
+                                cuenta_id: data[i].cuenta_id,
+                                debe: data[i].importe,
+                                haber: 0,
+                                total: 0
+                            })
+                        }
+                    }
+                }
+
+
+                for (var i = 0; i < ordenado.length; i++) {
+                    ordenado[i].total = parseFloat(ordenado[i].debe) + parseFloat(ordenado[i].haber);
+                }
+                vm.datos = ordenado;
+            });
         }
 
 
@@ -127,6 +173,7 @@
         var url = 'stock-api/reportes.php';
 
         service.getMargenes = getMargenes;
+        service.getTotalesPorCuenta = getTotalesPorCuenta;
 
         return service;
 
@@ -136,6 +183,21 @@
             var _hasta = hasta.getFullYear() + '-' + (hasta.getMonth() + 1) + '-' + hasta.getDate();
 
             $http.get(url + '?function=getMargenes&desde=' + _desde + '&hasta=' + _hasta)
+                .success(function (data) {
+                    callback(data)
+                })
+                .error(function (data) {
+                    callback(data)
+                });
+
+        }
+
+        function getTotalesPorCuenta(desde, hasta, callback) {
+
+            var _desde = desde.getFullYear() + '-' + (desde.getMonth() + 1) + '-' + desde.getDate();
+            var _hasta = hasta.getFullYear() + '-' + (hasta.getMonth() + 1) + '-' + hasta.getDate();
+
+            $http.get(url + '?function=getTotalesPorCuenta&desde=' + _desde + '&hasta=' + _hasta)
                 .success(function (data) {
                     callback(data)
                 })

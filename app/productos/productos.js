@@ -54,7 +54,8 @@
             sku: '',
             stocks: [],
             producto_tipo: '0',
-            kits: []
+            kits: [],
+            iva: 0.0
         };
         //vm.proveedores = [
         //    {usuario_id: '1', nombre: 'prov01'},
@@ -84,6 +85,7 @@
 
         function agregarKit(producto_kit) {
             ProductService.getByParams('producto_id', '' + producto_kit.producto_id, 'true', function (data) {
+
                 vm.producto.kits.push({
                     producto_cantidad: 1,
                     producto_id: producto_kit.producto_id,
@@ -128,6 +130,7 @@
                     ProductService.getByParams('producto_id', vm.id, 'true', function (data) {
                         vm.producto = data[0];
                         vm.producto.pto_repo = parseInt(vm.producto.pto_repo);
+                        vm.producto.iva = parseFloat(vm.producto.iva);
                         vm.producto.producto_tipo = '' + vm.producto.producto_tipo;
                         vm.producto.destacado = '' + vm.producto.destacado;
                         vm.producto.status = '' + vm.producto.status;

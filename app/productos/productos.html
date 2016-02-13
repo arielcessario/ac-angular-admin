@@ -103,10 +103,15 @@
 
             <label for="precio_oferta">Precio Oferta</label>
         </div>
+        <div class="input-container">
+            <input id="iva" type="number" ng-model="productosCtrl.producto.iva" required step="0.1"/>
+
+            <label for="iva">IVA</label>
+        </div>
 
 
         <div class="input-container" style="max-height: 150px;overflow-y: auto; position: relative;">
-            <div style="display: flex; flex-direction: column;">
+            <div style="display: flex; flex-direction: column; margin-bottom: 60px;">
                 <h3>Proveedores</h3><br/>
                 <input style="margin-top: -20px;" placeholder="Buscar proveedor..." type="text" ng-model="productosCtrl.filter">
             </div>

@@ -134,6 +134,7 @@
                 if (!selecciona) {
                     StockService.getDisponibles(AcUtilsGlobals.sucursal_id, vm.searchProductText, function (data) {
                         vm.listaProductos = data;
+                        vm.producto = data[0];
                     })
                 } else {
                     selecciona = false;
@@ -265,6 +266,7 @@
             //(tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, usuario_id, usuario_id, comentario, callback)
             MovimientosService.armarMovimiento('001', '00', AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, vm.forma_pago, '00', vm.total, vm.desc_cant, 'Venta de Caja', vm.detalles, vm.usuario_id, 1, '',
                 function (data) {
+
                     //console.log(MovimientoStockFinal.stocks_finales);
                     ConsultaStockService.updateStock(MovimientoStockFinal.stocks_finales, function (data) {
                         toastr.success('Venta realizada con éxito.');
@@ -442,7 +444,8 @@
                     precio_total: parseInt(vm.cantidad) * parseFloat(prod.precios[vm.tipo_precio].precio),
                     stock: prod.stock,
                     productos_kit: prod.kits,
-                    mp: false
+                    mp: false,
+                    iva: prod.iva
                 };
                 //console.log(vm.detalle);
                 vm.detalles.push(vm.detalle);
