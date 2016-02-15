@@ -4,8 +4,8 @@
     var currentScriptPath = scripts[scripts.length - 1].src;
 
     angular.module('' +
-    'nombreapp.stock.abrirCerrarCaja', ['ngRoute', 'toastr'
-        , 'acMovimientos', 'nombreapp.stock.cajas'])
+            'nombreapp.stock.abrirCerrarCaja', ['ngRoute', 'toastr'
+            , 'acMovimientos', 'nombreapp.stock.cajas'])
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/abrir_cerrar_caja', {
                 templateUrl: currentScriptPath.replace('.js', '.html'),
@@ -16,8 +16,8 @@
         .controller('AbrirCerrarCajaController', AbrirCerrarCajaController);
 
 
-    AbrirCerrarCajaController.$inject = ['$routeParams', 'CajasService', 'toastr', '$location', '$window'];
-    function AbrirCerrarCajaController($routeParams, CajasService, toastr, $location, $window) {
+    AbrirCerrarCajaController.$inject = ['$routeParams', 'CajasService', 'toastr', '$location', '$window', 'AcUtilsGlobals'];
+    function AbrirCerrarCajaController($routeParams, CajasService, toastr, $location, $window, AcUtilsGlobals) {
 
         var vm = this;
         vm.isOpen = true;
@@ -29,7 +29,7 @@
 
         vm.save = save;
 
-        CajasService.checkEstado(1, function (data) {
+        CajasService.checkEstado(AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, function (data) {
             //console.log(data);
 
             if (data.asiento_cierre_id == null || data.asiento_cierre_id == 0) {
@@ -41,20 +41,20 @@
                 });
             } else {
                 vm.isOpen = false;
-                CajasService.getSaldoFinalAnterior(1, function(data){
+                CajasService.getSaldoFinalAnterior(AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, function (data) {
                     vm.saldoInicial = data[0].valor_real;
                     vm.detalles = data[0].detalles;
                 });
             }
         });
 
-        function save(){
-            if(vm.isOpen){
-                CajasService.cerrarCaja(1, vm.saldoFinalReal, vm.detalles, function(data){
+        function save() {
+            if (vm.isOpen) {
+                CajasService.cerrarCaja(AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, vm.saldoFinalReal, vm.detalles, function (data) {
                     $location.path('/resumen_caja_diaria');
                 })
-            }else{
-                CajasService.abrirCaja(1, vm.saldoInicial, function(data){
+            } else {
+                CajasService.abrirCaja(AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, vm.saldoInicial, function (data) {
                     $location.path('/resumen_caja_diaria');
                 })
 
