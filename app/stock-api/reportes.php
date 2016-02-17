@@ -49,8 +49,10 @@ if ($decoded != null) {
     $function = $_GET["function"];
     if ($function == 'getMargenes') {
         getMargenes($_GET["desde"], $_GET["hasta"]);
-    }elseif ($function == 'getTotalesPorCuenta') {
+    } elseif ($function == 'getTotalesPorCuenta') {
         getTotalesPorCuenta($_GET["desde"], $_GET["hasta"]);
+    } elseif ($function == 'cierreDeCaja') {
+        cierreDeCaja($_GET["sucursal_id"], $_GET["pos_id"]);
     }
 }
 
@@ -129,6 +131,66 @@ group by c.descripcion, m.cuenta_id)';
 
 
     $results = $db->rawQuery($SQL, '', false);
+
+    echo json_encode($results);
+}
+
+
+function cierreDeCaja($sucursal_id, $pos_id)
+{
+    $db = new MysqliDb();
+
+
+    $SQL01 = 'select
+c.descripcion,
+sum(m.importe) importe,
+m.cuenta_id
+from movimientos m left join cuentas c on c.cuenta_id = m.cuenta_id
+where
+m.asiento_id > (select asiento_inicio_id from cajas where pos_id = ' . $pos_id . ' and sucursal_id = ' . $sucursal_id . ' order by caja_id desc limit 1)
+and sucursal_id = ' . $sucursal_id . ' and pos_id=' . $pos_id . '
+group by c.descripcion, m.cuenta_id;';
+
+
+    $SQL02 = 'select * from cajas c inner join cajas_detalles d on c.caja_id = d.caja_id where c.pos_id = 1 and c.sucursal_id = 1 order by c.caja_id desc limit 1;';
+
+    $SQL03 = 'SELECT
+    sum((select valor from detallesmovimientos where movimiento_id = m.movimiento_id and detalle_tipo_id = 13)) cantidad,
+    m.detalle_tipo_id,
+    valor,
+    nombre
+FROM
+    detallesmovimientos m
+        LEFT JOIN
+    productos ON valor = producto_id
+WHERE
+    movimiento_id IN (SELECT
+            movimiento_id
+        FROM
+            movimientos
+        WHERE
+            asiento_id >= (SELECT
+                    asiento_inicio_id
+                FROM
+                    cajas
+                WHERE
+                    sucursal_id = ' . $sucursal_id . ' and pos_id=' . $pos_id . '
+                ORDER BY caja_id DESC
+                LIMIT 1))
+        AND detalle_tipo_id = 8
+group by
+detalle_tipo_id, valor, nombre;';
+
+
+    $results01 = $db->rawQuery($SQL01, '', false);
+    $results02 = $db->rawQuery($SQL02, '', false);
+    $results03 = $db->rawQuery($SQL03, '', false);
+
+    $results = array();
+
+    array_push($results, $results01);
+    array_push($results, $results02);
+    array_push($results, $results03);
 
     echo json_encode($results);
 }

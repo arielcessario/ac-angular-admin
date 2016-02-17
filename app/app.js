@@ -20,6 +20,7 @@
         'acProductos',
         'acStocks',
         'acSucursales',
+        'acContacts',
         'slider.manager',
         'nombreapp.stock.login',
         'nombreapp.stock.productos',
@@ -239,10 +240,16 @@
             }
             vm.data = filtrados;
 
-            AcUtilsGlobals.sucursal_id = ($cookieStore.get('sucursal')).sucursal_id;
-            AcUtilsGlobals.pos_id = ($cookieStore.get('pos')).id;
-            AcUtilsGlobals.user_id = vm.user.data.id;
-            AcUtilsGlobals.rol_id = vm.user.data.rol;
+            if($cookieStore.get('sucursal') == undefined){
+                logout();
+            }else{
+                AcUtilsGlobals.sucursal_id = ($cookieStore.get('sucursal')).sucursal_id;
+                AcUtilsGlobals.pos_id = ($cookieStore.get('pos')).id;
+                AcUtilsGlobals.user_id = vm.user.data.id;
+                AcUtilsGlobals.rol_id = vm.user.data.rol;
+            }
+
+
 
 
         }

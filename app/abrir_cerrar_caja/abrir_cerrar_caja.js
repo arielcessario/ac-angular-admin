@@ -16,8 +16,10 @@
         .controller('AbrirCerrarCajaController', AbrirCerrarCajaController);
 
 
-    AbrirCerrarCajaController.$inject = ['$routeParams', 'CajasService', 'toastr', '$location', '$window', 'AcUtilsGlobals'];
-    function AbrirCerrarCajaController($routeParams, CajasService, toastr, $location, $window, AcUtilsGlobals) {
+    AbrirCerrarCajaController.$inject = ['$routeParams', 'CajasService', 'toastr', '$location', '$window', 'AcUtilsGlobals',
+        'ReportesService', 'ContactsService'];
+    function AbrirCerrarCajaController($routeParams, CajasService, toastr, $location, $window, AcUtilsGlobals,
+                                       ReportesService, ContactsService) {
 
         var vm = this;
         vm.isOpen = true;
@@ -35,7 +37,7 @@
             if (data.asiento_cierre_id == null || data.asiento_cierre_id == 0) {
                 vm.isOpen = true;
                 vm.saldoInicial = data.saldo_inicial;
-                CajasService.getSaldoFinal(1, function (data) {
+                CajasService.getSaldoFinal(AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, function (data) {
                     vm.saldoFinal = parseFloat(data[0].total) + parseFloat(vm.saldoInicial);
                     vm.saldoFinalReal = parseFloat(data[0].total) + parseFloat(vm.saldoInicial);
                 });
@@ -49,10 +51,53 @@
         });
 
         function save() {
+
+
             if (vm.isOpen) {
-                CajasService.cerrarCaja(AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, vm.saldoFinalReal, vm.detalles, function (data) {
-                    $location.path('/resumen_caja_diaria');
-                })
+
+                ReportesService.cierreDeCaja(AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, function (data) {
+
+                    console.log(data);
+                    var mensaje = '';
+                    for (var i = 0; i < data[0].length; i++) {
+
+                        if (data[0][i].cuenta_id.indexOf('1.1.1.0') > -1) {
+                            mensaje = mensaje + '<div> Caja Chica: ' + data[0][i].importe + '</div><br>'
+                        } else if (data[0][i].cuenta_id.indexOf('1.1.1.3') > -1) {
+                            mensaje = mensaje + '<div> Ahorro: ' + data[0][i].importe + '</div><br>'
+                        } else {
+                            mensaje = mensaje + '<div>' + data[0][i].descripcion + ' ' + data[0][i].importe + '</div><br>'
+                        }
+
+                    }
+
+                    mensaje = mensaje + '<br>Valor esperado: ' + data[1][0].valor_esperado + '<br>';
+                    mensaje = mensaje + '<br>Valor real: ' + data[1][0].valor_real + '<br>';
+                    mensaje = mensaje + '<br>Saldo Inicial: ' + data[1][0].saldo_inicial + '<br><br><br>';
+
+
+                    mensaje = mensaje + '<table><tbody>' +
+                        '<tr><td>Producto</td><td>Cantidad Vendida</td></tr>';
+                    for (var i = 0; i < data[2].length; i++) {
+                        mensaje = mensaje + '<tr><td>' + data[2][i].nombre + '</td><td>' + data[2][i].cantidad + '</td></tr>'
+                    }
+                    mensaje = mensaje + '</tbody></table>';
+                    ContactsService.sendMail(window.mailAdmin,
+                        window.mailAdmins,
+                        'Admin',
+                        'Sucursal:' + AcUtilsGlobals.sucursal_id + ' Caja: ' + AcUtilsGlobals.pos_id + ' Fecha: ' + new Date(),
+                        mensaje,
+                        function (data) {
+
+                            console.log(data);
+                            CajasService.cerrarCaja(AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, vm.saldoFinalReal, vm.detalles, function (data) {
+                                $location.path('/resumen_caja_diaria');
+
+
+                            });
+                        });
+                });
+
             } else {
                 CajasService.abrirCaja(AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, vm.saldoInicial, function (data) {
                     $location.path('/resumen_caja_diaria');

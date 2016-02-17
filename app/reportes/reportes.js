@@ -174,8 +174,19 @@
 
         service.getMargenes = getMargenes;
         service.getTotalesPorCuenta = getTotalesPorCuenta;
+        service.cierreDeCaja = cierreDeCaja;
 
         return service;
+
+        function cierreDeCaja(sucursal_id, pos_id, callback){
+            $http.get(url + '?function=cierreDeCaja&sucursal_id=' + sucursal_id + '&pos_id=' + pos_id)
+                .success(function (data) {
+                    callback(data)
+                })
+                .error(function (data) {
+                    callback(data)
+                });
+        }
 
         function getMargenes(desde, hasta, callback) {
 
