@@ -5,10 +5,11 @@
         <input type="date" ng-model="reportesCtrl.desde">
         <input type="date" ng-model="reportesCtrl.hasta">
         <button ng-click="reportesCtrl.generar()">Generar</button>
+        <button ng-click="reportesCtrl.exportExcel('tblGraphMargenes')">Exportar</button>
     </div>
 
     <div id="graphMargenes"></div>
-    <table class="table table-striped">
+    <table class="table table-striped" id="tblGraphMargenes">
         <thead>
         <tr>
             <th>Producto</th>

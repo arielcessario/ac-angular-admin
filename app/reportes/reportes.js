@@ -21,6 +21,7 @@
     function ReportesController($timeout, ReportesService) {
         var vm = this;
 
+        vm.exportHref = {};
         vm.reporte = 'reportes/lstMargenes.html';
         vm.hasta = new Date();
         vm.desde = new Date();
@@ -34,6 +35,13 @@
         // Funciones
         vm.verReporte = verReporte;
         vm.generar = generar;
+        vm.exportExcel = exportExcel;
+
+
+        function exportExcel(tableId){
+            vm.exportHref=ReportesService.tableToExcel(tableId,'sheet name');
+            $timeout(function(){location.href=vm.exportHref;},100); // trigger download
+        }
 
 
         function verReporte(reporte) {
@@ -166,19 +174,33 @@
         }
     }
 
-    ReportesService.$inject = ['$http'];
-    function ReportesService($http) {
+    ReportesService.$inject = ['$http', '$window'];
+    function ReportesService($http, $window) {
         var vm = this;
         var service = {};
         var url = 'stock-api/reportes.php';
+        // Generación de excel
+        var uri = 'data:application/vnd.ms-excel;base64,',
+            template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
+            base64 = function (s) {
+                return $window.btoa(unescape(encodeURIComponent(s)));
+            },
+            format = function (s, c) {
+                return s.replace(/{(\w+)}/g, function (m, p) {
+                    return c[p];
+                })
+            };
+
 
         service.getMargenes = getMargenes;
         service.getTotalesPorCuenta = getTotalesPorCuenta;
         service.cierreDeCaja = cierreDeCaja;
+        service.tableToExcel = tableToExcel;
+
 
         return service;
 
-        function cierreDeCaja(sucursal_id, pos_id, callback){
+        function cierreDeCaja(sucursal_id, pos_id, callback) {
             $http.get(url + '?function=cierreDeCaja&sucursal_id=' + sucursal_id + '&pos_id=' + pos_id)
                 .success(function (data) {
                     callback(data)
@@ -216,6 +238,15 @@
                     callback(data)
                 });
 
+        }
+
+
+
+        function tableToExcel(tableId, worksheetName) {
+            var table = document.getElementById(tableId),
+                ctx = {worksheet: worksheetName, table: table.innerHTML},
+                href = uri + base64(format(template, ctx));
+            return href;
         }
     }
 

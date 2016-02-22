@@ -44,6 +44,7 @@
             } else {
                 vm.isOpen = false;
                 CajasService.getSaldoFinalAnterior(AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, function (data) {
+                    console.log(data);
                     vm.saldoInicial = data[0].valor_real;
                     vm.detalles = data[0].detalles;
                 });

@@ -38,7 +38,13 @@
         $timeout(func, 1000);
         function func() {
             CajasService.getTotalByCuenta('1.1.1.3' + vm.sucursal_id, function (data) {
-                vm.cajaGeneralSucursal = data[0].importe;
+                if(data[0] == undefined){
+
+                    vm.cajaGeneralSucursal = 0;
+                }else{
+
+                    vm.cajaGeneralSucursal = data[0].importe;
+                }
             });
         }
 
@@ -79,13 +85,12 @@
             $rootScope.$broadcast('IsWaiting');
 
 
-            CajasService.getSaldoInicial(vm.sucursal.sucursal_id, AcUtilsGlobals.pos_id, function (data) {
+            CajasService.getSaldoInicial(AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, function (data) {
 
                 vm.saldoInicial = parseFloat(data.replace('"', ''));
                 vm.saldoFinal = vm.saldoInicial;
 
-                CajasService.getCajaDiaria(vm.sucursal.sucursal_id, AcUtilsGlobals.pos_id, function (data) {
-
+                CajasService.getCajaDiaria(AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, function (data) {
                     var asientos = [];
                     var detalles = [];
                     var asiento = {};
