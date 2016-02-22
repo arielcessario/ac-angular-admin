@@ -121,6 +121,7 @@
                                 }
 
                                 asiento.total = true;
+                                asiento.asiento_id = data[i].asiento_id;
                                 detalles.push(asiento);
                                 asiento = {};
                             }
@@ -204,6 +205,8 @@
                     }
 
                     vm.asientos = asientos;
+
+                    console.log(vm.asientos);
 
                     AcUtilsGlobals.isWaiting = false;
                     $rootScope.$broadcast('IsWaiting');
