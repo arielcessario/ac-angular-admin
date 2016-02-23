@@ -169,6 +169,7 @@ WHERE
         FROM
             movimientos
         WHERE
+            cuenta_id like "4.1.1.01" and
             asiento_id >= (SELECT
                     asiento_inicio_id
                 FROM
