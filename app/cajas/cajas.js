@@ -48,6 +48,7 @@
 
 
         StockVars.reducido = true;
+        StockVars.sucursal_id = AcUtilsGlobals.sucursal_id;
 
         vm.agregarDetalle = agregarDetalle;
         vm.removeDetalle = removeDetalle;
