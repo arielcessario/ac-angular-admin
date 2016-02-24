@@ -120,6 +120,7 @@
                 if (event.keyCode == 13 || event.type == 'click') {
                     selecciona = true;
                     vm.searchProductText = vm.producto.nombreProducto;
+
                     var elem = angular.element(document.querySelector('#cantidad'));
                     elem[0].focus();
 
@@ -411,6 +412,11 @@
             //console.log(vm.producto.cant_actual);
 
             if (vm.producto.producto_tipo == 0 && vm.producto.cant_actual < vm.cantidad) {
+                toastr.error('No hay stock suficiente. Solo quedan ' + stockSucursal + ' productos.');
+                return;
+            }
+
+            if (vm.producto.producto_tipo == 2 && vm.producto.cant_actual < vm.cantidad) {
                 toastr.error('No hay stock suficiente. Solo quedan ' + stockSucursal + ' productos.');
                 return;
             }
