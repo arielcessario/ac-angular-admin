@@ -53,7 +53,6 @@
 
         function save() {
 
-
             if (vm.isOpen) {
 
                 ReportesService.cierreDeCaja(AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, function (data) {
@@ -72,6 +71,7 @@
 
                     }
 
+                    mensaje = mensaje + '<br>Comentario: ' + vm.detalles + '<br>';
                     mensaje = mensaje + '<br>Valor esperado: ' + data[1][0].valor_esperado + '<br>';
                     mensaje = mensaje + '<br>Valor real: ' + data[1][0].valor_real + '<br>';
                     mensaje = mensaje + '<br>Saldo Inicial: ' + data[1][0].saldo_inicial + '<br><br><br>';
