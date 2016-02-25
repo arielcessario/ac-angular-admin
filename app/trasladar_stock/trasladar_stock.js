@@ -26,7 +26,11 @@
         vm.origen_id = 0;
         vm.destino_id = 0;
         vm.cantidad_disponible = 0;
+        vm.detalles = [];
+        vm.detalle = {};
+        vm.add = add;
         vm.save = save;
+        vm.removeDetalle = removeDetalle;
         vm.calc_disponible = calc_disponible;
         vm.setSucursalOrigen = setSucursalOrigen;
         vm.controlarCantidad = controlarCantidad;
@@ -66,31 +70,73 @@
             }
         }
 
+        function removeDetalle(detalle) {
+            var n = vm.detalles.indexOf(detalle);
+            vm.detalles.splice(n, 1);
+        }
+
+        function add() {
+            var origen_nombre = '';
+            var destino_nombre = '';
+            for (var i = 0; i < vm.sucursales.length; i++) {
+                if (vm.origen_id == vm.sucursales[i].sucursal_id) {
+                    origen_nombre = vm.sucursales[i].nombre;
+                }
+            }
+            for (var i = 0; i < vm.sucursales.length; i++) {
+                if (vm.destino_id == vm.sucursales[i].sucursal_id) {
+                    destino_nombre = vm.sucursales[i].nombre;
+                }
+            }
+
+            vm.detalle = {
+                origen_id: vm.origen_id,
+                origen_nombre: origen_nombre,
+                destino_id: vm.destino_id,
+                destino_nombre: destino_nombre,
+                producto_id: vm.producto.producto_id,
+                nombre: vm.producto.nombreProducto,
+                cantidad: vm.cantidad
+            };
+
+            vm.detalles.push(vm.detalle);
+            vm.detalle = {};
+
+        }
+
         function save() {
             AcUtilsGlobals.isWaiting = true;
             $rootScope.$broadcast('IsWaiting');
-            if(vm.destino_id == vm.origen_id){
-                toastr.error('La sucursal de origen y destino no pueden ser las mismas');
-                return;
+            //if (vm.destino_id == vm.origen_id) {
+            //    toastr.error('La sucursal de origen y destino no pueden ser las mismas');
+            //    return;
+            //}
+
+            for (var i = 0; i < vm.detalles.length; i++) {
+                StockService.trasladar(vm.detalles[i].origen_id, vm.detalles[i].destino_id, vm.detalles[i].producto_id, vm.detalles[i].cantidad, function (data) {
+                    //console.log(data);
+
+
+                    //}
+
+                });
+
             }
 
-            StockService.trasladar(vm.origen_id, vm.destino_id, vm.producto.producto_id, vm.cantidad, function (data) {
-                //console.log(data);
-                ProductVars.clearCache = true;
-                ProductService.get(function(data){});
-                //console.log(data);
-                //if (data == ' ') {
-                toastr.success('Traslado realizado con éxito');
-                //vm.producto = {};
-                //vm.origen_id = 0;
-                //vm.destino_id = 0;
-                //vm.cantidad_disponible = 0;
-                $location.path('/consulta_stock');
-                AcUtilsGlobals.isWaiting = false;
-                $rootScope.$broadcast('IsWaiting');
-                //}
-
+            ProductVars.clearCache = true;
+            ProductService.get(function (data) {
             });
+            //console.log(data);
+            //if (data == ' ') {
+            toastr.success('Traslado realizado con éxito');
+            //vm.producto = {};
+            //vm.origen_id = 0;
+            //vm.destino_id = 0;
+            //vm.cantidad_disponible = 0;
+            $location.path('/consulta_stock');
+            AcUtilsGlobals.isWaiting = false;
+            $rootScope.$broadcast('IsWaiting');
+
             //TrasladarStockService.save()
         }
 
@@ -122,7 +168,8 @@
                 .success(function (data) {
                     callback(data);
                 })
-                .error(function(data){});
+                .error(function (data) {
+                });
         }
 
     }
