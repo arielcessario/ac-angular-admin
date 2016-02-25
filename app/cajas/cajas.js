@@ -139,13 +139,18 @@
                 if (!selecciona) {
                     StockService.getDisponibles(AcUtilsGlobals.sucursal_id, vm.searchProductText, function (data) {
                         vm.listaProductos = data;
+                        for(var i = 0; i<vm.listaProductos.length; i++){
+                            vm.listaProductos[i].precios.sort(function (a, b) {
+                                // Turn your strings into dates, and then subtract them
+                                // to get a value that is either negative, positive, or zero.
+                                return b.precio_tipo_id - a.precio_tipo_id;
+                            });
+                        }
+
+
                         vm.producto = data[0];
 
-                        vm.producto.precios.sort(function (a, b) {
-                            // Turn your strings into dates, and then subtract them
-                            // to get a value that is either negative, positive, or zero.
-                            return b.precio_tipo_id - a.precio_tipo_id;
-                        });
+
                     })
                 } else {
                     selecciona = false;
