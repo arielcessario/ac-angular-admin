@@ -71,6 +71,9 @@
         });
 
 
+
+
+
         var map = {17: false, 18: false, 80: false};
         elemCaja.bind('keydown', function (e) {
             if (e.keyCode in map) {
@@ -137,6 +140,12 @@
                     StockService.getDisponibles(AcUtilsGlobals.sucursal_id, vm.searchProductText, function (data) {
                         vm.listaProductos = data;
                         vm.producto = data[0];
+
+                        vm.producto.precios.sort(function (a, b) {
+                            // Turn your strings into dates, and then subtract them
+                            // to get a value that is either negative, positive, or zero.
+                            return b.precio_tipo_id - a.precio_tipo_id;
+                        });
                     })
                 } else {
                     selecciona = false;
