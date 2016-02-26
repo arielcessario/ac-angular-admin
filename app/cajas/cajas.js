@@ -48,6 +48,7 @@
 
 
         StockVars.reducido = true;
+        StockVars.clearCache = true;
         StockVars.sucursal_id = AcUtilsGlobals.sucursal_id;
 
         vm.agregarDetalle = agregarDetalle;
@@ -69,9 +70,6 @@
             elemCaja.unbind('keydown');
             elemCaja.unbind('keyup');
         });
-
-
-
 
 
         var map = {17: false, 18: false, 80: false};
@@ -139,7 +137,7 @@
                 if (!selecciona) {
                     StockService.getDisponibles(AcUtilsGlobals.sucursal_id, vm.searchProductText, function (data) {
                         vm.listaProductos = data;
-                        for(var i = 0; i<vm.listaProductos.length; i++){
+                        for (var i = 0; i < vm.listaProductos.length; i++) {
                             vm.listaProductos[i].precios.sort(function (a, b) {
                                 // Turn your strings into dates, and then subtract them
                                 // to get a value that is either negative, positive, or zero.
@@ -209,7 +207,7 @@
                     //console.log(MovimientoStockFinal.stocks_finales);
                     ConsultaStockService.updateStock(MovimientoStockFinal.stocks_finales, function (data) {
 
-                        vm.cliente.saldo =  vm.cliente.saldo - parseFloat(vm.total);
+                        vm.cliente.saldo = vm.cliente.saldo - parseFloat(vm.total);
                         UserService.update(vm.cliente, function (data) {
                             if (!isNaN(data) && data > -1) {
                                 vm.detalles = [];

@@ -17,9 +17,9 @@
         .factory('TrasladarStockService', TrasladarStockService);
 
     TrasladarStockController.$inject = ["$rootScope", "$location", 'ProductService', 'SucursalesService', 'TrasladarStockService', 'AcUtilsGlobals',
-        'toastr', 'ProductVars', 'StockService'];
+        'toastr', 'ProductVars', 'StockService', 'StockVars'];
     function TrasladarStockController($rootScope, $location, ProductService, SucursalesService, TrasladarStockService, AcUtilsGlobals,
-                                      toastr, ProductVars, StockService) {
+                                      toastr, ProductVars, StockService, StockVars) {
         var vm = this;
         vm.producto = {};
         vm.sucursales = [];
