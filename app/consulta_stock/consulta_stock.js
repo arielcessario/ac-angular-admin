@@ -27,6 +27,7 @@
         vm.conStock = true;
         vm.filtroSucursal = filtroSucursal;
         vm.loadConStock = loadConStock;
+        StockVars.sucursal_id = -1;
 
 
         SucursalesService.get(function (data) {
@@ -38,6 +39,7 @@
 
             StockVars.reducido = true;
             StockVars.clearCache = true;
+            StockVars.sucursal_id = -1;
             StockService.get(function (data) {
                 vm.stocks = data;
             });

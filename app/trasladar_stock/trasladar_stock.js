@@ -34,6 +34,7 @@
         vm.calc_disponible = calc_disponible;
         vm.setSucursalOrigen = setSucursalOrigen;
         vm.controlarCantidad = controlarCantidad;
+        StockVars.sucursal_id = -1;
 
         SucursalesService.get(function (data) {
             vm.sucursales = data;
