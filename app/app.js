@@ -166,9 +166,9 @@
         });
 
 
-        ResultadosService.saveResultados(function (data) {
-            //console.log(data);
-        });
+        //ResultadosService.saveResultados(function (data) {
+        //    //console.log(data);
+        //});
 
 
         //ProductosServiceUtils.clearCache = true;

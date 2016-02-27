@@ -16,8 +16,8 @@
         .controller('DepositosController', DepositosController)
         .service('DepositosService', DepositosService);
 
-    DepositosController.$inject = ["$scope", "$routeParams", "DepositosService", "$location", "toastr", "MovimientosService"];
-    function DepositosController($scope, $routeParams, DepositosService, $location, toastr, MovimientosService) {
+    DepositosController.$inject = ["$scope", "$routeParams", "DepositosService", "$location", "toastr", "MovimientosService", "AcUtilsGlobals"];
+    function DepositosController($scope, $routeParams, DepositosService, $location, toastr, MovimientosService, AcUtilsGlobals) {
         var vm = this;
         vm.movimiento = '000';
         vm.comentario = 'Movimiento entre cuentas';
@@ -30,13 +30,13 @@
 
 
         function save() {
-            if (vm.importe < 1 || vm.importe == '' || vm.importe == undefined){
+            if (vm.importe < 1 || vm.importe == '' || vm.importe == undefined) {
                 toastr.error('Debe ingresar un importe');
                 return;
             }
             //tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback
-            MovimientosService.armarMovimiento(vm.movimiento, vm.subtipo,  AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, vm.destino, vm.origen, vm.importe, '', vm.comentario, [], 0, 1, vm.comentario, function(data){
-                if(data.indexOf("guardado")>1){
+            MovimientosService.armarMovimiento(vm.movimiento, vm.subtipo, AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, vm.destino, vm.origen, vm.importe, '', vm.comentario, [], 0, 1, vm.comentario, function (data) {
+                if (data > -1) {
                     toastr.success("Depósito realizado con éxito");
                     vm.movimiento = '000';
                     vm.subtipo = '00';
@@ -46,12 +46,11 @@
                     vm.importe = '';
 
                 }
-            } );
+            });
         }
 
 
     }
-
 
 
     DepositosService.$inject = ['$http'];
@@ -108,7 +107,6 @@
             })
 
         }
-
 
 
         function saveDeposito(deposito, _function, callback) {

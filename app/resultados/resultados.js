@@ -31,14 +31,14 @@
         return service;
 
         function saveResultados(callback) {
-            return $http.post(url, {function: 'save'})
-                .success(function (data) {
-
-                    callback(data);
-                })
-                .error(function (data) {
-
-                });
+            //return $http.post(url, {function: 'save'})
+            //    .success(function (data) {
+            //
+            //        callback(data);
+            //    })
+            //    .error(function (data) {
+            //
+            //    });
         }
 
 
