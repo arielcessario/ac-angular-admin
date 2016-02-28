@@ -141,7 +141,7 @@
                             vm.listaProductos[i].precios.sort(function (a, b) {
                                 // Turn your strings into dates, and then subtract them
                                 // to get a value that is either negative, positive, or zero.
-                                return b.precio_tipo_id - a.precio_tipo_id;
+                                return a.precio_tipo_id - b.precio_tipo_id;
                             });
                         }
 

@@ -15,9 +15,9 @@
 
 
     ResumenCajaDiariaController.$inject = ['CajasService', '$location', 'MovimientosService',
-        'SucursalesService', '$timeout', '$interval', 'AcUtilsGlobals', '$rootScope'];
+        'SucursalesService', '$timeout', '$interval', 'AcUtilsGlobals', '$rootScope', '$scope'];
     function ResumenCajaDiariaController(CajasService, $location, MovimientosService,
-                                         SucursalesService, $timeout, $interval, AcUtilsGlobals, $rootScope) {
+                                         SucursalesService, $timeout, $interval, AcUtilsGlobals, $rootScope, $scope) {
 
         var vm = this;
         vm.asientos = [];
@@ -35,15 +35,20 @@
         /**
          * Obtengo el total del ahorro del local
          */
-        $timeout(func, 1000);
+        //$timeout(func, 1000);
+        func();
         function func() {
             CajasService.getTotalByCuenta('1.1.1.3' + vm.sucursal_id, function (data) {
-                if(data[0] == undefined){
+                console.log(data);
+                if (data[0] == undefined) {
 
                     vm.cajaGeneralSucursal = 0;
-                }else{
+                } else {
 
                     vm.cajaGeneralSucursal = data[0].importe;
+                    if (!$scope.$$phase) {
+                        $scope.apply();
+                    }
                 }
             });
         }
