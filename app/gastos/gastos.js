@@ -16,8 +16,8 @@
         .controller('GastosController', GastosController)
         .service('GastosService', GastosService);
 
-    GastosController.$inject = ["$scope", "$routeParams", "GastosService", "$location", "toastr", "MovimientosService"];
-    function GastosController($scope, $routeParams, GastosService, $location, toastr, MovimientosService) {
+    GastosController.$inject = ["$scope", "$routeParams", "GastosService", "$location", "toastr", "MovimientosService", "AcUtilsGlobals"];
+    function GastosController($scope, $routeParams, GastosService, $location, toastr, MovimientosService, AcUtilsGlobals) {
         var vm = this;
         vm.movimiento = '012';
         vm.comentario = '';
