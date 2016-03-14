@@ -58,8 +58,8 @@
                 detalle = {};
                 detalle.producto_id = vm.pedido.pedidos_detalles[i].producto_id;
                 detalle.proveedor_id = vm.pedido.proveedor_id;
-                //detalle.sucursal_id = vm.pedido.sucursal_id;
-                detalle.sucursal_id = 1;
+                detalle.sucursal_id = vm.pedido.sucursal_id;
+                //detalle.sucursal_id = 1;
                 detalle.cant_inicial = vm.pedido.pedidos_detalles[i].cantidad;
                 detalle.cant_actual = vm.pedido.pedidos_detalles[i].cantidad;
                 detalle.precio_unidad = vm.pedido.pedidos_detalles[i].precio_unidad;
@@ -78,7 +78,7 @@
 
             PedidoService.confirmarPedido(vm.pedido,
                 function (data) {
-                    console.log(data);
+
                     if (data > 0) {
                         //(tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, cliente_id, usuario_id, comentario, callback)
                         MovimientosService.armarMovimiento('002', vm.subtipo, AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, vm.forma_pago, '', vm.pedido.total, '', vm.comentario, vm.pedido, vm.pedido.proveedor_id, 1, vm.comentario, function (data) {

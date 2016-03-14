@@ -6,14 +6,16 @@ $data = file_get_contents("php://input");
 
 $decoded = json_decode($data);
 if ($decoded != null) {
-    if ($decoded->function == 'save') {
-        saveResultados();
-    }
+//    if ($decoded->function == 'save') {
+//        saveResultados();
+//    }
 } else {
 
     $function = $_GET["function"];
     if ($function == 'getResultados') {
         getResultados();
+    } elseif ($function == 'saveResultados') {
+        saveResultados();
     }
 }
 
@@ -43,13 +45,19 @@ function saveResultados()
 
     $results = $db->rawQuery('select anio, mes from resultados where resultado_id = (select max(resultado_id) from resultados);');
 
-    if($db->count == 0){
+
+    if ($db->count == 0) {
         $results[0]["anio"] = $anio_ant;
         $results[0]["mes"] = $mes_ant;
+    } else {
+        if ($results[0]["anio"] == $anio &&
+            $results[0]["mes"] == $mes
+        ) {
+            return;
+        }
     }
 
-
-
+    echo print_r($results);
     if (($anio > $results[0]["anio"]) || ($anio == $results[0]["anio"] && $mes > $results[0]["mes"] + 1)) {
 
         $SQL = "SELECT
@@ -66,8 +74,13 @@ function saveResultados()
 (select IFNULL(sum(importe),0) + IFNULL((select total from resultados where anio= '" . $results[0]["anio"] . "' and mes = '" . $results[0]["mes"] . "' and cuenta_id= '1.1.4.01'),0) from movimientos where (fecha BETWEEN '" . $anio_ant . "-" . $mes_ant . "-01' AND '" . $anio . "-" . $mes . "-01') and cuenta_id = '1.1.4.01') ta
 FROM dual;";
 
-        
+
         $results = $db->rawQuery($SQL);
+
+        echo $anio . ' ' . $mes . '</br>';
+        echo $anio_ant . ' ' . $mes_ant;
+
+        echo print_r($results);
 
 //        // general
 //        $db->insert('resultados', array('anio' => $anio_ant, 'mes' => $mes_ant, 'cuenta_id' =>'1.1.1.10', 'total' => $results[0]['general']));

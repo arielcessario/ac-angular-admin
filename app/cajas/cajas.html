@@ -128,7 +128,7 @@
                 <!--<span ng-show="cajasForm.precio_unidad_prod.$error.maxlength">El Nombre es demasiado largo (Máximo 45)</span>-->
                 <!--</span>-->
             </div>
-            <img src="{{cajasCtrl.producto.fotos[0].path + cajasCtrl.producto.fotos[0].nombre}}"
+            <img ng-src="./images/{{cajasCtrl.producto.fotos[0].nombre}}"
                  alt="{{cajasCtrl.producto.fotos[0].nombre}}"
                  height="100" width="100" style="background-color: #dddddd; margin-top: -50px;">
 
