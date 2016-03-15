@@ -17,9 +17,9 @@
 
 
     AbrirCerrarCajaController.$inject = ['$routeParams', 'CajasService', 'toastr', '$location', '$window', 'AcUtilsGlobals',
-        'ReportesService', 'ContactsService', '$rootScope'];
+        'ReportesService', 'ContactsService', '$rootScope', 'SucursalesService'];
     function AbrirCerrarCajaController($routeParams, CajasService, toastr, $location, $window, AcUtilsGlobals,
-                                       ReportesService, ContactsService, $rootScope) {
+                                       ReportesService, ContactsService, $rootScope, SucursalesService) {
 
         var vm = this;
         vm.isOpen = true;
@@ -27,9 +27,14 @@
         vm.saldoFinal = 0.0;
         vm.saldoFinalReal = 0.0;
         vm.detalles = '';
+        vm.sucursal_nombre = '';
 
 
         vm.save = save;
+
+        SucursalesService.getByParams('sucursal_id', ''+AcUtilsGlobals.sucursal_id, 'true', function (data) {
+            vm.sucursal_nombre = data[0].nombre;
+        });
 
         CajasService.checkEstado(AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, function (data) {
             //console.log(data);
@@ -100,7 +105,7 @@
                     ContactsService.sendMail(window.mailAdmin,
                         window.mailAdmins,
                         'Cierre de Caja',
-                        'Sucursal:' + AcUtilsGlobals.sucursal_id + ' Caja: ' + AcUtilsGlobals.pos_id + ' Fecha: ' + new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear(),
+                        'Sucursal:' + vm.sucursal_nombre + ' Caja: ' + AcUtilsGlobals.pos_id + ' Fecha: ' + new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear(),
                         mensaje,
                         function (data) {
 
