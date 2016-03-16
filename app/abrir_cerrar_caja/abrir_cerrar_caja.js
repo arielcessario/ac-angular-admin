@@ -32,7 +32,7 @@
 
         vm.save = save;
 
-        SucursalesService.getByParams('sucursal_id', ''+AcUtilsGlobals.sucursal_id, 'true', function (data) {
+        SucursalesService.getByParams('sucursal_id', '' + AcUtilsGlobals.sucursal_id, 'true', function (data) {
             vm.sucursal_nombre = data[0].nombre;
         });
 
@@ -88,8 +88,12 @@
 
 
                     mensaje = mensaje + '<b>EGRESOS</b><br><br>';
-                    for (var i = 0; i < data[3].length; i++) {
-                        mensaje = mensaje + '<div>' + data[3][i].descripcion + ': ' + data[3][i].importe + '</div><br>'
+                    if (data[3].length == 0) {
+                        mensaje = mensaje + '<div>Sin Movimientos</div><br>'
+                    } else {
+                        for (var i = 0; i < data[3].length; i++) {
+                            mensaje = mensaje + '<div>' + data[3][i].descripcion + ': ' + data[3][i].importe + '</div><br>'
+                        }
                     }
 
 
