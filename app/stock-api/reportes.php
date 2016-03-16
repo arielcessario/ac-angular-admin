@@ -261,7 +261,15 @@ FROM
 WHERE
 m.sucursal_id = ' . $sucursal_id . ' and m.pos_id=' . $pos_id . ' and
     m.cuenta_id LIKE \'5.2.%\'
-        AND d.detalle_tipo_id = 2;';
+        AND d.detalle_tipo_id = 2
+        AND m.asiento_id >= (SELECT
+                    asiento_inicio_id
+                FROM
+                    cajas
+                WHERE
+                    sucursal_id = ' . $sucursal_id . ' and pos_id=' . $pos_id . '
+                ORDER BY caja_id DESC
+                LIMIT 1);';
 
     $results01 = $db->rawQuery($SQL01, '', false);
     $results02 = $db->rawQuery($SQL02, '', false);
