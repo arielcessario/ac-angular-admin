@@ -260,7 +260,7 @@ FROM
     ON m.cuenta_id = c.cuenta_id
 WHERE
 m.sucursal_id = ' . $sucursal_id . ' and m.pos_id=' . $pos_id . ' and
-    m.cuenta_id LIKE \'5.2.%\'
+    (m.cuenta_id LIKE "5.2.%" || m.cuenta_id LIKE "5.3.%")
         AND d.detalle_tipo_id = 2
         AND m.asiento_id >= (SELECT
                     asiento_inicio_id
