@@ -250,7 +250,7 @@ group by
 detalle_tipo_id, valor, nombre;';
 
     $SQL04 = 'SELECT
-    concat(c.descripcion, \': \', d.valor) descripcion , SUM(m.importe) importe, m.cuenta_id
+    concat(c.descripcion, \': \', d.valor) descripcion , m.importe importe, m.cuenta_id
 FROM
     movimientos m
         INNER JOIN
