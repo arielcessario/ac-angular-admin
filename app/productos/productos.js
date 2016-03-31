@@ -245,7 +245,7 @@
             //vm.producto.productos_kit = vm.productos_en_kit;
 
 
-            if (vm.listProveedores.length < 1) {
+            if (vm.listProveedores.length < 1 && vm.producto.producto_tipo != 3) {
                 toastr.error("Debe seleccionar un proveedor");
                 return;
             }

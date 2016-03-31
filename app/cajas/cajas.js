@@ -45,6 +45,7 @@
         vm.usuario_id = -1;
         vm.searchProductText = '';
         vm.listaProductos = [];
+        vm.comentario = '';
 
 
         StockVars.reducido = true;
@@ -220,6 +221,7 @@
                                 vm.paga_con = 0;
                                 vm.vuelto = 0;
                                 vm.total = 0;
+                                vm.comentario = '';
                                 toastr.success('Venta realizada con éxito.');
                             } else {
                                 toastr.error('Error al realizar la venta');
@@ -278,7 +280,7 @@
         function finalizarVenta() {
             //return;
             //(tipo_asiento, subtipo_asiento, sucursal_id, forma_pago, transferencia_desde, total, descuento, detalle, items, usuario_id, usuario_id, comentario, callback)
-            MovimientosService.armarMovimiento('001', '00', AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, vm.forma_pago, '00', vm.total, vm.desc_cant, 'Venta de Caja', vm.detalles, vm.usuario_id, 1, '',
+            MovimientosService.armarMovimiento('001', '00', AcUtilsGlobals.sucursal_id, AcUtilsGlobals.pos_id, vm.forma_pago, '00', vm.total, vm.desc_cant, 'Venta de Caja', vm.detalles, vm.usuario_id, 1, vm.comentario,
                 function (data) {
 
                     //console.log(MovimientoStockFinal.stocks_finales);
@@ -409,12 +411,15 @@
                 return;
             }
 
+            if(vm.producto.producto_tipo == 3){
+                vm.cantidad = 1;
+            }
+
             if (vm.cantidad === undefined || vm.cantidad == 0
                 || isNaN(vm.cantidad)) {
                 toastr.error('Debe ingresar una cantidad');
                 return;
             }
-
 
             if (vm.producto.cant_actual == 0) {
                 toastr.error('No hay stock suficiente.');

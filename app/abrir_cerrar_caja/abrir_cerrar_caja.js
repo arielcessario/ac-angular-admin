@@ -88,8 +88,7 @@
 
 
                     mensaje = mensaje + '<b>EGRESOS</b><br><br>';
-                    console.log(data[3][0].descripcion);
-                    if (data[3][0].descripcion == 'null') {
+                    if (data[3][0] == undefined ||data[3][0].descripcion == 'null') {
                         mensaje = mensaje + '<div>Sin Movimientos</div><br>'
                     } else {
                         for (var i = 0; i < data[3].length; i++) {

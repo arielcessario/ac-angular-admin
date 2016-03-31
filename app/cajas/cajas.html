@@ -109,15 +109,23 @@
             <!--extra-filter="">-->
             <!--</ac-search-panel>-->
 
-            <div class="input-container">
+            <div class="input-container" ng-if='cajasCtrl.producto.producto_tipo != 3'>
                 <input type="number" id="cantidad" name="cantidad" ng-model="cajasCtrl.cantidad" ng-maxlength="45"
                        required ng-keyup="($event.keyCode ==13)?cajasCtrl.agregarDetalle():''">
                 <label for="cantidad">Cantidad</label>
             </div>
 
+            <div class="input-container" ng-if='cajasCtrl.producto.producto_tipo == 3'>
+                <input type="text" id="cantidad" name="comentario" ng-model="cajasCtrl.producto.comentario" ng-maxlength="45"
+                       required >
+                <label for="cantidad">Comentario</label>
+            </div>
+
 
             <div style="width: 100px;">
-                $<span style="max-width: 60px;">{{cajasCtrl.producto.precios[cajasCtrl.tipo_precio].precio}}</span>
+
+                $<span ng-if='cajasCtrl.producto.producto_tipo != 3' style="max-width: 60px;">{{cajasCtrl.producto.precios[cajasCtrl.tipo_precio].precio}}</span>
+                <input ng-if='cajasCtrl.producto.producto_tipo == 3' type="number" step="0.01" ng-model="cajasCtrl.producto.precios[cajasCtrl.tipo_precio].precio">
                 <!--<input type="text" id="precio_unidad_prod" name="precio_unidad_prod"-->
                 <!--ng-model="cajasCtrl.producto.precios[cajasCtrl.tipo_precio].precio" ng-maxlength="45"-->
                 <!--required><br>-->
