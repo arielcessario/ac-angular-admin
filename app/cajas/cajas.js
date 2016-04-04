@@ -450,7 +450,11 @@
 
 
                     vm.detalles[i].cantidad = parseInt(vm.detalles[i].cantidad) + parseInt(vm.cantidad);
-                    vm.detalles[i].precio_total = parseInt(vm.detalles[i].cantidad) * parseFloat(vm.detalles[i].precio_unidad);
+                    if(vm.producto.producto_tipo == 3){
+                        vm.detalles[i].precio_total = parseInt(vm.detalles[i].precio_total) + parseFloat(vm.producto.precios[0].precio);
+                    }else{
+                        vm.detalles[i].precio_total = parseInt(vm.detalles[i].cantidad) * parseFloat(vm.detalles[i].precio_unidad);
+                    }
 
 
                     encontrado = true;
