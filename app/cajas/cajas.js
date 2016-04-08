@@ -400,7 +400,8 @@
             var stockSucursal = vm.producto.cant_actual;
 
             if (vm.producto.producto_id === undefined || vm.producto.producto_id == -1
-                || vm.producto.producto_id == '') {
+                || vm.producto.producto_id == '' || isNaN(vm.producto.producto_id) || vm.producto.producto_id == null
+                || vm.producto.producto_id < 1) {
                 toastr.error('Debe seleccionar un producto');
                 return;
             }
@@ -411,7 +412,7 @@
                 return;
             }
 
-            if(vm.producto.producto_tipo == 3){
+            if (vm.producto.producto_tipo == 3) {
                 vm.cantidad = 1;
             }
 
@@ -450,9 +451,9 @@
 
 
                     vm.detalles[i].cantidad = parseInt(vm.detalles[i].cantidad) + parseInt(vm.cantidad);
-                    if(vm.producto.producto_tipo == 3){
+                    if (vm.producto.producto_tipo == 3) {
                         vm.detalles[i].precio_total = parseInt(vm.detalles[i].precio_total) + parseFloat(vm.producto.precios[0].precio);
-                    }else{
+                    } else {
                         vm.detalles[i].precio_total = parseInt(vm.detalles[i].cantidad) * parseFloat(vm.detalles[i].precio_unidad);
                     }
 
