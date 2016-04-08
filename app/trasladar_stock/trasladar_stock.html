@@ -37,7 +37,8 @@
         </div>
         <div>
             <input type="number" id="cantidad" name="cantidad" ng-model="trasladarStockCtrl.cantidad" ng-maxlength="45"
-                   required ng-blur="trasladarStockCtrl.controlarCantidad();"><br>
+                   required ng-blur="trasladarStockCtrl.controlarCantidad();"
+                   ng-click="trasladarStockCtrl.calc_disponible();"><br>
             <label for="cantidad">Cantidad</label>
         </div>
         <div class="">
