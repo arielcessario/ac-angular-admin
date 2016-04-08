@@ -650,6 +650,13 @@ function updateStock($stock)
 
     foreach ($decoded as $row) {
 
+
+        if ($row->stock_id < 1 || is_nan($row->stock_id)) {
+            file_put_contents("error.txt", $row, FILE_APPEND);
+            echo json_encode(-1);
+            exit();
+        }
+
         $db = new MysqliDb();
         $data = array('cant_actual' => $row->cant_actual);
         $db->where('stock_id', $row->stock_id);
